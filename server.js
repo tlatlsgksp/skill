@@ -99,8 +99,7 @@ app.post('/today', (req, res) => {
                 "items": [
                   {
                     "title": "한정식",
-                    "description": `${todayMealMetropole.meal}`,
-                    "imageUrl": ""
+                    "description": `${todayMealMetropole.meal.replace(/ /g, '\n')}`,
                   },
                 ],
                   "buttons": [
@@ -123,13 +122,11 @@ app.post('/today', (req, res) => {
                 "items": [
                   {
                     "title": "조식",
-                    "description": `${todayMealMetropoleDormitory.breakfast}`,
-                    "imageUrl": ""
+                    "description": `${todayMealMetropoleDormitory.breakfast.replace(/ /g, '\n')}`,
                   },
                   {
                     "title": "석식",
-                    "description": `${todayMealMetropoleDormitory.dinner}`,
-                    "imageUrl": ""
+                    "description": `${todayMealMetropoleDormitory.dinner.replace(/ /g, '\n')}`,
                   },
                 ],
                   "buttons": [
@@ -144,9 +141,6 @@ app.post('/today', (req, res) => {
                       'messageText': `처음으로`
                     },
                 ]
-              },
-              {
-                
               }
             ]
           }
