@@ -27,7 +27,7 @@ function createActionButton(label, messageText) {
   };
 }
 
-const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 1, hour: 9, minute: 59 }, async function() {
+const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 1, hour: 6, minute: 0 }, async function() {
   try {
     console.log('크롤링 스케줄 실행 중');
     await main_met();
@@ -105,7 +105,24 @@ app.post('/today', (req, res) => {
 });
 
 app.post('/week', async (req, res) => {
-
+  const response = {
+    'version': '2.0',
+    'template': {
+      'outputs': [
+        createMealCard(`이번주 학식 [] - 양주 캠퍼스`, `한정식: `, [
+          createActionButton('원산지 확인', `원산지:`),
+          createActionButton('처음으로', '처음으로'),
+          createActionButton('뒤로가기', '뒤로가기')
+        ]), 
+        createMealCard(`이번주 학식[] - 양주 캠퍼스 기숙사`, `조식: \n석식: `, [
+          createActionButton('원산지 확인', `원산지: `),
+          createActionButton('처음으로', '처음으로'),
+          createActionButton('뒤로가기', '뒤로가기')
+        ])
+      ]
+    }
+  };
+  res.json(response);
   
 });
 
