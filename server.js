@@ -464,7 +464,7 @@ app.post('/week_met', async (req, res) => {
           {
             'action': 'block',
             'label': `원산지 확인`,
-            'blockId': `65ee6281e88704127f3d8446`
+            'blockId': `met_${dayOfWeek}`
           },
           {
             'action': 'block',
@@ -520,7 +520,7 @@ app.post('/week_met_dorm', async (req, res) => {
           {
             'action': 'block',
             'label': `원산지 확인`,
-            'blockId': `65ee9fa1693153232294d2a5`
+            'blockId': `dorm_${dayOfWeek}`
           },
           {
             'action': 'block',
@@ -553,7 +553,7 @@ app.post('/week_met_dorm', async (req, res) => {
   res.json(response);
 });
 
-app.post('/week_met_origin', async (req, res) => {
+/*app.post('/week_met_origin', async (req, res) => {
   const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
 
   const weekMeals = [];
@@ -649,6 +649,67 @@ app.post('/week_met_dorm_origin', async (req, res) => {
       ]
     }
   };
+
+  res.json(response);
+});*/
+
+app.post('/blockEvent', (req, res) => {
+  const blockId = req.body.action.params.blockId;
+  const type = blockId.split('_')[0];
+  const dayOfWeek = blockId.split('_')[1];
+  let response;
+
+  if (type === 'met'){
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "textCard": {
+              "title": `${dayOfWeek} 학식[학생식당] - 원산지`,
+              "buttons": [
+                {
+                  'action': 'block',
+                  'label': `뒤로가기`,
+                  'blockId': `65ee8c4499eaa8487e2a54df`
+                },
+                {
+                  'action': 'message',
+                  'label': `처음으로`,
+                  'messageText': `처음으로`
+                },
+            ]
+            }
+          }
+        ]
+      }
+    };
+  }else {
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "textCard": {
+              "title": `${dayOfWeek} 학식[기숙사] - 원산지`,
+              "buttons": [
+                {
+                  'action': 'block',
+                  'label': `뒤로가기`,
+                  'blockId': `65ee8c9b5f95a271a0afa67d`
+                },
+                {
+                  'action': 'message',
+                  'label': `처음으로`,
+                  'messageText': `처음으로`
+                },
+            ]
+            }
+          }
+        ]
+      }
+    };
+  }
 
   res.json(response);
 });
