@@ -195,6 +195,21 @@ app.post('/week', async (req, res) => {
       ]
     });
   }
+
+  const response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "carousel": {
+            "type": "listCard",
+            "items": weekMeals
+          }
+        }
+      ]
+    }
+  };
+  
   res.json(response);
   
 });
