@@ -108,11 +108,26 @@ app.post('/today', (req, res) => {
                             "description": `${todayMealMetropole.meal}`
                         }
                     ],
+                    "itemListAlignment" : "right",
+                    "itemListSummary": {
+                        "title": "Total",
+                        "description": "$4,032.54"
+                    },
+                    "buttons": [
+                      {
+                        'action': 'message',
+                        'label': `원산지 확인`,
+                        'messageText': `오늘의 학식[원산지] - 양주 캠퍼스`
+                      },
+                      {
+                        'action': 'message',
+                        'label': `처음으로`,
+                        'messageText': `처음으로`
+                      },
+                  ],
                 }
-            },
-            createActionButton('원산지 확인', `오늘의 학식[원산지] - 양주 캠퍼스`),
-            createActionButton('처음으로', '처음으로'),
-            createActionButton('뒤로가기', '뒤로가기')
+            }
+            
         ]
     }
   };
