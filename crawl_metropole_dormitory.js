@@ -57,7 +57,7 @@ async function writeToGoogleSheets(auth, spreadsheetId, range, dates, breakfasts
       })),
     };
     await fs.writeFile('crawl_met_dorm.json', JSON.stringify(jsonData, null, 2));
-    console.log('Crawling data saved to JSON file: crawledData.json');
+    console.log('Crawling data saved to JSON file: crawl_met_dorm.json');
   } catch (error) {
     console.error('Error appending data to Google Sheets:', error.message);
   }

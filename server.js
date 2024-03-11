@@ -4,7 +4,7 @@ const schedule = require('node-schedule');
 const { main_met } = require('./crawl_metropole');
 const { main_met_dorm } = require('./crawl_metropole_dormitory');
 const app = express();
-const port = 8080;
+const port = 80;
 let mealMetropole;
 let mealMetropoleDormitory;
 app.use(express.json());
