@@ -99,7 +99,7 @@ app.post('/today', (req, res) => {
                 "items": [
                   {
                     "title": "한정식",
-                    "description": `${todayMealMetropole.meal.replace(/ /g, '\n')}`,
+                    "description": `${todayMealMetropole.meal}`,
                     "imageUrl": ""
                   },
                 ],
@@ -123,12 +123,12 @@ app.post('/today', (req, res) => {
                 "items": [
                   {
                     "title": "조식",
-                    "description": `${todayMealMetropoleDormitory.breakfast.replace(/ /g, '\n')}`,
+                    "description": `${todayMealMetropoleDormitory.breakfast}`,
                     "imageUrl": ""
                   },
                   {
                     "title": "석식",
-                    "description": `${todayMealMetropoleDormitory.dinner.replace(/ /g, '\n')}`,
+                    "description": `${todayMealMetropoleDormitory.dinner}`,
                     "imageUrl": ""
                   },
                 ],
