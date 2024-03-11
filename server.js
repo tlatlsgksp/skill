@@ -462,14 +462,14 @@ app.post('/week_met', async (req, res) => {
         "description": `한정식 : ${todayMealMetropole.meal}`,
         "buttons": [
           {
-            'action': 'message',
+            'action': 'block',
             'label': `원산지 확인`,
-            'messageText': `65ee6281e88704127f3d8446`
+            'blockId': `65ee6281e88704127f3d8446`
           },
           {
-            'action': 'message',
+            'action': 'block',
             'label': `뒤로가기`,
-            'messageText': `65ca1c5709dcef4315f12fe8`
+            'blockId': `65ca1c5709dcef4315f12fe8`
           },
           {
             'action': 'message',
@@ -518,14 +518,14 @@ app.post('/week_met_dorm', async (req, res) => {
         "description": `조식 : ${todayMealMetropoleDormitory.breakfast}\n석식 : ${todayMealMetropoleDormitory.dinner}`,
         "buttons": [
           {
-            'action': 'message',
+            'action': 'block',
             'label': `원산지 확인`,
-            'messageText': `65ee9fa1693153232294d2a5`
+            'blockId': `65ee9fa1693153232294d2a5`
           },
           {
-            'action': 'message',
+            'action': 'block',
             'label': `뒤로가기`,
-            'messageText': `65ca1c5709dcef4315f12fe8`
+            'blockId': `65ca1c5709dcef4315f12fe8`
           },
           {
             'action': 'message',
@@ -573,9 +573,9 @@ app.post('/week_met_origin', async (req, res) => {
         "description": `${todayMealMetropole.origin}`,
         "buttons": [
           {
-            'action': 'message',
+            'action': 'block',
             'label': `뒤로가기`,
-            'messageText': `65ee8c4499eaa8487e2a54df`
+            'blockId': `65ee8c4499eaa8487e2a54df`
           },
           {
             'action': 'message',
@@ -623,9 +623,9 @@ app.post('/week_met_dorm_origin', async (req, res) => {
         "description": `${todayMealMetropoleDormitory.origin}`,
         "buttons": [
           {
-            'action': 'message',
+            'action': 'block',
             'label': `뒤로가기`,
-            'messageText': `65ee8c9b5f95a271a0afa67d`
+            'blockId': `65ee8c9b5f95a271a0afa67d`
           },
           {
             'action': 'message',
