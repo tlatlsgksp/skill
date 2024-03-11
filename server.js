@@ -87,48 +87,68 @@ app.post('/today', (req, res) => {
   const response = {
     "version": "2.0",
     "template": {
-        "outputs": [
-            {
-                "itemCard": {
-                    "imageTitle": {
-                        "title": `오늘의 학식[${todayMealMetropole.date}]`,
-                        "description": "양주 캠퍼스"
+      "outputs": [
+        {
+          "carousel": {
+            "type": "listCard",
+            "items": [
+              {
+                "header": {
+                  "title": "오늘의 학식 - 양주 캠퍼스"
+                },
+                "items": [
+                  {
+                    "title": "한정식",
+                    "description": `${todayMealMetropole.meal.replace(/ /g, '\n')}`,
+                  },
+                ],
+                  "buttons": [
+                    {
+                      'action': 'block',
+                      'label': `원산지 확인`,
+                      'blockId': `65ed16f940d33a5902c955aa`
                     },
-                    "title": "",
-                    "description": "",
-                    "thumbnail": {
+                    {
+                      'action': 'message',
+                      'label': `처음으로`,
+                      'messageText': `처음으로`
                     },
-                    "profile": {
-                        "title": "AA Airline",
-                        "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/aaairline.jpg"
+                ]
+              },
+              {
+                "header": {
+                  "title": "오늘의 학식 - 양주 캠퍼스 기숙사"
+                },
+                "items": [
+                  {
+                    "title": "조식",
+                    "description": `${todayMealMetropoleDormitory.breakfast.replace(/ /g, '\n')}`,
+                  },
+                  {
+                    "title": "석식",
+                    "description": `${todayMealMetropoleDormitory.dinner.replace(/ /g, '\n')}`,
+                  },
+                ],
+                  "buttons": [
+                    {
+                      'action': 'block',
+                      'label': `원산지 확인`,
+                      'blockId': `65ed16f940d33a5902c955aa`
                     },
-                    "itemList": [
-                        {
-                            "title": "한정식",
-                            "description": `${todayMealMetropole.meal}`
-                        }
-                    ],
-                    "itemListAlignment" : "right",
-                    "itemListSummary": {
-                        "title": "Total",
-                        "description": "$4,032.54"
+                    {
+                      'action': 'message',
+                      'label': `처음으로`,
+                      'messageText': `처음으로`
                     },
-                    "buttons": [
-                      {
-                        'action': 'message',
-                        'label': `원산지 확인`,
-                        'messageText': `오늘의 학식[원산지] - 양주 캠퍼스`
-                      },
-                      {
-                        'action': 'message',
-                        'label': `처음으로`,
-                        'messageText': `처음으로`
-                      },
-                  ],
-                }
-            }
-            
-        ]
+                ]
+              },
+              {
+                
+              }
+            ]
+          }
+        }
+      ]
     }
   };
   res.json(response);
