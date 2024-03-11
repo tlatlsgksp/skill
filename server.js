@@ -9,23 +9,6 @@ let mealMetropole;
 let mealMetropoleDormitory;
 app.use(express.json());
 //app.use(express.static(__dirname));
-function createMealCard(title, description, buttons) {
-  return {
-    'textCard': {
-      'title': title,
-      'description': description,
-      'buttons': buttons
-    }
-  };
-}
-
-function createActionButton(label, messageText) {
-  return {
-    'action': 'message',
-    'label': label,
-    'messageText': messageText
-  };
-}
 
 const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 1, hour: 6, minute: 0 }, async function() {
   try {
@@ -119,7 +102,7 @@ app.post('/today', (req, res) => {
               "items": [
                 {
                     "title": "오늘의 학식[학생식당]",
-                    "description": `한정식 : ${todayMealMetropole.meal}`,
+                    "description": `한정식▽\n${todayMealMetropole.meal}`,
                     "buttons": [
                       {
                         'action': 'block',
@@ -135,7 +118,7 @@ app.post('/today', (req, res) => {
                 },
                 {
                   "title": "오늘의 학식[기숙사]",
-                  "description": `조식 : ${todayMealMetropoleDormitory.breakfast}\n석식 : ${todayMealMetropoleDormitory.dinner}`,
+                  "description": `조식▽\n${todayMealMetropoleDormitory.breakfast}\n\n석식▽\n${todayMealMetropoleDormitory.dinner}`,
                   "buttons": [
                     {
                       'action': 'block',
@@ -204,7 +187,7 @@ app.post('/tomorrow', (req, res) => {
               "items": [
                 {
                     "title": "내일의 학식[학생식당]",
-                    "description": `한정식 : ${tomorrowMealMetropole.meal}`,
+                    "description": `한정식▽\n${tomorrowMealMetropole.meal}`,
                     "buttons": [
                       {
                         'action': 'block',
@@ -220,7 +203,7 @@ app.post('/tomorrow', (req, res) => {
                 },
                 {
                   "title": "내일의 학식[기숙사]",
-                  "description": `조식 : ${tomorrowMealMetropoleDormitory.breakfast}\n석식 : ${tomorrowMealMetropoleDormitory.dinner}`,
+                  "description": `조식▽\n${tomorrowMealMetropoleDormitory.breakfast}\n\n석식▽\n${tomorrowMealMetropoleDormitory.dinner}`,
                   "buttons": [
                     {
                       'action': 'block',
@@ -459,7 +442,7 @@ app.post('/week_met', async (req, res) => {
 
     weekMeals.push({
         "title": `${dayOfWeek} 학식[학생식당]`,
-        "description": `한정식 : ${todayMealMetropole.meal}`,
+        "description": `한정식▽\n${todayMealMetropole.meal}`,
         "buttons": [
           {
             'action': 'block',
@@ -518,7 +501,7 @@ app.post('/week_met_dorm', async (req, res) => {
 
     weekMeals.push({
         "title": `${dayOfWeek} 학식[기숙사]`,
-        "description": `조식 : ${todayMealMetropoleDormitory.breakfast}\n석식 : ${todayMealMetropoleDormitory.dinner}`,
+        "description": `조식▽\n${todayMealMetropoleDormitory.breakfast}\n\n-석식▽\n${todayMealMetropoleDormitory.dinner}`,
         "buttons": [
           {
             'action': 'block',
