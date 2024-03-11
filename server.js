@@ -118,7 +118,7 @@ app.post('/today', (req, res) => {
               "type": "textCard",
               "items": [
                 {
-                    "title": "오늘의 학식 - 학생식당 [11:00 ~ 14:00]",
+                    "title": "오늘의 학식[학생식당]",
                     "description": `한정식 : ${todayMealMetropole.meal}`,
                     "buttons": [
                       {
@@ -134,7 +134,7 @@ app.post('/today', (req, res) => {
                   ]
                 },
                 {
-                  "title": "오늘의 학식 - 기숙사",
+                  "title": "오늘의 학식[기숙사]",
                   "description": `조식 : ${todayMealMetropoleDormitory.breakfast}\n석식 : ${todayMealMetropoleDormitory.dinner}`,
                   "buttons": [
                     {
@@ -203,7 +203,7 @@ app.post('/tomorrow', (req, res) => {
               "type": "textCard",
               "items": [
                 {
-                    "title": "내일의 학식 - 학생식당 [11:00 ~ 14:00]",
+                    "title": "내일의 학식[학생식당]",
                     "description": `한정식 : ${tomorrowMealMetropole.meal}`,
                     "buttons": [
                       {
@@ -219,7 +219,7 @@ app.post('/tomorrow', (req, res) => {
                   ]
                 },
                 {
-                  "title": "내일의 학식 - 기숙사",
+                  "title": "내일의 학식[기숙사]",
                   "description": `조식 : ${tomorrowMealMetropoleDormitory.breakfast}\n석식 : ${tomorrowMealMetropoleDormitory.dinner}`,
                   "buttons": [
                     {
@@ -260,7 +260,7 @@ app.post('/today_origin', (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "한정식 원산지",
+              "title": "오늘의 학식[학생식당] - 원산지",
               "description": `${todayMealMetropole.origin}`,
               "buttons": [
                 {
@@ -298,7 +298,7 @@ app.post('/today_origin_dorm', (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "조식 및 석식 원산지",
+              "title": "오늘의 학식[기숙사] - 원산지",
               "description": `${todayMealMetropoleDormitory.origin}`,
               "buttons": [
                 {
@@ -337,7 +337,7 @@ app.post('/tomorrow_met_origin', (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "한정식 원산지",
+              "title": "내일의 학식[학생식당] - 원산지",
               "description": `${tomorrowMealMetropole.origin}`,
               "buttons": [
                 {
@@ -376,7 +376,7 @@ app.post('/tomorrow_met_dorm_origin', (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "조식 및 석식 원산지",
+              "title": "내일의 학식[기숙사] - 원산지",
               "description": `${tomorrowMealMetropoleDormitory.origin}`,
               "buttons": [
                 {
@@ -418,13 +418,13 @@ app.post('/week', (req, res) => {
               "buttons": [
                 {
                   'action': 'block',
-                  'label': `한정식[학생식당 11:00 ~ 14:00]`,
-                  'blockId': `65ee8c3a99eaa8487e2a54dc`
+                  'label': `한정식[학생식당]`,
+                  'blockId': `65ee8c4499eaa8487e2a54df`
                 },
                 {
                   'action': 'block',
                   'label': `조식, 석식[기숙사]`,
-                  'blockId': `65ee8c9099eaa8487e2a54ed`
+                  'blockId': `65ee8c9b5f95a271a0afa67d`
                 },
                 {
                   'action': 'message',
@@ -569,7 +569,7 @@ app.post('/week_met_origin', async (req, res) => {
     }
 
     weekMeals.push({
-        "title": `${dayOfWeek} 학식 원산지[학생식당]`,
+        "title": `${dayOfWeek} 학식[학생식당] - 원산지`,
         "description": `${todayMealMetropole.origin}`,
         "buttons": [
           {
@@ -619,7 +619,7 @@ app.post('/week_met_dorm_origin', async (req, res) => {
     }
 
     weekMeals.push({
-        "title": `${dayOfWeek} 학식 원산지[학생식당]`,
+        "title": `${dayOfWeek} 학식[기숙사] - 원산지`,
         "description": `${todayMealMetropoleDormitory.origin}`,
         "buttons": [
           {
