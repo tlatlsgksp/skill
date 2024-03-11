@@ -96,11 +96,6 @@ app.post('/today', (req, res) => {
               "description": "학식이 제공되지않습니다.",
               "buttons": [
                 {
-                  'action': 'block',
-                  'label': `뒤로가기`,
-                  'blockId': `65ca1b7109dcef4315f12fd3`
-                },
-                {
                   'action': 'message',
                   'label': `처음으로`,
                   'messageText': `처음으로`
@@ -207,6 +202,89 @@ app.post('/today_origin', (req, res) => {
         ]
       }
     };
+
+  res.json(response);
+});
+
+app.post('/tomorrow', (req, res) => {
+  const day = new Date();
+  day.setDate(day.getDate() + 1);
+  const tomorrow = day.getDay();
+  const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+  const targetDay = daysOfWeek[tomorrow];
+  const tomorrowMealMetropole = mealMetropole.data.find(item => item.date === targetDay);
+  const tomorrowMealMetropoleDormitory = mealMetropoleDormitory.data.find(item => item.date === targetDay);
+  let response;
+
+  if (tomorrow === 0 || tomorrow === 6) {
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "textCard": {
+              "title": "내일은 주말입니다.",
+              "description": "학식이 제공되지 않습니다.",
+              "buttons": [
+                {
+                  'action': 'message',
+                  'label': `처음으로`,
+                  'messageText': `처음으로`
+                },
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+  else {
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "carousel": {
+              "type": "listCard",
+              "items": [
+                {
+                  "header": {
+                    "title": "내일의 학식 - 양주 캠퍼스"
+                  },
+                  "items": [
+                    {
+                      "title": "한정식[학생식당 11:00 ~ 14:00]",
+                      "description": `${tomorrowMealMetropole.meal}`,
+                    },
+                    {
+                      "title": "조식[기숙사]",
+                      "description": `${tomorrowMealMetropoleDormitory.breakfast}`,
+                    },
+                    {
+                      "title": "석식[기숙사]",
+                      "description": `${tomorrowMealMetropoleDormitory.dinner}`,
+                    },
+                  ],
+                  "buttons": [
+                    {
+                      'action': 'block',
+                      'label': `원산지 확인`,
+                      'blockId': `65ed16f940d33a5902c955aa`
+                    },
+                    {
+                      'action': 'message',
+                      'label': `처음으로`,
+                      'messageText': `처음으로`
+                    },
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    };
+  }
 
   res.json(response);
 });
