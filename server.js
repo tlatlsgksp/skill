@@ -546,7 +546,7 @@ app.post('/week_met_origin', async (req, res) => {
   const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
   const { met_day } = req.body.action.clientExtra;
   
-  const targetDayIndex = daysOfWeek.indexOf(met_dorm_day);
+  const targetDayIndex = daysOfWeek.indexOf(met_day);
   if (targetDayIndex !== -1) {
     const targetDay = daysOfWeek[targetDayIndex];
     const tagetdayMealMetropole = mealMetropole.data.find(item => item.date === targetDay);
