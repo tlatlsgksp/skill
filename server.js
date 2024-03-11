@@ -127,7 +127,7 @@ app.post('/today', (req, res) => {
                   },
                   "items": [
                     {
-                      "title": "한정식[학생식당]",
+                      "title": "한정식[학생식당 11:00 ~ 14:00]",
                       "description": `${todayMealMetropole.meal}`,
                     },
                     {
@@ -163,21 +163,66 @@ app.post('/today', (req, res) => {
   res.json(response);
 });
 
+app.post('/today_origin', (req, res) => {
+  const day = new Date();
+  const today = day.getDay();
+  const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+  const targetDay = daysOfWeek[today];
+  const todayMealMetropole = mealMetropole.data.find(item => item.date === targetDay);
+  const todayMealMetropoleDormitory = mealMetropoleDormitory.data.find(item => item.date === targetDay);
+
+  const response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "carousel": {
+              "type": "listCard",
+              "items": [
+                {
+                  "header": {
+                    "title": "오늘의 학식 - 양주 캠퍼스[원산지]"
+                  },
+                  "items": [
+                    {
+                      "title": "한정식",
+                      "description": `${todayMealMetropole.origin}`,
+                    },
+                    {
+                      "title": "조식 및 석식",
+                      "description": `${todayMealMetropoleDormitory.origin}`,
+                    }
+                  ],
+                    "buttons": [
+                      {
+                        'action': 'message',
+                        'label': `처음으로`,
+                        'messageText': `처음으로`
+                      },
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    };
+
+  res.json(response);
+});
+
 app.post('/week', async (req, res) => {
   const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+  const fridayMessage = "금요일에는 제공되지 않습니다.";
 
   const weekMeals = [];
   for (let i = 0; i < 7; i++) {
     const day = new Date();
     day.setDate(day.getDate() + i);
     const dayOfWeek = daysOfWeek[day.getDay()];
-
     const todayMealMetropole = mealMetropole.data.find(item => item.date === dayOfWeek);
     const todayMealMetropoleDormitory = mealMetropoleDormitory.data.find(item => item.date === dayOfWeek);
 
-    const fridayMessage = "금, 토, 일에는 제공되지 않습니다.";
-
-    // 토요일과 일요일 제외 처리
     if (i === 5 || i === 6) {
       continue;
     }
@@ -188,7 +233,7 @@ app.post('/week', async (req, res) => {
       },
       "items": [
         {
-          "title": "한정식[학생식당]",
+          "title": "한정식[학생식당 11:00 ~ 14:00]",
           "description": `${todayMealMetropole.meal}`,
         },
         {
@@ -206,6 +251,63 @@ app.post('/week', async (req, res) => {
           'label': `원산지 확인`,
           'blockId': `65ee6281e88704127f3d8446`
         },
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        },
+      ]
+    });
+  }
+
+  const response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "carousel": {
+            "type": "listCard",
+            "items": weekMeals
+          }
+        }
+      ]
+    }
+  };
+
+  res.json(response);
+});
+
+app.post('/week_origin', async (req, res) => {
+  const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+  const fridayMessage = "금요일에는 제공되지 않습니다.";
+
+  const weekMeals = [];
+  for (let i = 0; i < 7; i++) {
+    const day = new Date();
+    day.setDate(day.getDate() + i);
+    const dayOfWeek = daysOfWeek[day.getDay()];
+    const todayMealMetropole = mealMetropole.data.find(item => item.date === dayOfWeek);
+    const todayMealMetropoleDormitory = mealMetropoleDormitory.data.find(item => item.date === dayOfWeek);
+
+    if (i === 5 || i === 6) {
+      continue;
+    }
+
+    weekMeals.push({
+      "header": {
+        "title": `이번주 학식 - ${dayOfWeek}`
+      },
+      "items": [
+        {
+          "title": "한정식",
+          "description": `${todayMealMetropole.origin}`,
+        },
+        {
+          "title": "조식 및 석식",
+          "description": i === 5 ? fridayMessage : `${todayMealMetropoleDormitory.origin}`,
+        },
+      ],
+      "buttons": [
         {
           'action': 'message',
           'label': `처음으로`,
