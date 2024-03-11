@@ -84,71 +84,82 @@ app.post('/today', (req, res) => {
   const todayMealMetropole = mealMetropole.data.find(item => item.date === targetDay);
   const todayMealMetropoleDormitory = mealMetropoleDormitory.data.find(item => item.date === targetDay);
 
-  const response = {
-    "version": "2.0",
-    "template": {
-      "outputs": [
-        {
-          "carousel": {
-            "type": "listCard",
-            "items": [
-              {
-                "header": {
-                  "title": "오늘의 학식 - 양주 캠퍼스"
+  if (today === 6 || today === 0) {
+    const response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "textCard": {
+              "title": "오늘은 주말입니다.",
+              "description": "학식이 제공되지않습니다.",
+              "buttons": [
+                {
+                  'action': 'block',
+                  'label': `뒤로가기`,
+                  'blockId': `65ca1b7109dcef4315f12fd3`
                 },
-                "items": [
-                  {
-                    "title": "한정식[학생식당]",
-                    "description": `${todayMealMetropole.meal}`,
-                  },
-                  {
-                    "title": "조식[기숙사]",
-                    "description": `${todayMealMetropoleDormitory.breakfast}`,
-                  },
-                  {
-                    "title": "석식[기숙사]",
-                    "description": `${todayMealMetropoleDormitory.dinner}`,
-                  },
-                ],
-                  "buttons": [
-                    {
-                      'action': 'block',
-                      'label': `원산지 확인`,
-                      'blockId': `65ed16f940d33a5902c955aa`
-                    },
-                    {
-                      'action': 'message',
-                      'label': `처음으로`,
-                      'messageText': `처음으로`
-                    },
-                ]
-              }
+                {
+                  'action': 'message',
+                  'label': `처음으로`,
+                  'messageText': `처음으로`
+                },
             ]
+            }
           }
-        }
-      ]
+        ]
+      }
     }
-  };
-  res.json(response);
-
-
-      /*'version': '2.0',
-      'template': {
-        'outputs': [
-          createMealCard(`오늘의 학식[${todayMealMetropole.date}] - 양주 캠퍼스`, `한정식: ${todayMealMetropole.meal}`, [
-            createActionButton('원산지 확인', `오늘의 학식[원산지] - 양주 캠퍼스`),
-            createActionButton('처음으로', '처음으로'),
-            createActionButton('뒤로가기', '뒤로가기')
-          ]), 
-          createMealCard(`오늘의 학식[${todayMealMetropoleDormitory.date}] - 양주 캠퍼스 기숙사`, `조식: ${todayMealMetropoleDormitory.breakfast}\n석식: ${todayMealMetropoleDormitory.dinner}`, [
-            createActionButton('원산지 확인', `오늘의 학식[원산지] - 양주 캠퍼스 기숙사`),
-            createActionButton('처음으로', '처음으로'),
-            createActionButton('뒤로가기', '뒤로가기')
-          ])
+  }
+  else {
+    const response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "carousel": {
+              "type": "listCard",
+              "items": [
+                {
+                  "header": {
+                    "title": "오늘의 학식 - 양주 캠퍼스"
+                  },
+                  "items": [
+                    {
+                      "title": "한정식[학생식당]",
+                      "description": `${todayMealMetropole.meal}`,
+                    },
+                    {
+                      "title": "조식[기숙사]",
+                      "description": `${todayMealMetropoleDormitory.breakfast}`,
+                    },
+                    {
+                      "title": "석식[기숙사]",
+                      "description": `${todayMealMetropoleDormitory.dinner}`,
+                    },
+                  ],
+                    "buttons": [
+                      {
+                        'action': 'block',
+                        'label': `원산지 확인`,
+                        'blockId': `65ed16f940d33a5902c955aa`
+                      },
+                      {
+                        'action': 'message',
+                        'label': `처음으로`,
+                        'messageText': `처음으로`
+                      },
+                  ]
+                }
+              ]
+            }
+          }
         ]
       }
     };
-    res.json(response);*/
+  }
+
+  res.json(response);
 });
 
 app.post('/week', async (req, res) => {
@@ -163,6 +174,13 @@ app.post('/week', async (req, res) => {
     const todayMealMetropole = mealMetropole.data.find(item => item.date === dayOfWeek);
     const todayMealMetropoleDormitory = mealMetropoleDormitory.data.find(item => item.date === dayOfWeek);
 
+    const fridayMessage = "금, 토, 일에는 제공되지 않습니다.";
+
+    // 토요일과 일요일 제외 처리
+    if (i === 5 || i === 6) {
+      continue;
+    }
+
     weekMeals.push({
       "header": {
         "title": `이번주 학식 - ${dayOfWeek}`
@@ -174,11 +192,11 @@ app.post('/week', async (req, res) => {
         },
         {
           "title": "조식[기숙사]",
-          "description": `${todayMealMetropoleDormitory.breakfast}`,
+          "description": i === 5 ? fridayMessage : `${todayMealMetropoleDormitory.breakfast}`,
         },
         {
           "title": "석식[기숙사]",
-          "description": `${todayMealMetropoleDormitory.dinner}`,
+          "description": i === 5 ? fridayMessage : `${todayMealMetropoleDormitory.dinner}`,
         }
       ],
       "buttons": [
@@ -209,9 +227,8 @@ app.post('/week', async (req, res) => {
       ]
     }
   };
-  
+
   res.json(response);
-  
 });
 
 app.listen(port, () => {
