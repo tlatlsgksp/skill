@@ -101,8 +101,8 @@ app.post('/today', (req, res) => {
               "type": "textCard",
               "items": [
                 {
-                    "title": "오늘의 학식[학생식당]",
-                    "description": `한정식▽\n${todayMealMetropole.meal}`,
+                    "title": "🍴오늘의 학식[학생식당]🍴",
+                    "description": `한정식▼\n${todayMealMetropole.meal}`,
                     "buttons": [
                       {
                         'action': 'block',
@@ -117,8 +117,8 @@ app.post('/today', (req, res) => {
                   ]
                 },
                 {
-                  "title": "오늘의 학식[기숙사]",
-                  "description": `조식▽\n${todayMealMetropoleDormitory.breakfast}\n\n석식▽\n${todayMealMetropoleDormitory.dinner}`,
+                  "title": "🍴오늘의 학식[기숙사]🍴",
+                  "description": `조식▼\n${todayMealMetropoleDormitory.breakfast}\n\n석식▼\n${todayMealMetropoleDormitory.dinner}`,
                   "buttons": [
                     {
                       'action': 'block',
@@ -186,8 +186,8 @@ app.post('/tomorrow', (req, res) => {
               "type": "textCard",
               "items": [
                 {
-                    "title": "내일의 학식[학생식당]",
-                    "description": `한정식▽\n${tomorrowMealMetropole.meal}`,
+                    "title": "🍴내일의 학식[학생식당]🍴",
+                    "description": `한정식▼\n${tomorrowMealMetropole.meal}`,
                     "buttons": [
                       {
                         'action': 'block',
@@ -202,8 +202,8 @@ app.post('/tomorrow', (req, res) => {
                   ]
                 },
                 {
-                  "title": "내일의 학식[기숙사]",
-                  "description": `조식▽\n${tomorrowMealMetropoleDormitory.breakfast}\n\n석식▽\n${tomorrowMealMetropoleDormitory.dinner}`,
+                  "title": "🍴내일의 학식[기숙사]🍴",
+                  "description": `조식▼\n${tomorrowMealMetropoleDormitory.breakfast}\n\n석식▼\n${tomorrowMealMetropoleDormitory.dinner}`,
                   "buttons": [
                     {
                       'action': 'block',
@@ -243,7 +243,7 @@ app.post('/today_origin', (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "오늘의 학식[학생식당] - 원산지",
+              "title": "🍴오늘의 학식[학생식당] - 원산지🍴",
               "description": `${todayMealMetropole.origin}`,
               "buttons": [
                 {
@@ -281,7 +281,7 @@ app.post('/today_origin_dorm', (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "오늘의 학식[기숙사] - 원산지",
+              "title": "🍴오늘의 학식[기숙사] - 원산지🍴",
               "description": `${todayMealMetropoleDormitory.origin}`,
               "buttons": [
                 {
@@ -320,7 +320,7 @@ app.post('/tomorrow_met_origin', (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "내일의 학식[학생식당] - 원산지",
+              "title": "🍴내일의 학식[학생식당] - 원산지🍴",
               "description": `${tomorrowMealMetropole.origin}`,
               "buttons": [
                 {
@@ -359,7 +359,7 @@ app.post('/tomorrow_met_dorm_origin', (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "내일의 학식[기숙사] - 원산지",
+              "title": "🍴내일의 학식[기숙사] - 원산지🍴",
               "description": `${tomorrowMealMetropoleDormitory.origin}`,
               "buttons": [
                 {
@@ -397,7 +397,7 @@ app.post('/week', (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "이번주 학식",
+              "title": "🍴이번주 학식🍴",
               "buttons": [
                 {
                   'action': 'block',
@@ -441,8 +441,8 @@ app.post('/week_met', async (req, res) => {
     }
 
     weekMeals.push({
-        "title": `${dayOfWeek} 학식[학생식당]`,
-        "description": `한정식▽\n${todayMealMetropole.meal}`,
+        "title": `🍴${dayOfWeek} 학식[학생식당]🍴`,
+        "description": `한정식▼\n${todayMealMetropole.meal}`,
         "buttons": [
           {
             'action': 'block',
@@ -500,8 +500,8 @@ app.post('/week_met_dorm', async (req, res) => {
     }
 
     weekMeals.push({
-        "title": `${dayOfWeek} 학식[기숙사]`,
-        "description": `조식▽\n${todayMealMetropoleDormitory.breakfast}\n\n-석식▽\n${todayMealMetropoleDormitory.dinner}`,
+        "title": `🍴${dayOfWeek} 학식[기숙사]🍴`,
+        "description": `조식▼\n${todayMealMetropoleDormitory.breakfast}\n\n석식▼\n${todayMealMetropoleDormitory.dinner}`,
         "buttons": [
           {
             'action': 'block',
@@ -558,7 +558,7 @@ app.post('/week_met_origin', async (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": `${met_day} 학식[학생식당] - 원산지`,
+              "title": `🍴${met_day} 학식[학생식당] - 원산지🍴`,
               "description": `${tagetdayMealMetropole.origin}`,
               "buttons": [
                 {
@@ -597,7 +597,7 @@ app.post('/week_met_dorm_origin', async (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": `${met_dorm_day} 학식[기숙사] - 원산지`,
+              "title": `🍴${met_dorm_day} 학식[기숙사] - 원산지🍴`,
               "description": `${tagetdayMealMetropoleDormitory.origin}`,
               "buttons": [
                 {
