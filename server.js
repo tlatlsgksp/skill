@@ -124,7 +124,7 @@ app.post('/today', (req, res) => {
                       {
                         'action': 'block',
                         'label': `원산지 확인`,
-                        'blockId': `한정식 원산지`
+                        'blockId': `65ed16f940d33a5902c955aa`
                       },
                       {
                         'action': 'message',
@@ -140,7 +140,7 @@ app.post('/today', (req, res) => {
                     {
                       'action': 'block',
                       'label': `원산지 확인`,
-                      'blockId': `기숙사 원산지`
+                      'blockId': `65ee9f1fac1dbb67bfcf55d0`
                     },
                     {
                       'action': 'message',
@@ -160,7 +160,7 @@ app.post('/today', (req, res) => {
   res.json(response);
 });
 
-//내일의 학식
+//내일의 학식 - 학생식당, 기숙사
 app.post('/tomorrow', (req, res) => {
   const day = new Date();
   day.setDate(day.getDate() + 1);
@@ -209,7 +209,7 @@ app.post('/tomorrow', (req, res) => {
                       {
                         'action': 'block',
                         'label': `원산지 확인`,
-                        'blockId': `한정식 원산지`
+                        'blockId': `65ee8171d287ba103c2cd6ac`
                       },
                       {
                         'action': 'message',
@@ -225,7 +225,7 @@ app.post('/tomorrow', (req, res) => {
                     {
                       'action': 'block',
                       'label': `원산지 확인`,
-                      'blockId': `기숙사 원산지`
+                      'blockId': `65eea19f18f53f3111d6f432`
                     },
                     {
                       'action': 'message',
@@ -464,7 +464,7 @@ app.post('/week_met', async (req, res) => {
           {
             'action': 'message',
             'label': `원산지 확인`,
-            'messageText': `원산지 블럭`
+            'messageText': `65ee6281e88704127f3d8446`
           },
           {
             'action': 'message',
@@ -520,7 +520,7 @@ app.post('/week_met_dorm', async (req, res) => {
           {
             'action': 'message',
             'label': `원산지 확인`,
-            'messageText': `원산지 블럭`
+            'messageText': `65ee9fa1693153232294d2a5`
           },
           {
             'action': 'message',
