@@ -266,7 +266,7 @@ app.post('/today_origin', (req, res) => {
                 {
                   'action': 'block',
                   'label': `뒤로가기`,
-                  'blockId': `today로`
+                  'blockId': `65ca1b7109dcef4315f12fd3`
                 },
                 {
                   'action': 'message',
@@ -304,7 +304,7 @@ app.post('/today_origin_dorm', (req, res) => {
                 {
                   'action': 'block',
                   'label': `뒤로가기`,
-                  'blockId': `today로`
+                  'blockId': `65ca1b7109dcef4315f12fd3`
                 },
                 {
                   'action': 'message',
@@ -322,7 +322,7 @@ app.post('/today_origin_dorm', (req, res) => {
 });
 
 //내일의 학식 - 학생식당 원산지
-app.post('/tomorrow', (req, res) => {
+app.post('/tomorrow_met_origin', (req, res) => {
   const day = new Date();
   day.setDate(day.getDate() + 1);
   const tomorrow = day.getDay();
@@ -343,7 +343,7 @@ app.post('/tomorrow', (req, res) => {
                 {
                   'action': 'block',
                   'label': `뒤로가기`,
-                  'blockId': `tomorrow로`
+                  'blockId': `65ee8168c8612a194feaff1d`
                 },
                 {
                   'action': 'message',
@@ -361,7 +361,7 @@ app.post('/tomorrow', (req, res) => {
 });
 
 //내일의 학식 - 기숙사 원산지
-app.post('/tomorrow', (req, res) => {
+app.post('/tomorrow_met_dorm_origin', (req, res) => {
   const day = new Date();
   day.setDate(day.getDate() + 1);
   const tomorrow = day.getDay();
@@ -382,7 +382,7 @@ app.post('/tomorrow', (req, res) => {
                 {
                   'action': 'block',
                   'label': `뒤로가기`,
-                  'blockId': `tomorrow로`
+                  'blockId': `65ee8168c8612a194feaff1d`
                 },
                 {
                   'action': 'message',
@@ -469,7 +469,7 @@ app.post('/week_met', async (req, res) => {
           {
             'action': 'message',
             'label': `뒤로가기`,
-            'messageText': `week로`
+            'messageText': `65ca1c5709dcef4315f12fe8`
           },
           {
             'action': 'message',
@@ -525,7 +525,7 @@ app.post('/week_met_dorm', async (req, res) => {
           {
             'action': 'message',
             'label': `뒤로가기`,
-            'messageText': `week로`
+            'messageText': `65ca1c5709dcef4315f12fe8`
           },
           {
             'action': 'message',
@@ -575,7 +575,7 @@ app.post('/week_met_origin', async (req, res) => {
           {
             'action': 'message',
             'label': `뒤로가기`,
-            'messageText': `week로`
+            'messageText': `65ee8c4499eaa8487e2a54df`
           },
           {
             'action': 'message',
@@ -625,7 +625,7 @@ app.post('/week_met_dorm_origin', async (req, res) => {
           {
             'action': 'message',
             'label': `뒤로가기`,
-            'messageText': `week로`
+            'messageText': `65ee8c9b5f95a271a0afa67d`
           },
           {
             'action': 'message',
