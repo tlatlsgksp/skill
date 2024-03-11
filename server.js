@@ -83,9 +83,10 @@ app.post('/today', (req, res) => {
   const targetDay = daysOfWeek[today];
   const todayMealMetropole = mealMetropole.data.find(item => item.date === targetDay);
   const todayMealMetropoleDormitory = mealMetropoleDormitory.data.find(item => item.date === targetDay);
+  let response;
 
   if (today === 6 || today === 0) {
-    const response = {
+    response = {
       "version": "2.0",
       "template": {
         "outputs": [
@@ -112,7 +113,7 @@ app.post('/today', (req, res) => {
     }
   }
   else {
-    const response = {
+    response = {
       "version": "2.0",
       "template": {
         "outputs": [
