@@ -561,7 +561,7 @@ app.post('/week_met_dorm', async (req, res) => {
 
 app.post('/week_met_origin', async (req, res) => {
   const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
-  const { met_dorm_day } = req.body.action.clientExtra;
+  const { met_day } = req.body.action.clientExtra;
   
   const targetDayIndex = daysOfWeek.indexOf(met_dorm_day);
   if (targetDayIndex !== -1) {
@@ -575,7 +575,7 @@ app.post('/week_met_origin', async (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": `${met_dorm_day} 학식[학생식당] - 원산지`,
+              "title": `${met_day} 학식[학생식당] - 원산지`,
               "description": `${tagetdayMealMetropole.origin}`,
               "buttons": [
                 {
