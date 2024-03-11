@@ -4,7 +4,7 @@ const schedule = require('node-schedule');
 const { main_met } = require('./crawl_metropole');
 const { main_met_dorm } = require('./crawl_metropole_dormitory');
 const app = express();
-const port = 80;
+const port = 8080;
 let mealMetropole;
 let mealMetropoleDormitory;
 app.use(express.json());
@@ -85,23 +85,57 @@ app.post('/today', (req, res) => {
   const todayMealMetropoleDormitory = mealMetropoleDormitory.data.find(item => item.date === targetDay);
 
   const response = {
-      'version': '2.0',
+    "version": "2.0",
+    "template": {
+        "outputs": [
+            {
+                "itemCard": {
+                    "imageTitle": {
+                        "title": `오늘의 학식[${todayMealMetropole.date}]`,
+                        "description": "양주 캠퍼스"
+                    },
+                    "title": "",
+                    "description": "",
+                    "thumbnail": {
+                    },
+                    "profile": {
+                        "title": "AA Airline",
+                        "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/aaairline.jpg"
+                    },
+                    "itemList": [
+                        {
+                            "title": "한정식",
+                            "description": `${todayMealMetropole.meal}`
+                        }
+                    ],
+                }
+            },
+            createActionButton('원산지 확인', `오늘의 학식[원산지] - 양주 캠퍼스`),
+            createActionButton('처음으로', '처음으로'),
+            createActionButton('뒤로가기', '뒤로가기')
+        ]
+    }
+  };
+  res.json(response);
+
+
+      /*'version': '2.0',
       'template': {
         'outputs': [
-          createMealCard(`오늘의 학식 [${todayMealMetropole.date}] - 양주 캠퍼스`, `한정식: ${todayMealMetropole.meal}`, [
-            createActionButton('원산지 확인', `원산지: ${todayMealMetropole.origin}`),
+          createMealCard(`오늘의 학식[${todayMealMetropole.date}] - 양주 캠퍼스`, `한정식: ${todayMealMetropole.meal}`, [
+            createActionButton('원산지 확인', `오늘의 학식[원산지] - 양주 캠퍼스`),
             createActionButton('처음으로', '처음으로'),
             createActionButton('뒤로가기', '뒤로가기')
           ]), 
           createMealCard(`오늘의 학식[${todayMealMetropoleDormitory.date}] - 양주 캠퍼스 기숙사`, `조식: ${todayMealMetropoleDormitory.breakfast}\n석식: ${todayMealMetropoleDormitory.dinner}`, [
-            createActionButton('원산지 확인', `원산지: ${todayMealMetropoleDormitory.origin}`),
+            createActionButton('원산지 확인', `오늘의 학식[원산지] - 양주 캠퍼스 기숙사`),
             createActionButton('처음으로', '처음으로'),
             createActionButton('뒤로가기', '뒤로가기')
           ])
         ]
       }
     };
-    res.json(response);
+    res.json(response);*/
 });
 
 app.post('/week', async (req, res) => {
@@ -109,13 +143,13 @@ app.post('/week', async (req, res) => {
     'version': '2.0',
     'template': {
       'outputs': [
-        createMealCard(`이번주 학식 [] - 양주 캠퍼스`, `한정식: `, [
-          createActionButton('원산지 확인', `원산지:`),
+        createMealCard(`이번주 학식[] - 양주 캠퍼스`, `한정식: `, [
+          createActionButton('원산지 확인', `이번주 학식[원산지] - 양주 캠퍼스`),
           createActionButton('처음으로', '처음으로'),
           createActionButton('뒤로가기', '뒤로가기')
         ]), 
         createMealCard(`이번주 학식[] - 양주 캠퍼스 기숙사`, `조식: \n석식: `, [
-          createActionButton('원산지 확인', `원산지: `),
+          createActionButton('원산지 확인', `이번주 학식[원산지] - 양주 캠퍼스 기숙사`),
           createActionButton('처음으로', '처음으로'),
           createActionButton('뒤로가기', '뒤로가기')
         ])
