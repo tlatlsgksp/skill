@@ -464,7 +464,10 @@ app.post('/week_met', async (req, res) => {
           {
             'action': 'block',
             'label': `원산지 확인`,
-            'blockId': `met_${dayOfWeek}`
+            'blockId': `65ee6281e88704127f3d8446`,
+            'extra': {
+              'met_day' : `${dayOfWeek}`
+            }
           },
           {
             'action': 'block',
@@ -520,7 +523,10 @@ app.post('/week_met_dorm', async (req, res) => {
           {
             'action': 'block',
             'label': `원산지 확인`,
-            'blockId': `dorm_${dayOfWeek}`
+            'blockId': `65ee9fa1693153232294d2a5`,
+            'extra': {
+              'met_dorm_day' : `${dayOfWeek}`
+            }
           },
           {
             'action': 'block',
@@ -553,120 +559,24 @@ app.post('/week_met_dorm', async (req, res) => {
   res.json(response);
 });
 
-/*app.post('/week_met_origin', async (req, res) => {
+app.post('/week_met_origin', async (req, res) => {
   const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+  const { met_dorm_day } = req.body.action.clientExtra;
+  
+  const targetDayIndex = daysOfWeek.indexOf(met_dorm_day);
+  if (targetDayIndex !== -1) {
+    const targetDay = daysOfWeek[targetDayIndex];
+    const tagetdayMealMetropole = mealMetropole.data.find(item => item.date === targetDay);
+    const tagetdayMealMetropoleDormitory = mealMetropoleDormitory.data.find(item => item.date === targetDay);
 
-  const weekMeals = [];
-  for (let i = 0; i < 7; i++) {
-    const day = new Date();
-    day.setDate(day.getDate() + i);
-    const dayOfWeek = daysOfWeek[day.getDay()];
-    const todayMealMetropole = mealMetropole.data.find(item => item.date === dayOfWeek);
-    const todayMealMetropoleDormitory = mealMetropoleDormitory.data.find(item => item.date === dayOfWeek);
-
-    if (i === 5 || i === 6) {
-      continue;
-    }
-
-    weekMeals.push({
-        "title": `${dayOfWeek} 학식[학생식당] - 원산지`,
-        "description": `${todayMealMetropole.origin}`,
-        "buttons": [
-          {
-            'action': 'block',
-            'label': `뒤로가기`,
-            'blockId': `65ee8c4499eaa8487e2a54df`
-          },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          },
-      ]
-    });
-  }
-
-  const response = {
-    "version": "2.0",
-    "template": {
-      "outputs": [
-        {
-          "carousel": {
-            "type": "textCard",
-            "items": weekMeals
-          }
-        }
-      ]
-    }
-  };
-
-  res.json(response);
-});
-
-app.post('/week_met_dorm_origin', async (req, res) => {
-  const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
-
-  const weekMeals = [];
-  for (let i = 0; i < 7; i++) {
-    const day = new Date();
-    day.setDate(day.getDate() + i);
-    const dayOfWeek = daysOfWeek[day.getDay()];
-    const todayMealMetropole = mealMetropole.data.find(item => item.date === dayOfWeek);
-    const todayMealMetropoleDormitory = mealMetropoleDormitory.data.find(item => item.date === dayOfWeek);
-
-    if (i === 5 || i === 6) {
-      continue;
-    }
-
-    weekMeals.push({
-        "title": `${dayOfWeek} 학식[기숙사] - 원산지`,
-        "description": `${todayMealMetropoleDormitory.origin}`,
-        "buttons": [
-          {
-            'action': 'block',
-            'label': `뒤로가기`,
-            'blockId': `65ee8c9b5f95a271a0afa67d`
-          },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          },
-      ]
-    });
-  }
-
-  const response = {
-    "version": "2.0",
-    "template": {
-      "outputs": [
-        {
-          "carousel": {
-            "type": "textCard",
-            "items": weekMeals
-          }
-        }
-      ]
-    }
-  };
-
-  res.json(response);
-});*/
-
-app.post('/blockEvent', (req, res) => {
-  const blockId = req.body.action.params.blockId;
-  const type = blockId.split('_')[0];
-  const dayOfWeek = blockId.split('_')[1];
-  let response;
-
-  if (type === 'met'){
-    response = {
+    const response = {
       "version": "2.0",
       "template": {
         "outputs": [
           {
             "textCard": {
-              "title": `${dayOfWeek} 학식[학생식당] - 원산지`,
+              "title": `${met_dorm_day} 학식[학생식당] - 원산지`,
+              "description": `${tagetdayMealMetropole.origin}`,
               "buttons": [
                 {
                   'action': 'block',
@@ -679,19 +589,33 @@ app.post('/blockEvent', (req, res) => {
                   'messageText': `처음으로`
                 },
             ]
-            }
-          }
+        }
+        }
         ]
       }
     };
-  }else {
-    response = {
+  res.json(response);
+  }
+});
+
+app.post('/week_met_dorm_origin', async (req, res) => {
+  const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+  const { met_dorm_day } = req.body.action.clientExtra;
+  
+  const targetDayIndex = daysOfWeek.indexOf(met_dorm_day);
+  if (targetDayIndex !== -1) {
+    const targetDay = daysOfWeek[targetDayIndex];
+    const tagetdayMealMetropole = mealMetropole.data.find(item => item.date === targetDay);
+    const tagetdayMealMetropoleDormitory = mealMetropoleDormitory.data.find(item => item.date === targetDay);
+
+    const response = {
       "version": "2.0",
       "template": {
         "outputs": [
           {
             "textCard": {
-              "title": `${dayOfWeek} 학식[기숙사] - 원산지`,
+              "title": `${met_dorm_day} 학식[기숙사] - 원산지`,
+              "description": `${tagetdayMealMetropoleDormitory.origin}`,
               "buttons": [
                 {
                   'action': 'block',
@@ -704,14 +628,13 @@ app.post('/blockEvent', (req, res) => {
                   'messageText': `처음으로`
                 },
             ]
-            }
-          }
+        }
+        }
         ]
       }
     };
-  }
-
   res.json(response);
+  }
 });
 
 app.listen(port, () => {
