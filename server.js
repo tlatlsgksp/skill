@@ -853,30 +853,6 @@ app.post('/empty_lecture_now', async (req, res) => {
     }
   });
 
-  const buildingTexts = {};
-  for (const [buildingCode, floors] of Object.entries(buildings)) {
-    const buildingName = getBuildingName(buildingCode);
-    const floorTexts = [];
-
-    const sortedFloors = Object.keys(floors).sort((a, b) => {
-      const aNumeric = parseInt(a);
-      const bNumeric = parseInt(b);
-    
-      if (aNumeric === 10 && bNumeric === 10) return 0;
-      if (aNumeric === 10) return 1;
-      if (bNumeric === 10) return -1;
-      return aNumeric - bNumeric;
-    });
-    
-    for (const floorName of sortedFloors) {
-      const sortedClassrooms = floors[floorName].sort((a, b) => a.localeCompare(b));
-      const floorText = `${getFloorName(floorName)}▼\n(${sortedClassrooms.join(', ')})`;
-      floorTexts.push(floorText);
-    }
-
-    buildingTexts[buildingName] = floorTexts.join('\n');
-  }
-
   const response = {
     version: '2.0',
     template: {
@@ -884,27 +860,48 @@ app.post('/empty_lecture_now', async (req, res) => {
         {
           carousel: {
             type: 'textCard',
-            items: Object.entries(buildingTexts).map(([buildingName, buildingText]) => ({
-              title: `현재 빈 강의실[${buildingName}]`,
-              description: buildingText,
-              buttons: [
-                {
-                  action: 'block',
-                  label: '뒤로가기',
-                  blockId: '65f16c470c18862f977ddf5b',
-                },
-                {
-                  action: 'message',
-                  label: '처음으로',
-                  messageText: '처음으로',
-                },
-              ],
-            })),
+            items: []
           },
         },
       ],
     },
   };
+
+  for (const [buildingCode, floors] of Object.entries(buildings)) {
+    const buildingName = getBuildingName(buildingCode);
+
+    const sortedFloors = Object.keys(floors).sort((a, b) => {
+      const aNumeric = parseInt(a);
+      const bNumeric = parseInt(b);
+
+      if (aNumeric === 10 && bNumeric === 10) return 0;
+      if (aNumeric === 10) return 1;
+      if (bNumeric === 10) return -1;
+      return aNumeric - bNumeric;
+    });
+
+    for (const floorName of sortedFloors) {
+      const sortedClassrooms = floors[floorName].sort((a, b) => a.localeCompare(b));
+      const floorText = `${getFloorName(floorName)}▼\n(${sortedClassrooms.join(', ')})`;
+
+      response.template.outputs[0].carousel.items.push({
+        title: `현재 빈 강의실[${buildingName} ${getFloorName(floorName)}]`,
+        description: floorText,
+        buttons: [
+          {
+            action: 'block',
+            label: '뒤로가기',
+            blockId: '65f16c470c18862f977ddf5b',
+          },
+          {
+            action: 'message',
+            label: '처음으로',
+            messageText: '처음으로',
+          },
+        ],
+      });
+    }
+  }
 
   res.json(response);
 });
