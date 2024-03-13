@@ -44,7 +44,7 @@ async function writeToGoogleSheets(auth, dates, menus, origins) {
       },
     });
 
-    console.log('Appended data to Google Sheets:', response.data);
+    console.log('Appended data to Google Sheets');
 
     // 크롤링 데이터를 JSON 파일로 저장
     const jsonData = {
