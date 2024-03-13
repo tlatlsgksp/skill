@@ -430,13 +430,11 @@ app.post('/week_met', async (req, res) => {
 
   const weekMeals = [];
   for (let i = 0; i < 7; i++) {
-    const day = new Date();
-    day.setDate(day.getDate() + i);
-    const dayOfWeek = daysOfWeek[day.getDay()];
+    const dayOfWeek = daysOfWeek[i];
     const todayMealMetropole = mealMetropole.data.find(item => item.date === dayOfWeek);
     const todayMealMetropoleDormitory = mealMetropoleDormitory.data.find(item => item.date === dayOfWeek);
 
-    if (i === 5 || i === 6) {
+    if (i === 0 || i === 6) {
       continue;
     }
 
@@ -489,13 +487,11 @@ app.post('/week_met_dorm', async (req, res) => {
 
   const weekMeals = [];
   for (let i = 0; i < 7; i++) {
-    const day = new Date();
-    day.setDate(day.getDate() + i);
-    const dayOfWeek = daysOfWeek[day.getDay()];
+    const dayOfWeek = daysOfWeek[i];
     const todayMealMetropole = mealMetropole.data.find(item => item.date === dayOfWeek);
     const todayMealMetropoleDormitory = mealMetropoleDormitory.data.find(item => item.date === dayOfWeek);
 
-    if (i === 4 || i === 5 || i === 6) {
+    if (i === 0 || i === 5 || i === 6) {
       continue;
     }
 
