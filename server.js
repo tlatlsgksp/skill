@@ -173,6 +173,53 @@ function getCurrentFloor(classroom) {
   return getFloorName(floorCode);
 }
 
+function createBuildingResponse(buildingName, buildingCode, floors, hasCarousel) {
+  const items = [];
+
+  for (const [floor, classrooms] of Object.entries(floors)) {
+    if (classrooms.length > 0) {
+      const item = {
+        title: `현재 빈 강의실[${buildingName} ${getFloorLabel(floor)}]`,
+        description: `${getFloorLabel(floor)}▼\n(${classrooms.join(', ')})`,
+        buttons: [
+          { action: 'block', label: '뒤로가기', blockId: '65f16c470c18862f977ddf5b' },
+          { action: 'message', label: '처음으로', messageText: '처음으로' },
+        ],
+      };
+      items.push(item);
+    }
+  }
+
+  const response = {
+    version: '2.0',
+    template: {
+      outputs: [
+        {
+          carousel: {
+            type: 'textCard',
+            items: items,
+          },
+        },
+      ],
+    },
+  };
+
+  return response;
+}
+
+// Function to get the floor label (e.g., '1층' for floor '1')
+function getFloorLabel(floor) {
+  return `${floor}`;
+}
+
+function sortFloors(floors) {
+  const sortedFloors = {};
+  Object.keys(floors).sort((a, b) => parseInt(a) - parseInt(b)).forEach(key => {
+    sortedFloors[key] = floors[key].sort(); // 각 층의 강의실을 정렬
+  });
+  return sortedFloors;
+}
+
 async function initialize() {
   try {
     console.log('서버 초기화 중');
@@ -828,158 +875,177 @@ app.post('/week_met_dorm_origin', async (req, res) => {
   }
 });
 
-//현재 빈 강의실
-app.post('/empty_lecture_now', async (req, res) => {
+//현재 빈 강의실 - 우당관
+app.post('/empty_lecture_now_1', async (req, res) => {
   const empty = findAvailableClassrooms(lectureList);
 
-  const buildings = {
-    '1': [],  // 우당관
-    '2': [],  // 선덕관
-    '3': []   // 충효관
+  const buildingCode = '1';
+  const floors = {
+    '1': [], '2': [], '3': [], '4': [], '5': [],
+    '6': [], '7': [], '8': [], '9': [], '0': [],
   };
 
   empty.forEach(classroom => {
-    const buildingCode = classroom.charAt(0);
+    const currentBuildingCode = classroom.charAt(0);
     const floorName = getCurrentFloor(classroom);
 
-    if (['1', '2', '3'].includes(buildingCode)) {
-      if (!buildings[buildingCode][floorName]) {
-        buildings[buildingCode][floorName] = [];
+    if (currentBuildingCode === buildingCode) {
+      if (!floors[floorName]) {
+        floors[floorName] = [];
       }
 
-      buildings[buildingCode][floorName].push(classroom);
+      floors[floorName].push(classroom);
     }
   });
 
-  const response = {
-    version: '2.0',
-    template: {
-      outputs: [
-        {
-          carousel: {
-            type: 'textCard',
-            items: []
-          },
-        },
-      ],
-    },
-  };
+  const sortedFloors = sortFloors(floors);
 
-  for (const [buildingCode, floors] of Object.entries(buildings)) {
-    const buildingName = getBuildingName(buildingCode);
-
-    const sortedFloors = Object.keys(floors).sort((a, b) => {
-      const aNumeric = parseInt(a);
-      const bNumeric = parseInt(b);
-
-      if (aNumeric === 10 && bNumeric === 10) return 0;
-      if (aNumeric === 10) return 1;
-      if (bNumeric === 10) return -1;
-      return aNumeric - bNumeric;
-    });
-
-    for (const floorName of sortedFloors) {
-      const sortedClassrooms = floors[floorName].sort((a, b) => a.localeCompare(b));
-      const floorText = `${getFloorName(floorName)}▼\n(${sortedClassrooms.join(', ')})`;
-
-      response.template.outputs[0].carousel.items.push({
-        title: `현재 빈 강의실[${buildingName} ${getFloorName(floorName)}]`,
-        description: floorText,
-        buttons: [
-          {
-            action: 'block',
-            label: '뒤로가기',
-            blockId: '65f16c470c18862f977ddf5b',
-          },
-          {
-            action: 'message',
-            label: '처음으로',
-            messageText: '처음으로',
-          },
-        ],
-      });
-    }
-  }
-
+  const response = createBuildingResponse('우당관', buildingCode, sortedFloors, false);
   res.json(response);
 });
 
-//다음 교시 빈 강의실
-app.post('/empty_lecture_next', async (req, res) => {
-  const empty = findAvailableClassroomsNext(lectureList);
+//현재 빈 강의실 - 선덕관
+app.post('/empty_lecture_now_2', async (req, res) => {
+  const empty = findAvailableClassrooms(lectureList);
 
-  const buildings = {
-    '1': [],  // 우당관
-    '2': [],  // 선덕관
-    '3': []   // 충효관
+  const buildingCode = '2';
+  const floors = {
+    '1': [], '2': [], '3': [], '4': [], '5': [],
+    '6': [], '7': [], '8': [], '9': [], '0': [],
   };
 
   empty.forEach(classroom => {
-    const buildingCode = classroom.charAt(0);
+    const currentBuildingCode = classroom.charAt(0);
     const floorName = getCurrentFloor(classroom);
 
-    if (['1', '2', '3'].includes(buildingCode)) {
-      if (!buildings[buildingCode][floorName]) {
-        buildings[buildingCode][floorName] = [];
+    if (currentBuildingCode === buildingCode) {
+      if (!floors[floorName]) {
+        floors[floorName] = [];
       }
 
-      buildings[buildingCode][floorName].push(classroom);
+      floors[floorName].push(classroom);
     }
   });
 
-  const buildingTexts = {};
-  for (const [buildingCode, floors] of Object.entries(buildings)) {
-    const buildingName = getBuildingName(buildingCode);
-    const floorTexts = [];
+  const sortedFloors = sortFloors(floors);
 
-    const sortedFloors = Object.keys(floors).sort((a, b) => {
-      const aNumeric = parseInt(a);
-      const bNumeric = parseInt(b);
-    
-      if (aNumeric === 10 && bNumeric === 10) return 0;
-      if (aNumeric === 10) return 1;
-      if (bNumeric === 10) return -1;
-      return aNumeric - bNumeric;
-    });
-    
-    for (const floorName of sortedFloors) {
-      const sortedClassrooms = floors[floorName].sort((a, b) => a.localeCompare(b));
-      const floorText = `${getFloorName(floorName)}▼\n(${sortedClassrooms.join(', ')})`;
-      floorTexts.push(floorText);
-    }
+  const response = createBuildingResponse('선덕관', buildingCode, sortedFloors, false);
+  res.json(response);
+});
 
-    buildingTexts[buildingName] = floorTexts.join('\n');
-  }
+//현재 빈 강의실 - 충효관
+app.post('/empty_lecture_now_3', async (req, res) => {
+  const empty = findAvailableClassrooms(lectureList);
 
-  const response = {
-    version: '2.0',
-    template: {
-      outputs: [
-        {
-          carousel: {
-            type: 'textCard',
-            items: Object.entries(buildingTexts).map(([buildingName, buildingText]) => ({
-              title: `다음 교시 빈 강의실[${buildingName}]`,
-              description: buildingText,
-              buttons: [
-                {
-                  action: 'block',
-                  label: '뒤로가기',
-                  blockId: '65f16c470c18862f977ddf5b',
-                },
-                {
-                  action: 'message',
-                  label: '처음으로',
-                  messageText: '처음으로',
-                },
-              ],
-            })),
-          },
-        },
-      ],
-    },
+  const buildingCode = '3';
+  const floors = {
+    '1': [], '2': [], '3': [], '4': [], '5': [],
+    '6': [], '7': [], '8': [], '9': [], '0': [],
   };
 
+  empty.forEach(classroom => {
+    const currentBuildingCode = classroom.charAt(0);
+    const floorName = getCurrentFloor(classroom);
+
+    if (currentBuildingCode === buildingCode) {
+      if (!floors[floorName]) {
+        floors[floorName] = [];
+      }
+
+      floors[floorName].push(classroom);
+    }
+  });
+
+  const sortedFloors = sortFloors(floors);
+
+  const response = createBuildingResponse('충효관', buildingCode, sortedFloors, false);
+  res.json(response);
+});
+
+//다음 교시 빈 강의실 - 우당관
+app.post('/empty_lecture_now_1', async (req, res) => {
+  const empty = findAvailableClassroomsNext(lectureList);
+
+  const buildingCode = '1';
+  const floors = {
+    '1': [], '2': [], '3': [], '4': [], '5': [],
+    '6': [], '7': [], '8': [], '9': [], '0': [],
+  };
+
+  empty.forEach(classroom => {
+    const currentBuildingCode = classroom.charAt(0);
+    const floorName = getCurrentFloor(classroom);
+
+    if (currentBuildingCode === buildingCode) {
+      if (!floors[floorName]) {
+        floors[floorName] = [];
+      }
+
+      floors[floorName].push(classroom);
+    }
+  });
+
+  const sortedFloors = sortFloors(floors);
+
+  const response = createBuildingResponse('우당관', buildingCode, sortedFloors, false);
+  res.json(response);
+});
+
+//다음 교시 빈 강의실 - 선덕관
+app.post('/empty_lecture_now_2', async (req, res) => {
+  const empty = findAvailableClassroomsNext(lectureList);
+
+  const buildingCode = '2';
+  const floors = {
+    '1': [], '2': [], '3': [], '4': [], '5': [],
+    '6': [], '7': [], '8': [], '9': [], '0': [],
+  };
+
+  empty.forEach(classroom => {
+    const currentBuildingCode = classroom.charAt(0);
+    const floorName = getCurrentFloor(classroom);
+
+    if (currentBuildingCode === buildingCode) {
+      if (!floors[floorName]) {
+        floors[floorName] = [];
+      }
+
+      floors[floorName].push(classroom);
+    }
+  });
+
+  const sortedFloors = sortFloors(floors);
+
+  const response = createBuildingResponse('선덕관', buildingCode, sortedFloors, false);
+  res.json(response);
+});
+
+//다음 교시 빈 강의실 - 충효관
+app.post('/empty_lecture_now_3', async (req, res) => {
+  const empty = findAvailableClassroomsNext(lectureList);
+
+  const buildingCode = '3';
+  const floors = {
+    '1': [], '2': [], '3': [], '4': [], '5': [],
+    '6': [], '7': [], '8': [], '9': [], '0': [],
+  };
+
+  empty.forEach(classroom => {
+    const currentBuildingCode = classroom.charAt(0);
+    const floorName = getCurrentFloor(classroom);
+
+    if (currentBuildingCode === buildingCode) {
+      if (!floors[floorName]) {
+        floors[floorName] = [];
+      }
+
+      floors[floorName].push(classroom);
+    }
+  });
+
+  const sortedFloors = sortFloors(floors);
+
+  const response = createBuildingResponse('충효관', buildingCode, sortedFloors, false);
   res.json(response);
 });
 
