@@ -7,9 +7,13 @@
   <title>Test Message Post</title>
 </head>
 <body>
-  <form action="http://localhost:8080/today" method="POST">
-    <button type="submit" name="test" value="오늘의 학식">오늘의 학식</button>
-    <button type="submit" name="test" value="이번주 학식">이번주 학식</button>
+  <form action="http://localhost:8080/update" method="POST">
+    <button type="submit" name="test" value="update">데이터 업데이트</button>
   </form>
+  <form action="http://localhost:8080/restart" method="POST">
+    <button type="submit" name="test" value="restart">서버 초기화</button>
+  </form>
+  <form action="http://localhost:8080/shutdown" method="POST">
+    <button type="submit" name="test" value="shutdown">서버 종료</button>
 </body>
 </html>

@@ -3,13 +3,15 @@ const fs = require('fs');
 const schedule = require('node-schedule');
 const { main_met } = require('./crawl_metropole');
 const { main_met_dorm } = require('./crawl_metropole_dormitory');
+const { main_lecturelist } = require('./load_lecturelist');
 const app = express();
 const port = 8080;
 let mealMetropole;
 let mealMetropoleDormitory;
+let lectureList;
 let serverInitialized = false;
 app.use(express.json());
-//app.use(express.static(__dirname));
+app.use(express.static(__dirname));
 
 const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 1, hour: 6, minute: 0 }, async function() {
   try {
@@ -30,11 +32,162 @@ const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 1, hour: 6, minute: 0 }
   }
 });
 
+function gettoDay() {
+  const day = new Date();
+  const today = day.getDay();
+  const days = ["일", "월", "화", "수", "목", "금", "토"];
+  return days[today];
+}
+
+function getCurrentTime() {
+  const now = new Date();
+  const currentHour = now.getHours();
+  const currentMinute = now.getMinutes();
+  
+  const classTimes = [
+    { start: 9, end: 10, minute: 30 },
+    { start: 10, end: 11, minute: 30 },
+    { start: 11, end: 12, minute: 30 },
+    { start: 12, end: 13, minute: 30 },
+    { start: 13, end: 14, minute: 30 },
+    { start: 14, end: 15, minute: 30 },
+    { start: 15, end: 16, minute: 30 },
+    { start: 16, end: 17, minute: 30 },
+    { start: 17, end: 18, minute: 30 },
+    { start: 18, end: 19, minute: 30 },
+    { start: 19, end: 20, minute: 30 },
+    { start: 20, end: 21, minute: 30 },
+    { start: 21, end: 22, minute: 30 },
+    { start: 22, end: 23, minute: 30 }
+  ];
+
+  for (let i = 0; i < classTimes.length; i++) {
+    const classTime = classTimes[i];
+    if (
+      (currentHour === classTime.start && currentMinute >= classTime.minute) ||
+      (currentHour > classTime.start && currentHour < classTime.end) ||
+      (currentHour === classTime.end && currentMinute <= classTime.minute)
+    ) {
+      return i + 1;
+    }
+  }
+
+  return -1;
+}
+
+function getCurrentAndNextTime() {
+  const now = new Date();
+  const currentHour = now.getHours();
+  const currentMinute = now.getMinutes();
+
+  const classTimes = [
+    { start: 9, end: 10, minute: 30 },
+    { start: 10, end: 11, minute: 30 },
+    // ... (다른 교시 정보들 추가)
+  ];
+
+  for (let i = 0; i < classTimes.length; i++) {
+    const classTime = classTimes[i];
+    if (
+      (currentHour === classTime.start && currentMinute >= classTime.minute) ||
+      (currentHour > classTime.start && currentHour < classTime.end) ||
+      (currentHour === classTime.end && currentMinute <= classTime.minute)
+    ) {
+      const nextClassTime = classTimes[i + 1];
+      if (nextClassTime) {
+        return { current: classTime, next: nextClassTime };
+      } else {
+        return { current: classTime, next: null };
+      }
+    }
+  }
+
+  return { current: null, next: null };
+}
+
+function findAvailableClassrooms(lectureList) {
+  const today = gettoDay();  // 현재 요일
+  const currentClass = getCurrentTime();  // 현재 교시
+  const availableClassrooms = [];
+
+  // lectureList 객체의 프로퍼티를 순회
+  for (const lectureKey in lectureList) {
+    const lecture = lectureList[lectureKey];
+    
+
+    // lecture 객체에 "시간표"와 "캠퍼스" 프로퍼티가 있는지 확인
+    if (lecture.hasOwnProperty("시간표") && lecture.hasOwnProperty("캠퍼스")) {
+      const classTime = lecture["시간표"];
+
+      // 시간표가 빈 문자열이 아니고, 오늘의 요일과 현재 교시가 포함되지 않으며, 캠퍼스가 "메트로폴"인 경우 강의실을 추가
+      if (classTime !== "" && classTime.includes(today) && !classTime.includes(currentClass.toString()) && lecture["캠퍼스"] === "메트로폴") {
+        availableClassrooms.push(lecture["강의실"]);
+      }
+    }
+    else {
+      // "시간표" 또는 "캠퍼스" 프로퍼티가 없는 경우 로그 추가
+      console.log("Lecture does not have '시간표' or '캠퍼스' property:", lecture);
+    }
+  }
+
+  // 로그 추가
+  console.log("Available classrooms:", availableClassrooms);
+
+  return availableClassrooms;
+}
+
+function findAvailableClassroomsNext(lectureList) {
+  const today = gettoDay();  // 현재 요일
+  const times = getCurrentAndNextTime();  // 현재 교시와 다음 교시 정보
+  const currentClass = times.current;  // 현재 교시
+  const nextClass = times.next;  // 다음 교시
+
+  const availableClassrooms = [];
+
+  // lectureList 객체의 프로퍼티를 순회
+  for (const lectureKey in lectureList) {
+    const lecture = lectureList[lectureKey];
+
+    // lecture 객체에 "시간표" 프로퍼티가 있는지 확인
+    if (lecture.hasOwnProperty("시간표")) {
+      const classTime = lecture["시간표"];
+
+      // 시간표가 빈 문자열이 아니고, 오늘의 요일과 다음 교시가 포함되지 않은 경우의 강의실을 찾음
+      if (classTime !== "" && classTime.includes(today) && !classTime.includes(nextClass.start.toString())) {
+        availableClassrooms.push(lecture["강의실"]);
+      }
+    }
+    else {
+      // "시간표" 프로퍼티가 없는 경우 로그 추가
+      console.log("Lecture does not have '시간표' property:", lecture);
+    }
+  }
+
+  // 로그 추가
+  console.log("Available classrooms for next class:", availableClassrooms);
+
+  return availableClassrooms;
+}
+
+function getBuildingName(buildingCode) {
+  switch (buildingCode) {
+    case '1':
+      return '우당관';
+    case '2':
+      return '선덕관';
+    case '3':
+      return '충효관';
+    default:
+      return 'Unknown Building';
+  }
+}
+
 async function initialize() {
   try {
     console.log('서버 초기화 중');
     await main_met();
     await main_met_dorm();
+    await main_lecturelist();
     fs.readFile('./crawl_met.json', 'utf8', (err, data) => {
       if (err) throw err;
       mealMetropole = JSON.parse(data);
@@ -42,6 +195,10 @@ async function initialize() {
     fs.readFile('./crawl_met_dorm.json', 'utf8', (err, data) => {
       if (err) throw err;
       mealMetropoleDormitory = JSON.parse(data);
+    });
+    fs.readFile('./lecturelist.json', 'utf8', (err, data) => {
+      if (err) throw err;
+      lectureList = JSON.parse(data);
     });
     console.log('서버 초기화 완료');
     serverInitialized = true;
@@ -61,6 +218,8 @@ app.get('/keyboard', (req, res) => {
   res.json(data);
 });
 
+
+//서버 대기
 app.use((req, res, next) => {
   if (!serverInitialized) {
     const response = {
@@ -87,6 +246,37 @@ app.use((req, res, next) => {
     return;
   }
   next();
+});
+
+//서버 재시작
+app.post('/restart', (req, res) => {
+  serverInitialized = false;
+  initialize();
+  res.json({ message: '서버 재시작' });
+});
+
+//서버 종료
+app.post('/shutdown', (req, res) => {
+  console.log('서버를 종료합니다.');
+  res.json({ message: '서버가 종료됩니다.' });
+
+  // 프로세스 종료
+  process.exit();
+});
+
+//서버 업데이트
+app.post('/update', async (req, res) => {
+  try {
+    await main_lecturekist();
+    fs.readFile('./lecturelist.json', 'utf8', (err, data) => {
+      if (err) throw err;
+      mealMetropoleDormitory = JSON.parse(data);
+    });
+    res.json({ message: '데이터가 업데이트되었습니다.' });
+  } catch (error) {
+    console.error('Error during update:', error.message);
+    res.status(500).json({ error: '업데이트 중 오류가 발생했습니다.' });
+  }
 });
 
 //오늘의 학식 - 학생식당, 기숙사
@@ -568,6 +758,7 @@ app.post('/week_met_dorm', async (req, res) => {
   res.json(response);
 });
 
+//이번주 학식 = 학생식당 원산지
 app.post('/week_met_origin', async (req, res) => {
   const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
   const { met_day } = req.body.action.clientExtra;
@@ -607,6 +798,7 @@ app.post('/week_met_origin', async (req, res) => {
   }
 });
 
+//이번주 학식 = 기숙사 원산지
 app.post('/week_met_dorm_origin', async (req, res) => {
   const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
   const { met_dorm_day } = req.body.action.clientExtra;
@@ -646,6 +838,113 @@ app.post('/week_met_dorm_origin', async (req, res) => {
   }
 });
 
+app.post('/empty_lecture_now', async (req, res) => {
+  const empty = findAvailableClassrooms(lectureList);
+
+  const buildings = {
+    '1': [],  // 우당관
+    '2': [],  // 선덕관
+    '3': []   // 충효관
+  };
+
+  empty.forEach(classroom => {
+    const buildingCode = classroom.charAt(0);
+    buildings[buildingCode].push(classroom);
+  });
+
+  const buildingTexts = {};
+  for (const [buildingCode, classrooms] of Object.entries(buildings)) {
+    const buildingName = getBuildingName(buildingCode);
+    const sortedClassrooms = classrooms.sort((a, b) => a.localeCompare(b));
+    const buildingText = sortedClassrooms.join(', ');
+    buildingTexts[buildingName] = buildingText;
+  }
+
+  const response = {
+    version: '2.0',
+    template: {
+      outputs: [
+        {
+          carousel: {
+            type: 'textCard',
+            items: Object.entries(buildingTexts).map(([buildingName, buildingText]) => ({
+              title: `현재 빈 강의실[${buildingName}]`,
+              description: buildingText,
+              buttons: [
+                {
+                  action: 'block',
+                  label: '뒤로가기',
+                  blockId: '65f16c470c18862f977ddf5b',
+                },
+                {
+                  action: 'message',
+                  label: '처음으로',
+                  messageText: '처음으로',
+                },
+              ],
+            })),
+          },
+        },
+      ],
+    },
+  };
+
+  res.json(response);
+});
+
+app.post('/empty_lecture_next', async (req, res) => {
+  const empty = findAvailableClassroomsNext(lectureList);
+
+  const buildings = {
+    '1': [],  // 우당관
+    '2': [],  // 선덕관
+    '3': []   // 충효관
+  };
+
+  empty.forEach(classroom => {
+    const buildingCode = classroom.charAt(0);
+    buildings[buildingCode].push(classroom);
+  });
+
+  const buildingTexts = {};
+  for (const [buildingCode, classrooms] of Object.entries(buildings)) {
+    const buildingName = getBuildingName(buildingCode);
+    const sortedClassrooms = classrooms.sort((a, b) => a.localeCompare(b));
+    const buildingText = sortedClassrooms.join(', ');
+    buildingTexts[buildingName] = buildingText;
+  }
+
+  const response = {
+    version: '2.0',
+    template: {
+      outputs: [
+        {
+          carousel: {
+            type: 'textCard',
+            items: Object.entries(buildingTexts).map(([buildingName, buildingText]) => ({
+              title: `다음 교시 빈 강의실[${buildingName}]`,
+              description: buildingText,
+              buttons: [
+                {
+                  action: 'block',
+                  label: '뒤로가기',
+                  blockId: '65f16c470c18862f977ddf5b',
+                },
+                {
+                  action: 'message',
+                  label: '처음으로',
+                  messageText: '처음으로',
+                },
+              ],
+            })),
+          },
+        },
+      ],
+    },
+  };
+
+  res.json(response);
+});
 app.listen(port, () => {
   console.log(`서버가 http://localhost:${port} 에서 실행 중입니다.`);
 });
