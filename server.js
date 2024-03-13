@@ -39,11 +39,11 @@ function gettoDay() {
   return days[today];
 }
 
-function getCurrentTime() {
+function getCurrentAndNextTime() {
   const now = new Date();
   const currentHour = now.getHours();
   const currentMinute = now.getMinutes();
-  
+
   const classTimes = [
     { start: 9, end: 10, minute: 30 },
     { start: 10, end: 11, minute: 30 },
@@ -68,31 +68,6 @@ function getCurrentTime() {
       (currentHour > classTime.start && currentHour < classTime.end) ||
       (currentHour === classTime.end && currentMinute <= classTime.minute)
     ) {
-      return i + 1;
-    }
-  }
-
-  return -1;
-}
-
-function getCurrentAndNextTime() {
-  const now = new Date();
-  const currentHour = now.getHours();
-  const currentMinute = now.getMinutes();
-
-  const classTimes = [
-    { start: 9, end: 10, minute: 30 },
-    { start: 10, end: 11, minute: 30 },
-    // ... (다른 교시 정보들 추가)
-  ];
-
-  for (let i = 0; i < classTimes.length; i++) {
-    const classTime = classTimes[i];
-    if (
-      (currentHour === classTime.start && currentMinute >= classTime.minute) ||
-      (currentHour > classTime.start && currentHour < classTime.end) ||
-      (currentHour === classTime.end && currentMinute <= classTime.minute)
-    ) {
       const nextClassTime = classTimes[i + 1];
       if (nextClassTime) {
         return { current: classTime, next: nextClassTime };
@@ -106,53 +81,45 @@ function getCurrentAndNextTime() {
 }
 
 function findAvailableClassrooms(lectureList) {
-  const today = gettoDay();  // 현재 요일
-  const currentClass = getCurrentTime();  // 현재 교시
+  const today = gettoDay();
+  const times = getCurrentAndNextTime();
+  const currentClass = times.current;
+  const nextClass = times.next;
   const availableClassrooms = [];
 
-  // lectureList 객체의 프로퍼티를 순회
   for (const lectureKey in lectureList) {
     const lecture = lectureList[lectureKey];
     
-
-    // lecture 객체에 "시간표"와 "캠퍼스" 프로퍼티가 있는지 확인
     if (lecture.hasOwnProperty("시간표") && lecture.hasOwnProperty("캠퍼스")) {
       const classTime = lecture["시간표"];
 
-      // 시간표가 빈 문자열이 아니고, 오늘의 요일과 현재 교시가 포함되지 않으며, 캠퍼스가 "메트로폴"인 경우 강의실을 추가
       if (classTime !== "" && classTime.includes(today) && !classTime.includes(currentClass.toString()) && lecture["캠퍼스"] === "메트로폴") {
         availableClassrooms.push(lecture["강의실"]);
       }
     }
     else {
-      // "시간표" 또는 "캠퍼스" 프로퍼티가 없는 경우 로그 추가
       console.log("Lecture does not have '시간표' or '캠퍼스' property:", lecture);
     }
   }
 
-  // 로그 추가
   console.log("Available classrooms:", availableClassrooms);
 
   return availableClassrooms;
 }
 
 function findAvailableClassroomsNext(lectureList) {
-  const today = gettoDay();  // 현재 요일
-  const times = getCurrentAndNextTime();  // 현재 교시와 다음 교시 정보
-  const currentClass = times.current;  // 현재 교시
-  const nextClass = times.next;  // 다음 교시
-
+  const today = gettoDay();
+  const times = getCurrentAndNextTime();
+  const currentClass = times.current;
+  const nextClass = times.next;
   const availableClassrooms = [];
 
-  // lectureList 객체의 프로퍼티를 순회
   for (const lectureKey in lectureList) {
     const lecture = lectureList[lectureKey];
 
-    // lecture 객체에 "시간표" 프로퍼티가 있는지 확인
     if (lecture.hasOwnProperty("시간표")) {
       const classTime = lecture["시간표"];
 
-      // 시간표가 빈 문자열이 아니고, 오늘의 요일과 다음 교시가 포함되지 않은 경우의 강의실을 찾음
       if (classTime !== "" && classTime.includes(today) && !classTime.includes(nextClass.start.toString())) {
         availableClassrooms.push(lecture["강의실"]);
       }
@@ -162,9 +129,6 @@ function findAvailableClassroomsNext(lectureList) {
       console.log("Lecture does not have '시간표' property:", lecture);
     }
   }
-
-  // 로그 추가
-  console.log("Available classrooms for next class:", availableClassrooms);
 
   return availableClassrooms;
 }
@@ -849,6 +813,11 @@ app.post('/empty_lecture_now', async (req, res) => {
 
   empty.forEach(classroom => {
     const buildingCode = classroom.charAt(0);
+
+    if (!buildings[buildingCode]) {
+      buildings[buildingCode] = [];
+    }
+
     buildings[buildingCode].push(classroom);
   });
 
@@ -903,6 +872,11 @@ app.post('/empty_lecture_next', async (req, res) => {
 
   empty.forEach(classroom => {
     const buildingCode = classroom.charAt(0);
+
+    if (!buildings[buildingCode]) {
+      buildings[buildingCode] = [];
+    }
+
     buildings[buildingCode].push(classroom);
   });
 
