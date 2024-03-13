@@ -13,6 +13,8 @@ let serverInitialized = false;
 app.use(express.json());
 app.use(express.static(__dirname));
 
+
+//스케줄러
 const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 1, hour: 6, minute: 0 }, async function() {
   try {
     console.log('크롤링 스케줄 실행 중');
@@ -32,6 +34,9 @@ const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 1, hour: 6, minute: 0 }
   }
 });
 
+
+//함수
+//요일 환산
 function gettoDay() {
   const day = new Date();
   const today = day.getDay();
@@ -39,6 +44,7 @@ function gettoDay() {
   return days[today];
 }
 
+//수업 교시 환산
 function getCurrentAndNextTime() {
   const now = new Date();
   const currentHour = now.getHours();
@@ -80,6 +86,7 @@ function getCurrentAndNextTime() {
   return { current: null, next: null };
 }
 
+//현재 빈 강의실 추출
 function findAvailableClassrooms(lectureList) {
   const today = gettoDay();
   const times = getCurrentAndNextTime();
@@ -105,6 +112,7 @@ function findAvailableClassrooms(lectureList) {
   return availableClassrooms;
 }
 
+//다음 교시 빈 강의실 추출
 function findAvailableClassroomsNext(lectureList) {
   const today = gettoDay();
   const times = getCurrentAndNextTime();
@@ -131,16 +139,7 @@ function findAvailableClassroomsNext(lectureList) {
   return availableClassrooms;
 }
 
-function getBuildingName(buildingCode) {
-  const buildingNames = {
-    '1': '우당관',
-    '2': '선덕관',
-    '3': '충효관'
-  };
-
-  return buildingNames[buildingCode] || 'Unknown Building';
-}
-
+//층수 기입
 function getFloorName(floorCode) {
   switch (floorCode) {
     case '1':
@@ -173,7 +172,8 @@ function getCurrentFloor(classroom) {
   return getFloorName(floorCode);
 }
 
-function createBuildingResponse(buildingName, buildingCode, floors, hasCarousel) {
+//현재 우당관 템플릿
+function createBuildingResponse_1(buildingName, buildingCode, floors, hasCarousel) {
   const items = [];
 
   for (const [floor, classrooms] of Object.entries(floors)) {
@@ -185,7 +185,7 @@ function createBuildingResponse(buildingName, buildingCode, floors, hasCarousel)
         title: `현재 빈 강의실[${buildingName} ${getFloorLabel(floor)}]`,
         description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})`,
         buttons: [
-          { action: 'block', label: '뒤로가기', blockId: '65f16c470c18862f977ddf5b' },
+          { action: 'block', label: '뒤로가기', blockId: '65f16b9d21bdeb24853d9669' },
           { action: 'message', label: '처음으로', messageText: '처음으로' },
         ],
       };
@@ -210,7 +210,122 @@ function createBuildingResponse(buildingName, buildingCode, floors, hasCarousel)
   return response;
 }
 
-function createBuildingResponse(buildingName, buildingCode, floors, hasCarousel) {
+//현재 선덕관 템플릿
+function createBuildingResponse_2(buildingName, buildingCode, floors, hasCarousel) {
+  const items = [];
+
+  for (const [floor, classrooms] of Object.entries(floors)) {
+    if (classrooms.length > 0) {
+      // 중복 제거
+      const uniqueClassrooms = removeDuplicates(classrooms);
+
+      const item = {
+        title: `현재 빈 강의실[${buildingName} ${getFloorLabel(floor)}]`,
+        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})`,
+        buttons: [
+          { action: 'block', label: '뒤로가기', blockId: '65f16bac82abcd51947bf6d4' },
+          { action: 'message', label: '처음으로', messageText: '처음으로' },
+        ],
+      };
+      items.push(item);
+    }
+  }
+
+  const response = {
+    version: '2.0',
+    template: {
+      outputs: [
+        {
+          carousel: {
+            type: 'textCard',
+            items: items,
+          },
+        },
+      ],
+    },
+  };
+
+  return response;
+}
+
+//현재 충효관 템플릿
+function createBuildingResponse_3(buildingName, buildingCode, floors, hasCarousel) {
+  const items = [];
+
+  for (const [floor, classrooms] of Object.entries(floors)) {
+    if (classrooms.length > 0) {
+      // 중복 제거
+      const uniqueClassrooms = removeDuplicates(classrooms);
+
+      const item = {
+        title: `현재 빈 강의실[${buildingName} ${getFloorLabel(floor)}]`,
+        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})`,
+        buttons: [
+          { action: 'block', label: '뒤로가기', blockId: '65f18d02303da839d8dfc680' },
+          { action: 'message', label: '처음으로', messageText: '처음으로' },
+        ],
+      };
+      items.push(item);
+    }
+  }
+
+  const response = {
+    version: '2.0',
+    template: {
+      outputs: [
+        {
+          carousel: {
+            type: 'textCard',
+            items: items,
+          },
+        },
+      ],
+    },
+  };
+
+  return response;
+}
+
+//다음 교시 우당관 템플릿
+function createBuildingResponseNext_1(buildingName, buildingCode, floors, hasCarousel) {
+  const items = [];
+
+  for (const [floor, classrooms] of Object.entries(floors)) {
+    if (classrooms.length > 0) {
+      // 중복 제거
+      const uniqueClassrooms = removeDuplicates(classrooms);
+
+      const item = {
+        title: `현재 빈 강의실[${buildingName} ${getFloorLabel(floor)}]`,
+        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})`,
+        buttons: [
+          { action: 'block', label: '뒤로가기', blockId: '65f16b9d21bdeb24853d9669' },
+          { action: 'message', label: '처음으로', messageText: '처음으로' },
+        ],
+      };
+      items.push(item);
+    }
+  }
+
+  const response = {
+    version: '2.0',
+    template: {
+      outputs: [
+        {
+          carousel: {
+            type: 'textCard',
+            items: items,
+          },
+        },
+      ],
+    },
+  };
+
+  return response;
+}
+
+//다음 교시 선덕관 템플릿
+function createBuildingResponseNext_2(buildingName, buildingCode, floors, hasCarousel) {
   const items = [];
 
   for (const [floor, classrooms] of Object.entries(floors)) {
@@ -222,7 +337,45 @@ function createBuildingResponse(buildingName, buildingCode, floors, hasCarousel)
         title: `다음 교시 빈 강의실[${buildingName} ${getFloorLabel(floor)}]`,
         description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})`,
         buttons: [
-          { action: 'block', label: '뒤로가기', blockId: '65f16c470c18862f977ddf5b' },
+          { action: 'block', label: '뒤로가기', blockId: '65f16bac82abcd51947bf6d4' },
+          { action: 'message', label: '처음으로', messageText: '처음으로' },
+        ],
+      };
+      items.push(item);
+    }
+  }
+
+  const response = {
+    version: '2.0',
+    template: {
+      outputs: [
+        {
+          carousel: {
+            type: 'textCard',
+            items: items,
+          },
+        },
+      ],
+    },
+  };
+
+  return response;
+}
+
+//다음 교시 충효관 템플릿
+function createBuildingResponseNext_3(buildingName, buildingCode, floors, hasCarousel) {
+  const items = [];
+
+  for (const [floor, classrooms] of Object.entries(floors)) {
+    if (classrooms.length > 0) {
+      // 중복 제거
+      const uniqueClassrooms = removeDuplicates(classrooms);
+
+      const item = {
+        title: `다음 교시 빈 강의실[${buildingName} ${getFloorLabel(floor)}]`,
+        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})`,
+        buttons: [
+          { action: 'block', label: '뒤로가기', blockId: '65f18d02303da839d8dfc680' },
           { action: 'message', label: '처음으로', messageText: '처음으로' },
         ],
       };
@@ -251,6 +404,7 @@ function getFloorLabel(floor) {
   return `${floor}`;
 }
 
+//층 정렬
 function sortFloors(floors) {
   const sortedFloors = {};
   Object.keys(floors).sort((a, b) => parseInt(a) - parseInt(b)).forEach(key => {
@@ -259,10 +413,12 @@ function sortFloors(floors) {
   return sortedFloors;
 }
 
+//중복 제거
 function removeDuplicates(arr) {
   return [...new Set(arr)];
 }
 
+//서버 초기화
 async function initialize() {
   try {
     console.log('서버 초기화 중');
@@ -290,6 +446,8 @@ async function initialize() {
 
 initialize();
 
+
+//엔드포인트
 app.get('/', (req, res) => {
   res.send('서버가 실행 중입니다.');
 });
@@ -943,7 +1101,7 @@ app.post('/empty_lecture_now_1', async (req, res) => {
 
   const sortedFloors = sortFloors(floors);
 
-  const response = createBuildingResponse('우당관', buildingCode, sortedFloors, false);
+  const response = createBuildingResponse_1('우당관', buildingCode, sortedFloors, false);
   res.json(response);
 });
 
@@ -972,7 +1130,7 @@ app.post('/empty_lecture_now_2', async (req, res) => {
 
   const sortedFloors = sortFloors(floors);
 
-  const response = createBuildingResponse('선덕관', buildingCode, sortedFloors, false);
+  const response = createBuildingResponse_2('선덕관', buildingCode, sortedFloors, false);
   res.json(response);
 });
 
@@ -1001,7 +1159,7 @@ app.post('/empty_lecture_now_3', async (req, res) => {
 
   const sortedFloors = sortFloors(floors);
 
-  const response = createBuildingResponse('충효관', buildingCode, sortedFloors, false);
+  const response = createBuildingResponse_3('충효관', buildingCode, sortedFloors, false);
   res.json(response);
 });
 
@@ -1030,7 +1188,7 @@ app.post('/empty_lecture_next_1', async (req, res) => {
 
   const sortedFloors = sortFloors(floors);
 
-  const response = createBuildingResponse('우당관', buildingCode, sortedFloors, false);
+  const response = createBuildingResponseNext_1('우당관', buildingCode, sortedFloors, false);
   res.json(response);
 });
 
@@ -1059,7 +1217,7 @@ app.post('/empty_lecture_next_2', async (req, res) => {
 
   const sortedFloors = sortFloors(floors);
 
-  const response = createBuildingResponseNext('선덕관', buildingCode, sortedFloors, false);
+  const response = createBuildingResponseNext_2('선덕관', buildingCode, sortedFloors, false);
   res.json(response);
 });
 
@@ -1088,7 +1246,7 @@ app.post('/empty_lecture_next_3', async (req, res) => {
 
   const sortedFloors = sortFloors(floors);
 
-  const response = createBuildingResponseNext('충효관', buildingCode, sortedFloors, false);
+  const response = createBuildingResponseNext_3('충효관', buildingCode, sortedFloors, false);
   res.json(response);
 });
 
