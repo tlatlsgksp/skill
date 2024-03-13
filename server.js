@@ -34,7 +34,6 @@ const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 1, hour: 6, minute: 0 }
   }
 });
 
-
 //함수
 //요일 환산
 function gettoDay() {
@@ -296,7 +295,7 @@ function createBuildingResponseNext_1(buildingName, buildingCode, floors, hasCar
       const uniqueClassrooms = removeDuplicates(classrooms);
 
       const item = {
-        title: `현재 빈 강의실[${buildingName} ${getFloorLabel(floor)}]`,
+        title: `다음 교시 빈 강의실[${buildingName} ${getFloorLabel(floor)}]`,
         description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})`,
         buttons: [
           { action: 'block', label: '뒤로가기', blockId: '65f16b9d21bdeb24853d9669' },
@@ -445,7 +444,6 @@ async function initialize() {
 }
 
 initialize();
-
 
 //엔드포인트
 app.get('/', (req, res) => {
@@ -880,7 +878,6 @@ app.post('/week', (req, res) => {
     };
   res.json(response);
 });
-
 
 //이번주 학식 - 학생식당
 app.post('/week_met', async (req, res) => {
