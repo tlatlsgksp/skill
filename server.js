@@ -178,9 +178,12 @@ function createBuildingResponse(buildingName, buildingCode, floors, hasCarousel)
 
   for (const [floor, classrooms] of Object.entries(floors)) {
     if (classrooms.length > 0) {
+      // 중복 제거
+      const uniqueClassrooms = removeDuplicates(classrooms);
+
       const item = {
         title: `현재 빈 강의실[${buildingName} ${getFloorLabel(floor)}]`,
-        description: `${getFloorLabel(floor)}▼\n(${classrooms.join(', ')})`,
+        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})`,
         buttons: [
           { action: 'block', label: '뒤로가기', blockId: '65f16c470c18862f977ddf5b' },
           { action: 'message', label: '처음으로', messageText: '처음으로' },
@@ -207,14 +210,17 @@ function createBuildingResponse(buildingName, buildingCode, floors, hasCarousel)
   return response;
 }
 
-function createBuildingResponseNext(buildingName, buildingCode, floors, hasCarousel) {
+function createBuildingResponse(buildingName, buildingCode, floors, hasCarousel) {
   const items = [];
 
   for (const [floor, classrooms] of Object.entries(floors)) {
     if (classrooms.length > 0) {
+      // 중복 제거
+      const uniqueClassrooms = removeDuplicates(classrooms);
+
       const item = {
         title: `다음 교시 빈 강의실[${buildingName} ${getFloorLabel(floor)}]`,
-        description: `${getFloorLabel(floor)}▼\n(${classrooms.join(', ')})`,
+        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})`,
         buttons: [
           { action: 'block', label: '뒤로가기', blockId: '65f16c470c18862f977ddf5b' },
           { action: 'message', label: '처음으로', messageText: '처음으로' },
@@ -251,6 +257,10 @@ function sortFloors(floors) {
     sortedFloors[key] = floors[key].sort();
   });
   return sortedFloors;
+}
+
+function removeDuplicates(arr) {
+  return [...new Set(arr)];
 }
 
 async function initialize() {
