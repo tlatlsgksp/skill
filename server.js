@@ -63,7 +63,27 @@ app.get('/keyboard', (req, res) => {
 
 app.use((req, res, next) => {
   if (!serverInitialized) {
-    res.status(503).send('서버 초기화 중입니다. 잠시 후 다시 시도해주세요.');
+    const response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "textCard": {
+              "title": "서버 초기화 중입니다.",
+              "description": "잠시 후 다시 시도해주세요.",
+              "buttons": [
+                {
+                  'action': 'message',
+                  'label': `처음으로`,
+                  'messageText': `처음으로`
+                },
+              ]
+            }
+          }
+        ]
+      }
+    }
+    res.json(response);
     return;
   }
   next();
