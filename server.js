@@ -143,6 +143,38 @@ function getBuildingName(buildingCode) {
   return buildingNames[buildingCode] || 'Unknown Building';
 }
 
+function getFloorName(floorCode) {
+  switch (floorCode) {
+    case '1':
+      return '1층';
+    case '2':
+      return '2층';
+      case '3':
+      return '3층';
+      case '4':
+      return '4층';
+      case '5':
+      return '5층';
+      case '6':
+      return '6층';
+      case '7':
+      return '7층';
+      case '8':
+      return '8층';
+      case '9':
+      return '9층';
+      case '0':
+      return '10층';
+    default:
+      return `Unknown Floor ${floorCode}`;
+  }
+}
+
+function getCurrentFloor(classroom) {
+  const floorCode = classroom.slice(1, 2);
+  return getFloorName(floorCode);
+}
+
 async function initialize() {
   try {
     console.log('서버 초기화 중');
@@ -178,7 +210,6 @@ app.get('/keyboard', (req, res) => {
   const data = { 'type': 'text' }
   res.json(data);
 });
-
 
 //서버 대기
 app.use((req, res, next) => {
@@ -811,20 +842,39 @@ app.post('/empty_lecture_now', async (req, res) => {
 
   empty.forEach(classroom => {
     const buildingCode = classroom.charAt(0);
+    const floorName = getCurrentFloor(classroom);
 
-    if (!buildings[buildingCode]) {
-      buildings[buildingCode] = [];
+    if (['1', '2', '3'].includes(buildingCode)) {
+      if (!buildings[buildingCode][floorName]) {
+        buildings[buildingCode][floorName] = [];
+      }
+
+      buildings[buildingCode][floorName].push(classroom);
     }
-
-    buildings[buildingCode].push(classroom);
   });
 
   const buildingTexts = {};
-  for (const [buildingCode, classrooms] of Object.entries(buildings)) {
+  for (const [buildingCode, floors] of Object.entries(buildings)) {
     const buildingName = getBuildingName(buildingCode);
-    const sortedClassrooms = classrooms.sort((a, b) => a.localeCompare(b));
-    const buildingText = sortedClassrooms.join('\n');
-    buildingTexts[buildingName] = buildingText;
+    const floorTexts = [];
+
+    const sortedFloors = Object.keys(floors).sort((a, b) => {
+      const aNumeric = parseInt(a);
+      const bNumeric = parseInt(b);
+    
+      if (aNumeric === 10 && bNumeric === 10) return 0;
+      if (aNumeric === 10) return 1;
+      if (bNumeric === 10) return -1;
+      return aNumeric - bNumeric;
+    });
+    
+    for (const floorName of sortedFloors) {
+      const sortedClassrooms = floors[floorName].sort((a, b) => a.localeCompare(b));
+      const floorText = `${getFloorName(floorName)}▼\n(${sortedClassrooms.join(', ')})`;
+      floorTexts.push(floorText);
+    }
+
+    buildingTexts[buildingName] = floorTexts.join('\n');
   }
 
   const response = {
@@ -871,20 +921,39 @@ app.post('/empty_lecture_next', async (req, res) => {
 
   empty.forEach(classroom => {
     const buildingCode = classroom.charAt(0);
+    const floorName = getCurrentFloor(classroom);
 
-    if (!buildings[buildingCode]) {
-      buildings[buildingCode] = [];
+    if (['1', '2', '3'].includes(buildingCode)) {
+      if (!buildings[buildingCode][floorName]) {
+        buildings[buildingCode][floorName] = [];
+      }
+
+      buildings[buildingCode][floorName].push(classroom);
     }
-
-    buildings[buildingCode].push(classroom);
   });
 
   const buildingTexts = {};
-  for (const [buildingCode, classrooms] of Object.entries(buildings)) {
+  for (const [buildingCode, floors] of Object.entries(buildings)) {
     const buildingName = getBuildingName(buildingCode);
-    const sortedClassrooms = classrooms.sort((a, b) => a.localeCompare(b));
-    const buildingText = sortedClassrooms.join('\n');
-    buildingTexts[buildingName] = buildingText;
+    const floorTexts = [];
+
+    const sortedFloors = Object.keys(floors).sort((a, b) => {
+      const aNumeric = parseInt(a);
+      const bNumeric = parseInt(b);
+    
+      if (aNumeric === 10 && bNumeric === 10) return 0;
+      if (aNumeric === 10) return 1;
+      if (bNumeric === 10) return -1;
+      return aNumeric - bNumeric;
+    });
+    
+    for (const floorName of sortedFloors) {
+      const sortedClassrooms = floors[floorName].sort((a, b) => a.localeCompare(b));
+      const floorText = `${getFloorName(floorName)}▼\n(${sortedClassrooms.join(', ')})`;
+      floorTexts.push(floorText);
+    }
+
+    buildingTexts[buildingName] = floorTexts.join('\n');
   }
 
   const response = {
@@ -918,6 +987,7 @@ app.post('/empty_lecture_next', async (req, res) => {
 
   res.json(response);
 });
+
 app.listen(port, () => {
   console.log(`서버가 http://localhost:${port} 에서 실행 중입니다.`);
 });
