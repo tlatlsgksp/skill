@@ -134,16 +134,13 @@ function findAvailableClassroomsNext(lectureList) {
 }
 
 function getBuildingName(buildingCode) {
-  switch (buildingCode) {
-    case '1':
-      return '우당관';
-    case '2':
-      return '선덕관';
-    case '3':
-      return '충효관';
-    default:
-      return 'Unknown Building';
-  }
+  const buildingNames = {
+    '1': '우당관',
+    '2': '선덕관',
+    '3': '충효관'
+  };
+
+  return buildingNames[buildingCode] || 'Unknown Building';
 }
 
 async function initialize() {
@@ -802,6 +799,7 @@ app.post('/week_met_dorm_origin', async (req, res) => {
   }
 });
 
+//현재 빈 강의실
 app.post('/empty_lecture_now', async (req, res) => {
   const empty = findAvailableClassrooms(lectureList);
 
@@ -825,7 +823,7 @@ app.post('/empty_lecture_now', async (req, res) => {
   for (const [buildingCode, classrooms] of Object.entries(buildings)) {
     const buildingName = getBuildingName(buildingCode);
     const sortedClassrooms = classrooms.sort((a, b) => a.localeCompare(b));
-    const buildingText = sortedClassrooms.join(', ');
+    const buildingText = sortedClassrooms.join('\n');
     buildingTexts[buildingName] = buildingText;
   }
 
@@ -861,6 +859,7 @@ app.post('/empty_lecture_now', async (req, res) => {
   res.json(response);
 });
 
+//다음 교시 빈 강의실
 app.post('/empty_lecture_next', async (req, res) => {
   const empty = findAvailableClassroomsNext(lectureList);
 
@@ -884,7 +883,7 @@ app.post('/empty_lecture_next', async (req, res) => {
   for (const [buildingCode, classrooms] of Object.entries(buildings)) {
     const buildingName = getBuildingName(buildingCode);
     const sortedClassrooms = classrooms.sort((a, b) => a.localeCompare(b));
-    const buildingText = sortedClassrooms.join(', ');
+    const buildingText = sortedClassrooms.join('\n');
     buildingTexts[buildingName] = buildingText;
   }
 
