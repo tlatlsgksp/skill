@@ -7,6 +7,7 @@ const app = express();
 const port = 8080;
 let mealMetropole;
 let mealMetropoleDormitory;
+let serverInitialized = false;
 app.use(express.json());
 //app.use(express.static(__dirname));
 
@@ -43,6 +44,7 @@ async function initialize() {
       mealMetropoleDormitory = JSON.parse(data);
     });
     console.log('서버 초기화 완료');
+    serverInitialized = true;
   } catch (error) {
     console.error('Error during initialization:', error.message);
   }
@@ -57,6 +59,14 @@ app.get('/', (req, res) => {
 app.get('/keyboard', (req, res) => {
   const data = { 'type': 'text' }
   res.json(data);
+});
+
+app.use((req, res, next) => {
+  if (!serverInitialized) {
+    res.status(503).send('서버 초기화 중입니다. 잠시 후 다시 시도해주세요.');
+    return;
+  }
+  next();
 });
 
 //오늘의 학식 - 학생식당, 기숙사
