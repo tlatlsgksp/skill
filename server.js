@@ -207,7 +207,40 @@ function createBuildingResponse(buildingName, buildingCode, floors, hasCarousel)
   return response;
 }
 
-// Function to get the floor label (e.g., '1층' for floor '1')
+function createBuildingResponseNext(buildingName, buildingCode, floors, hasCarousel) {
+  const items = [];
+
+  for (const [floor, classrooms] of Object.entries(floors)) {
+    if (classrooms.length > 0) {
+      const item = {
+        title: `다음 교시 빈 강의실[${buildingName} ${getFloorLabel(floor)}]`,
+        description: `${getFloorLabel(floor)}▼\n(${classrooms.join(', ')})`,
+        buttons: [
+          { action: 'block', label: '뒤로가기', blockId: '65f16c470c18862f977ddf5b' },
+          { action: 'message', label: '처음으로', messageText: '처음으로' },
+        ],
+      };
+      items.push(item);
+    }
+  }
+
+  const response = {
+    version: '2.0',
+    template: {
+      outputs: [
+        {
+          carousel: {
+            type: 'textCard',
+            items: items,
+          },
+        },
+      ],
+    },
+  };
+
+  return response;
+}
+
 function getFloorLabel(floor) {
   return `${floor}`;
 }
@@ -215,7 +248,7 @@ function getFloorLabel(floor) {
 function sortFloors(floors) {
   const sortedFloors = {};
   Object.keys(floors).sort((a, b) => parseInt(a) - parseInt(b)).forEach(key => {
-    sortedFloors[key] = floors[key].sort(); // 각 층의 강의실을 정렬
+    sortedFloors[key] = floors[key].sort();
   });
   return sortedFloors;
 }
@@ -963,7 +996,7 @@ app.post('/empty_lecture_now_3', async (req, res) => {
 });
 
 //다음 교시 빈 강의실 - 우당관
-app.post('/empty_lecture_now_1', async (req, res) => {
+app.post('/empty_lecture_next_1', async (req, res) => {
   const empty = findAvailableClassroomsNext(lectureList);
 
   const buildingCode = '1';
@@ -992,7 +1025,7 @@ app.post('/empty_lecture_now_1', async (req, res) => {
 });
 
 //다음 교시 빈 강의실 - 선덕관
-app.post('/empty_lecture_now_2', async (req, res) => {
+app.post('/empty_lecture_next_2', async (req, res) => {
   const empty = findAvailableClassroomsNext(lectureList);
 
   const buildingCode = '2';
@@ -1016,12 +1049,12 @@ app.post('/empty_lecture_now_2', async (req, res) => {
 
   const sortedFloors = sortFloors(floors);
 
-  const response = createBuildingResponse('선덕관', buildingCode, sortedFloors, false);
+  const response = createBuildingResponseNext('선덕관', buildingCode, sortedFloors, false);
   res.json(response);
 });
 
 //다음 교시 빈 강의실 - 충효관
-app.post('/empty_lecture_now_3', async (req, res) => {
+app.post('/empty_lecture_next_3', async (req, res) => {
   const empty = findAvailableClassroomsNext(lectureList);
 
   const buildingCode = '3';
@@ -1045,7 +1078,7 @@ app.post('/empty_lecture_now_3', async (req, res) => {
 
   const sortedFloors = sortFloors(floors);
 
-  const response = createBuildingResponse('충효관', buildingCode, sortedFloors, false);
+  const response = createBuildingResponseNext('충효관', buildingCode, sortedFloors, false);
   res.json(response);
 });
 
