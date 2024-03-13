@@ -102,8 +102,6 @@ function findAvailableClassrooms(lectureList) {
     }
   }
 
-  console.log("Available classrooms:", availableClassrooms);
-
   return availableClassrooms;
 }
 
