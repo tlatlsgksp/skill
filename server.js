@@ -975,11 +975,12 @@ app.post('/week_met_dorm', async (req, res) => {
 
 //이번주 학식 = 학생식당 원산지
 app.post('/week_met_origin', async (req, res) => {
+
   const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
 
   const weekMeals = [];
   for (let i = 0; i < 7; i++) {
-    const targetDay = daysOfWeek[targetDayIndex];
+    const targetDay = daysOfWeek[i];
     const tagetdayMealMetropole = mealMetropole.data.find(item => item.date === targetDay);
     const tagetdayMealMetropoleDormitory = mealMetropoleDormitory.data.find(item => item.date === targetDay);
 
@@ -1027,7 +1028,7 @@ app.post('/week_met_dorm_origin', async (req, res) => {
 
   const weekMeals = [];
   for (let i = 0; i < 7; i++) {
-    const targetDay = daysOfWeek[targetDayIndex];
+    const targetDay = daysOfWeek[i];
     const tagetdayMealMetropole = mealMetropole.data.find(item => item.date === targetDay);
     const tagetdayMealMetropoleDormitory = mealMetropoleDormitory.data.find(item => item.date === targetDay);
 
