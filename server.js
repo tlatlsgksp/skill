@@ -989,7 +989,7 @@ app.post('/week_met_origin', async (req, res) => {
     }
 
     weekMeals.push({
-      "title": `🍴${daysOfWeek} 학식[학생식당] - 원산지🍴`,
+      "title": `🍴${daysOfWeek[i]} 학식[학생식당] - 원산지🍴`,
       "description": `${tagetdayMealMetropole.origin}`,
     });
   }
@@ -1037,7 +1037,7 @@ app.post('/week_met_dorm_origin', async (req, res) => {
     }
 
     weekMeals.push({
-      "title": `🍴${daysOfWeek} 학식[기숙사] - 원산지🍴`,
+      "title": `🍴${daysOfWeek[i]} 학식[기숙사] - 원산지🍴`,
       "description": `${tagetdayMealMetropoleDormitory.origin}`,
     });
   }
