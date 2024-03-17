@@ -173,6 +173,9 @@ function getCurrentFloor(classroom) {
 
 //현재 우당관 템플릿
 function createBuildingResponse_1(buildingName, buildingCode, floors, hasCarousel) {
+  const times = getCurrentAndNextTime();
+  const currentClass = times.current;
+  const nextClass = times.next;
   const items = [];
 
   for (const [floor, classrooms] of Object.entries(floors)) {
@@ -182,7 +185,7 @@ function createBuildingResponse_1(buildingName, buildingCode, floors, hasCarouse
 
       const item = {
         title: `🕒현재 빈 강의실[${buildingName} ${getFloorLabel(floor)}]🕒`,
-        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})`,
+        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${currentClass}교시 기준※`,
         buttons: [
           { action: 'block', label: '뒤로가기', blockId: '65f16b9d21bdeb24853d9669' },
           { action: 'message', label: '처음으로', messageText: '처음으로' },
@@ -211,6 +214,9 @@ function createBuildingResponse_1(buildingName, buildingCode, floors, hasCarouse
 
 //현재 선덕관 템플릿
 function createBuildingResponse_2(buildingName, buildingCode, floors, hasCarousel) {
+  const times = getCurrentAndNextTime();
+  const currentClass = times.current;
+  const nextClass = times.next;
   const items = [];
 
   for (const [floor, classrooms] of Object.entries(floors)) {
@@ -220,7 +226,7 @@ function createBuildingResponse_2(buildingName, buildingCode, floors, hasCarouse
 
       const item = {
         title: `🕒현재 빈 강의실[${buildingName} ${getFloorLabel(floor)}]🕒`,
-        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})`,
+        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${currentClass}교시 기준※`,
         buttons: [
           { action: 'block', label: '뒤로가기', blockId: '65f16bac82abcd51947bf6d4' },
           { action: 'message', label: '처음으로', messageText: '처음으로' },
@@ -249,6 +255,9 @@ function createBuildingResponse_2(buildingName, buildingCode, floors, hasCarouse
 
 //현재 충효관 템플릿
 function createBuildingResponse_3(buildingName, buildingCode, floors, hasCarousel) {
+  const times = getCurrentAndNextTime();
+  const currentClass = times.current;
+  const nextClass = times.next;
   const items = [];
 
   for (const [floor, classrooms] of Object.entries(floors)) {
@@ -258,7 +267,7 @@ function createBuildingResponse_3(buildingName, buildingCode, floors, hasCarouse
 
       const item = {
         title: `🕒현재 빈 강의실[${buildingName} ${getFloorLabel(floor)}]🕒`,
-        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})`,
+        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${currentClass}교시 기준※`,
         buttons: [
           { action: 'block', label: '뒤로가기', blockId: '65f18d02303da839d8dfc680' },
           { action: 'message', label: '처음으로', messageText: '처음으로' },
@@ -287,6 +296,9 @@ function createBuildingResponse_3(buildingName, buildingCode, floors, hasCarouse
 
 //다음 교시 우당관 템플릿
 function createBuildingResponseNext_1(buildingName, buildingCode, floors, hasCarousel) {
+  const times = getCurrentAndNextTime();
+  const currentClass = times.current;
+  const nextClass = times.next;
   const items = [];
 
   for (const [floor, classrooms] of Object.entries(floors)) {
@@ -296,7 +308,7 @@ function createBuildingResponseNext_1(buildingName, buildingCode, floors, hasCar
 
       const item = {
         title: `🕒다음 교시 빈 강의실[${buildingName} ${getFloorLabel(floor)}]🕒`,
-        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})`,
+        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${nextClass}교시 기준※`,
         buttons: [
           { action: 'block', label: '뒤로가기', blockId: '65f16b9d21bdeb24853d9669' },
           { action: 'message', label: '처음으로', messageText: '처음으로' },
@@ -325,6 +337,9 @@ function createBuildingResponseNext_1(buildingName, buildingCode, floors, hasCar
 
 //다음 교시 선덕관 템플릿
 function createBuildingResponseNext_2(buildingName, buildingCode, floors, hasCarousel) {
+  const times = getCurrentAndNextTime();
+  const currentClass = times.current;
+  const nextClass = times.next;
   const items = [];
 
   for (const [floor, classrooms] of Object.entries(floors)) {
@@ -334,7 +349,7 @@ function createBuildingResponseNext_2(buildingName, buildingCode, floors, hasCar
 
       const item = {
         title: `🕒다음 교시 빈 강의실[${buildingName} ${getFloorLabel(floor)}]🕒`,
-        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})`,
+        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${nextClass}교시 기준※`,
         buttons: [
           { action: 'block', label: '뒤로가기', blockId: '65f16bac82abcd51947bf6d4' },
           { action: 'message', label: '처음으로', messageText: '처음으로' },
@@ -363,6 +378,9 @@ function createBuildingResponseNext_2(buildingName, buildingCode, floors, hasCar
 
 //다음 교시 충효관 템플릿
 function createBuildingResponseNext_3(buildingName, buildingCode, floors, hasCarousel) {
+  const times = getCurrentAndNextTime();
+  const currentClass = times.current;
+  const nextClass = times.next;
   const items = [];
 
   for (const [floor, classrooms] of Object.entries(floors)) {
@@ -372,7 +390,7 @@ function createBuildingResponseNext_3(buildingName, buildingCode, floors, hasCar
 
       const item = {
         title: `🕒다음 교시 빈 강의실[${buildingName} ${getFloorLabel(floor)}]🕒`,
-        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})`,
+        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${nextClass}교시 기준※`,
         buttons: [
           { action: 'block', label: '뒤로가기', blockId: '65f18d02303da839d8dfc680' },
           { action: 'message', label: '처음으로', messageText: '처음으로' },
