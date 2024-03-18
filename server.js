@@ -44,7 +44,7 @@ function gettoDay() {
 }
 
 //수업 교시 환산
-function getCurrentAndNextTime() {
+function getCurrentClass() {
   const now = new Date();
   const currentHour = now.getHours();
   const currentMinute = now.getMinutes();
@@ -73,24 +73,17 @@ function getCurrentAndNextTime() {
       (currentHour > classTime.start && currentHour < classTime.end) ||
       (currentHour === classTime.end && currentMinute <= classTime.minute)
     ) {
-      const nextClassTime = classTimes[i + 1];
-      if (nextClassTime) {
-        return { current: classTime, next: nextClassTime };
-      } else {
-        return { current: classTime, next: null };
-      }
+      return i + 1;
     }
   }
 
-  return { current: null, next: null };
+  return null;
 }
 
 //현재 빈 강의실 추출
 function findAvailableClassrooms(lectureList) {
   const today = gettoDay();
-  const times = getCurrentAndNextTime();
-  const currentClass = times.current;
-  const nextClass = times.next;
+  const currentClass = getCurrentClass();
   const availableClassrooms = [];
 
   for (const lectureKey in lectureList) {
@@ -98,7 +91,7 @@ function findAvailableClassrooms(lectureList) {
     
     if (lecture.hasOwnProperty("시간표") && lecture.hasOwnProperty("캠퍼스")) {
       const classTime = lecture["시간표"];
-
+      
       if (classTime !== "" && classTime.includes(today) && currentClass && !classTime.includes(currentClass.toString()) && lecture["캠퍼스"] === "메트로폴") {
         availableClassrooms.push(lecture["강의실"]);
       }
@@ -114,9 +107,7 @@ function findAvailableClassrooms(lectureList) {
 //다음 교시 빈 강의실 추출
 function findAvailableClassroomsNext(lectureList) {
   const today = gettoDay();
-  const times = getCurrentAndNextTime();
-  const currentClass = times.current;
-  const nextClass = times.next;
+  const nextClass = getCurrentClass() + 1;
   const availableClassrooms = [];
 
   for (const lectureKey in lectureList) {
@@ -125,12 +116,11 @@ function findAvailableClassroomsNext(lectureList) {
     if (lecture.hasOwnProperty("시간표")) {
       const classTime = lecture["시간표"];
 
-      if (classTime !== "" && classTime.includes(today) && currentClass && !classTime.includes(nextClass.start.toString()) && lecture["캠퍼스"] === "메트로폴") {
+      if (classTime !== "" && classTime.includes(today) && nextClass && !classTime.includes(nextClass.toString()) && lecture["캠퍼스"] === "메트로폴") {
         availableClassrooms.push(lecture["강의실"]);
       }
     }
     else {
-      // "시간표" 프로퍼티가 없는 경우 로그 추가
       console.log("Lecture does not have '시간표' property:", lecture);
     }
   }
@@ -173,9 +163,7 @@ function getCurrentFloor(classroom) {
 
 //현재 우당관 템플릿
 function createBuildingResponse_1(buildingName, buildingCode, floors, hasCarousel) {
-  const times = getCurrentAndNextTime();
-  const currentClass = times.current;
-  const nextClass = times.next;
+  const currentClass = getCurrentClass();
   const items = [];
 
   for (const [floor, classrooms] of Object.entries(floors)) {
@@ -189,7 +177,7 @@ function createBuildingResponse_1(buildingName, buildingCode, floors, hasCarouse
         buttons: [
           {
             'action': 'message',
-            'label': ``,
+            'label': `-`,
             'messageText': ``
           },
       ]
@@ -229,9 +217,7 @@ function createBuildingResponse_1(buildingName, buildingCode, floors, hasCarouse
 
 //현재 선덕관 템플릿
 function createBuildingResponse_2(buildingName, buildingCode, floors, hasCarousel) {
-  const times = getCurrentAndNextTime();
-  const currentClass = times.current;
-  const nextClass = times.next;
+  const currentClass = getCurrentClass();
   const items = [];
 
   for (const [floor, classrooms] of Object.entries(floors)) {
@@ -245,7 +231,7 @@ function createBuildingResponse_2(buildingName, buildingCode, floors, hasCarouse
         buttons: [
           {
             'action': 'message',
-            'label': ``,
+            'label': `-`,
             'messageText': ``
           },
       ]
@@ -285,9 +271,7 @@ function createBuildingResponse_2(buildingName, buildingCode, floors, hasCarouse
 
 //현재 충효관 템플릿
 function createBuildingResponse_3(buildingName, buildingCode, floors, hasCarousel) {
-  const times = getCurrentAndNextTime();
-  const currentClass = times.current;
-  const nextClass = times.next;
+  const currentClass = getCurrentClass();
   const items = [];
 
   for (const [floor, classrooms] of Object.entries(floors)) {
@@ -301,7 +285,7 @@ function createBuildingResponse_3(buildingName, buildingCode, floors, hasCarouse
         buttons: [
           {
             'action': 'message',
-            'label': ``,
+            'label': `-`,
             'messageText': ``
           },
       ]
@@ -341,9 +325,7 @@ function createBuildingResponse_3(buildingName, buildingCode, floors, hasCarouse
 
 //다음 교시 우당관 템플릿
 function createBuildingResponseNext_1(buildingName, buildingCode, floors, hasCarousel) {
-  const times = getCurrentAndNextTime();
-  const currentClass = times.current;
-  const nextClass = times.next;
+  const nextClass = getCurrentClass() + 1;
   const items = [];
 
   for (const [floor, classrooms] of Object.entries(floors)) {
@@ -357,7 +339,7 @@ function createBuildingResponseNext_1(buildingName, buildingCode, floors, hasCar
         buttons: [
           {
             'action': 'message',
-            'label': ``,
+            'label': `-`,
             'messageText': ``
           },
       ]
@@ -397,9 +379,7 @@ function createBuildingResponseNext_1(buildingName, buildingCode, floors, hasCar
 
 //다음 교시 선덕관 템플릿
 function createBuildingResponseNext_2(buildingName, buildingCode, floors, hasCarousel) {
-  const times = getCurrentAndNextTime();
-  const currentClass = times.current;
-  const nextClass = times.next;
+  const nextClass = getCurrentClass() + 1;
   const items = [];
 
   for (const [floor, classrooms] of Object.entries(floors)) {
@@ -413,7 +393,7 @@ function createBuildingResponseNext_2(buildingName, buildingCode, floors, hasCar
         buttons: [
           {
             'action': 'message',
-            'label': ``,
+            'label': `-`,
             'messageText': ``
           },
       ]
@@ -453,9 +433,7 @@ function createBuildingResponseNext_2(buildingName, buildingCode, floors, hasCar
 
 //다음 교시 충효관 템플릿
 function createBuildingResponseNext_3(buildingName, buildingCode, floors, hasCarousel) {
-  const times = getCurrentAndNextTime();
-  const currentClass = times.current;
-  const nextClass = times.next;
+  const nextClass = getCurrentClass() + 1;
   const items = [];
 
   for (const [floor, classrooms] of Object.entries(floors)) {
@@ -469,7 +447,7 @@ function createBuildingResponseNext_3(buildingName, buildingCode, floors, hasCar
         buttons: [
           {
             'action': 'message',
-            'label': ``,
+            'label': `-`,
             'messageText': ``
           },
       ]
@@ -670,7 +648,7 @@ app.post('/today', (req, res) => {
                     "buttons": [
                       {
                         'action': 'message',
-                        'label': ``,
+                        'label': `-`,
                         'messageText': ``
                       },
                   ]
@@ -681,7 +659,7 @@ app.post('/today', (req, res) => {
                   "buttons": [
                     {
                       'action': 'message',
-                      'label': ``,
+                      'label': `-`,
                       'messageText': ``
                     },
                 ]
@@ -758,7 +736,7 @@ app.post('/tomorrow', (req, res) => {
                     "buttons": [
                       {
                         'action': 'message',
-                        'label': ``,
+                        'label': `-`,
                         'messageText': ``
                       },
                   ]
@@ -769,7 +747,7 @@ app.post('/tomorrow', (req, res) => {
                   "buttons": [
                     {
                       'action': 'message',
-                      'label': ``,
+                      'label': `-`,
                       'messageText': ``
                     },
                 ]
@@ -820,7 +798,7 @@ app.post('/today_origin', (req, res) => {
                   "buttons": [
                     {
                       'action': 'message',
-                      'label': ``,
+                      'label': `-`,
                       'messageText': ``
                     },
                 ]
@@ -831,7 +809,7 @@ app.post('/today_origin', (req, res) => {
                   "buttons": [
                     {
                       'action': 'message',
-                      'label': ``,
+                      'label': `-`,
                       'messageText': ``
                     },
                 ]
@@ -882,7 +860,7 @@ app.post('/tomorrow_origin', (req, res) => {
                 "buttons": [
                   {
                     'action': 'message',
-                    'label': ``,
+                    'label': `-`,
                     'messageText': ``
                   },
               ]
@@ -893,7 +871,7 @@ app.post('/tomorrow_origin', (req, res) => {
                 "buttons": [
                   {
                     'action': 'message',
-                    'label': ``,
+                    'label': `-`,
                     'messageText': ``
                   },
               ]
@@ -983,7 +961,7 @@ app.post('/week_met', async (req, res) => {
         "buttons": [
           {
             'action': 'message',
-            'label': ``,
+            'label': `-`,
             'messageText': ``
           },
       ]
@@ -1044,7 +1022,7 @@ app.post('/week_met_dorm', async (req, res) => {
         "buttons": [
           {
             'action': 'message',
-            'label': ``,
+            'label': `-`,
             'messageText': ``
           },
       ]
@@ -1117,7 +1095,7 @@ app.post('/week_met_origin', async (req, res) => {
             "buttons": [
               {
                 'action': 'message',
-                'label': ``,
+                'label': `-`,
                 'messageText': ``
               },
           ]
@@ -1172,7 +1150,7 @@ app.post('/week_met_dorm_origin', async (req, res) => {
             "buttons": [
               {
                 'action': 'message',
-                'label': ``,
+                'label': `-`,
                 'messageText': ``
               },
           ]
