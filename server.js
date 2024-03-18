@@ -563,8 +563,9 @@ app.post('/update', async (req, res) => {
 
 //오늘의 학식 - 학생식당, 기숙사
 app.post('/today', (req, res) => {
-  const day = new Date();
-  const today = day.getDay();
+  const offset = 1000 * 60 * 60 * 9
+  const KST = new Date((new Date()).getTime() + offset)
+  const today = KST.getDay();
   const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
   const targetDay = daysOfWeek[today];
   const todayMealMetropole = mealMetropole.data.find(item => item.date === targetDay);
@@ -647,9 +648,10 @@ app.post('/today', (req, res) => {
 
 //내일의 학식 - 학생식당, 기숙사
 app.post('/tomorrow', (req, res) => {
-  const day = new Date();
-  day.setDate(day.getDate() + 1);
-  const tomorrow = day.getDay();
+  const offset = 1000 * 60 * 60 * 9
+  const KST = new Date((new Date()).getTime() + offset)
+  KST.setDate(KST.getDate() + 1);
+  const tomorrow = KST.getDay();
   const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
   const targetDay = daysOfWeek[tomorrow];
   const tomorrowMealMetropole = mealMetropole.data.find(item => item.date === targetDay);
@@ -732,8 +734,9 @@ app.post('/tomorrow', (req, res) => {
 
 //오늘의 학식 - 학생식당 원산지
 app.post('/today_origin', (req, res) => {
-  const day = new Date();
-  const today = day.getDay();
+  const offset = 1000 * 60 * 60 * 9
+  const KST = new Date((new Date()).getTime() + offset)
+  const today = KST.getDay();
   const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
   const targetDay = daysOfWeek[today];
   const todayMealMetropole = mealMetropole.data.find(item => item.date === targetDay);
@@ -770,8 +773,9 @@ app.post('/today_origin', (req, res) => {
 
 //오늘의 학식 - 기숙사 원산지
 app.post('/today_origin_dorm', (req, res) => {
-  const day = new Date();
-  const today = day.getDay();
+  const offset = 1000 * 60 * 60 * 9
+  const KST = new Date((new Date()).getTime() + offset)
+  const today = KST.getDay();
   const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
   const targetDay = daysOfWeek[today];
   const todayMealMetropole = mealMetropole.data.find(item => item.date === targetDay);
@@ -808,9 +812,10 @@ app.post('/today_origin_dorm', (req, res) => {
 
 //내일의 학식 - 학생식당 원산지
 app.post('/tomorrow_origin', (req, res) => {
-  const day = new Date();
-  day.setDate(day.getDate() + 1);
-  const tomorrow = day.getDay();
+  const offset = 1000 * 60 * 60 * 9
+  const KST = new Date((new Date()).getTime() + offset)
+  KST.setDate(KST.getDate() + 1);
+  const tomorrow = KST.getDay();
   const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
   const targetDay = daysOfWeek[tomorrow];
   const tomorrowMealMetropole = mealMetropole.data.find(item => item.date === targetDay);
@@ -847,9 +852,10 @@ app.post('/tomorrow_origin', (req, res) => {
 
 //내일의 학식 - 기숙사 원산지
 app.post('/tomorrow_origin_dorm', (req, res) => {
-  const day = new Date();
-  day.setDate(day.getDate() + 1);
-  const tomorrow = day.getDay();
+  const offset = 1000 * 60 * 60 * 9
+  const KST = new Date((new Date()).getTime() + offset)
+  KST.setDate(KST.getDate() + 1);
+  const tomorrow = KST.getDay();
   const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
   const targetDay = daysOfWeek[tomorrow];
   const tomorrowMealMetropole = mealMetropole.data.find(item => item.date === targetDay);
@@ -886,12 +892,6 @@ app.post('/tomorrow_origin_dorm', (req, res) => {
 
 //이번주 학식 - 학생식당, 기숙사
 app.post('/week', (req, res) => {
-  const day = new Date();
-  const today = day.getDay();
-  const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
-  const targetDay = daysOfWeek[today];
-  const todayMealMetropole = mealMetropole.data.find(item => item.date === targetDay);
-  const todayMealMetropoleDormitory = mealMetropoleDormitory.data.find(item => item.date === targetDay);
 
   const response = {
       "version": "2.0",
