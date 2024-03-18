@@ -21,7 +21,7 @@ async function authorize() {
 }
 
 // Google Sheets에 데이터 쓰기
-async function writeToGoogleSheets(auth, dates, menus, origins) {
+async function writeToGoogleSheets(auth, spreadsheetId, range, dates, menus, origins) {
   const sheets = google.sheets({ version: 'v4', auth });
 
   try {
@@ -29,15 +29,15 @@ async function writeToGoogleSheets(auth, dates, menus, origins) {
     const timestamp = now.toLocaleString('en-US', { timeZone: 'Asia/Seoul' });
 
     await sheets.spreadsheets.values.clear({
-      spreadsheetId: '1F3kEbduNvPnsIbfdO9gDZzc1yua1LMs627KAwZsYg6o',
-      range: '학식_메트로폴!A2:N',
+      spreadsheetId,
+      range,
     });
 
     const values = dates.map((date, index) => [timestamp, date, menus[index], origins[index]]);
 
     const response = await sheets.spreadsheets.values.append({
-      spreadsheetId: '1F3kEbduNvPnsIbfdO9gDZzc1yua1LMs627KAwZsYg6o',
-      range: '학식_메트로폴', // 원하는 시트 이름으로 변경
+      spreadsheetId,
+      range,
       valueInputOption: 'RAW',
       resource: {
         values: values,
@@ -84,6 +84,8 @@ async function scrapeWebsite() {
 // 메인 함수
 async function main_met() {
   const auth = await authorize();
+  const spreadsheetId = '1F3kEbduNvPnsIbfdO9gDZzc1yua1LMs627KAwZsYg6o';
+  const range = '학식_메트로폴!A2:N';
   const { dates, menus, origins } = await scrapeWebsite();
   await writeToGoogleSheets(auth, dates, menus, origins);
 }

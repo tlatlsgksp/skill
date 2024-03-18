@@ -37,12 +37,11 @@ const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 0, hour: 10, minute: 0 
 //함수
 //요일 환산
 function gettoDay() {
-  const day = new Date();
-  const offset = 9 * 60;
-  const todayUTC = (day.getDay() + 6) % 7;
-  const todayKST = (todayUTC + offset / 60 / 24) % 7;
+  const offset = 1000 * 60 * 60 * 9
+  const KST = new Date((new Date()).getTime() + offset)
+  const today = KST.getDay();
   const days = ["일", "월", "화", "수", "목", "금", "토"];
-  return days[todayKST];
+  return days[today];
 }
 
 //수업 교시 환산
@@ -87,6 +86,7 @@ function getCurrentClass() {
 //현재 빈 강의실 추출
 function findAvailableClassrooms(lectureList) {
   const today = gettoDay();
+  console.log(today);
   const currentClass = getCurrentClass();
   const availableClassrooms = [];
 
@@ -169,7 +169,6 @@ function getCurrentFloor(classroom) {
 function createBuildingResponse_1(buildingName, buildingCode, floors, hasCarousel) {
   const currentClass = getCurrentClass();
   const items = [];
-  console.log(currentClass);
   for (const [floor, classrooms] of Object.entries(floors)) {
     if (classrooms.length > 0) {
       // 중복 제거
