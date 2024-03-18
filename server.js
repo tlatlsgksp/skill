@@ -625,10 +625,24 @@ app.post('/today', (req, res) => {
                 {
                     "title": "🍴오늘의 학식[학생식당]🍴",
                     "description": `한정식▼\n${todayMealMetropole.meal}`,
+                    "buttons": [
+                      {
+                        'action': 'message',
+                        'label': ``,
+                        'messageText': ``
+                      },
+                  ]
                 },
                 {
                   "title": "🍴오늘의 학식[기숙사]🍴",
                   "description": `조식▼\n${todayMealMetropoleDormitory.breakfast}\n\n석식▼\n${todayMealMetropoleDormitory.dinner}`,
+                  "buttons": [
+                    {
+                      'action': 'message',
+                      'label': ``,
+                      'messageText': ``
+                    },
+                ]
               }
               ]
             }
@@ -699,10 +713,24 @@ app.post('/tomorrow', (req, res) => {
                 {
                     "title": "🍴내일의 학식[학생식당]🍴",
                     "description": `한정식▼\n${tomorrowMealMetropole.meal}`,
+                    "buttons": [
+                      {
+                        'action': 'message',
+                        'label': ``,
+                        'messageText': ``
+                      },
+                  ]
                 },
                 {
                   "title": "🍴내일의 학식[기숙사]🍴",
                   "description": `조식▼\n${tomorrowMealMetropoleDormitory.breakfast}\n\n석식▼\n${tomorrowMealMetropoleDormitory.dinner}`,
+                  "buttons": [
+                    {
+                      'action': 'message',
+                      'label': ``,
+                      'messageText': ``
+                    },
+                ]
               }
               ]
             }
@@ -747,10 +775,24 @@ app.post('/today_origin', (req, res) => {
                 {
                   "title": "🍴오늘의 학식[학생식당] - 원산지🍴",
                   "description": `${todayMealMetropole.origin}`,
+                  "buttons": [
+                    {
+                      'action': 'message',
+                      'label': ``,
+                      'messageText': ``
+                    },
+                ]
                 },
                 {
                   "title": "🍴오늘의 학식[기숙사] - 원산지🍴",
                   "description": `${todayMealMetropoleDormitory.origin}`,
+                  "buttons": [
+                    {
+                      'action': 'message',
+                      'label': ``,
+                      'messageText': ``
+                    },
+                ]
                 },
               ]
             }
@@ -795,10 +837,24 @@ app.post('/tomorrow_origin', (req, res) => {
               {
                 "title": "🍴내일의 학식[학생식당] - 원산지🍴",
                 "description": `${tomorrowMealMetropole.origin}`,
+                "buttons": [
+                  {
+                    'action': 'message',
+                    'label': ``,
+                    'messageText': ``
+                  },
+              ]
               },
               {
                 "title": "🍴내일의 학식[기숙사] - 원산지🍴",
                 "description": `${tomorrowMealMetropoleDormitory.origin}`,
+                "buttons": [
+                  {
+                    'action': 'message',
+                    'label': ``,
+                    'messageText': ``
+                  },
+              ]
               },
             ]
           }
@@ -984,7 +1040,7 @@ app.post('/week_met_origin', async (req, res) => {
     const tagetdayMealMetropole = mealMetropole.data.find(item => item.date === targetDay);
     const tagetdayMealMetropoleDormitory = mealMetropoleDormitory.data.find(item => item.date === targetDay);
 
-    if (i === 0 || i === 5) {
+    if (i === 0 || i === 6) {
       continue;
     }
 
@@ -1001,7 +1057,14 @@ app.post('/week_met_origin', async (req, res) => {
         {
           "carousel": {
             "type": "textCard",
-            "items": weekMeals
+            "items": weekMeals,
+            "buttons": [
+              {
+                'action': 'message',
+                'label': ``,
+                'messageText': ``
+              },
+          ]
           }
         }
       ],
@@ -1049,7 +1112,14 @@ app.post('/week_met_dorm_origin', async (req, res) => {
         {
           "carousel": {
             "type": "textCard",
-            "items": weekMeals
+            "items": weekMeals,
+            "buttons": [
+              {
+                'action': 'message',
+                'label': ``,
+                'messageText': ``
+              },
+          ]
           }
         }
       ],
