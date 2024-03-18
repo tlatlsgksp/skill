@@ -98,6 +98,7 @@ function findAvailableClassrooms(lectureList) {
     
     if (lecture.hasOwnProperty("시간표") && lecture.hasOwnProperty("캠퍼스")) {
       const classTime = lecture["시간표"];
+      console.log(classTime);
 
       if (classTime !== "" && classTime.includes(today) && !classTime.includes(currentClass.toString()) && lecture["캠퍼스"] === "메트로폴") {
         availableClassrooms.push(lecture["강의실"]);
@@ -186,6 +187,13 @@ function createBuildingResponse_1(buildingName, buildingCode, floors, hasCarouse
       const item = {
         title: `🕒현재 빈 강의실[${buildingName} ${getFloorLabel(floor)}]🕒`,
         description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${currentClass}교시 기준※`,
+        buttons: [
+          {
+            'action': 'message',
+            'label': ``,
+            'messageText': ``
+          },
+      ]
       };
       items.push(item);
     }
@@ -235,6 +243,13 @@ function createBuildingResponse_2(buildingName, buildingCode, floors, hasCarouse
       const item = {
         title: `🕒현재 빈 강의실[${buildingName} ${getFloorLabel(floor)}]🕒`,
         description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${currentClass}교시 기준※`,
+        buttons: [
+          {
+            'action': 'message',
+            'label': ``,
+            'messageText': ``
+          },
+      ]
       };
       items.push(item);
     }
@@ -284,6 +299,13 @@ function createBuildingResponse_3(buildingName, buildingCode, floors, hasCarouse
       const item = {
         title: `🕒현재 빈 강의실[${buildingName} ${getFloorLabel(floor)}]🕒`,
         description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${currentClass}교시 기준※`,
+        buttons: [
+          {
+            'action': 'message',
+            'label': ``,
+            'messageText': ``
+          },
+      ]
       };
       items.push(item);
     }
@@ -333,6 +355,13 @@ function createBuildingResponseNext_1(buildingName, buildingCode, floors, hasCar
       const item = {
         title: `🕒다음 교시 빈 강의실[${buildingName} ${getFloorLabel(floor)}]🕒`,
         description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${nextClass}교시 기준※`,
+        buttons: [
+          {
+            'action': 'message',
+            'label': ``,
+            'messageText': ``
+          },
+      ]
       };
       items.push(item);
     }
@@ -382,6 +411,13 @@ function createBuildingResponseNext_2(buildingName, buildingCode, floors, hasCar
       const item = {
         title: `🕒다음 교시 빈 강의실[${buildingName} ${getFloorLabel(floor)}]🕒`,
         description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${nextClass}교시 기준※`,
+        buttons: [
+          {
+            'action': 'message',
+            'label': ``,
+            'messageText': ``
+          },
+      ]
       };
       items.push(item);
     }
@@ -431,6 +467,13 @@ function createBuildingResponseNext_3(buildingName, buildingCode, floors, hasCar
       const item = {
         title: `🕒다음 교시 빈 강의실[${buildingName} ${getFloorLabel(floor)}]🕒`,
         description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${nextClass}교시 기준※`,
+        buttons: [
+          {
+            'action': 'message',
+            'label': ``,
+            'messageText': ``
+          },
+      ]
       };
       items.push(item);
     }
@@ -938,6 +981,13 @@ app.post('/week_met', async (req, res) => {
     weekMeals.push({
         "title": `🍴${dayOfWeek} 학식[학생식당]🍴`,
         "description": `한정식▼\n${todayMealMetropole.meal}`,
+        "buttons": [
+          {
+            'action': 'message',
+            'label': ``,
+            'messageText': ``
+          },
+      ]
     });
   }
 
@@ -992,6 +1042,13 @@ app.post('/week_met_dorm', async (req, res) => {
     weekMeals.push({
         "title": `🍴${dayOfWeek} 학식[기숙사]🍴`,
         "description": `조식▼\n${todayMealMetropoleDormitory.breakfast}\n\n석식▼\n${todayMealMetropoleDormitory.dinner}`,
+        "buttons": [
+          {
+            'action': 'message',
+            'label': ``,
+            'messageText': ``
+          },
+      ]
     });
   }
 
