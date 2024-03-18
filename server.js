@@ -175,14 +175,7 @@ function createBuildingResponse_1(buildingName, buildingCode, floors, hasCarouse
 
       const item = {
         title: `🕒현재 빈 강의실[${buildingName} ${getFloorLabel(floor)}]🕒`,
-        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${currentClass}교시 기준※`,
-        buttons: [
-          {
-            'action': 'message',
-            'label': `-`,
-            'messageText': `-`
-          },
-      ]
+        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${currentClass}교시 기준※`
       };
       items.push(item);
     }
@@ -229,14 +222,7 @@ function createBuildingResponse_2(buildingName, buildingCode, floors, hasCarouse
 
       const item = {
         title: `🕒현재 빈 강의실[${buildingName} ${getFloorLabel(floor)}]🕒`,
-        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${currentClass}교시 기준※`,
-        buttons: [
-          {
-            'action': 'message',
-            'label': `-`,
-            'messageText': `-`
-          },
-      ]
+        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${currentClass}교시 기준※`
       };
       items.push(item);
     }
@@ -283,14 +269,7 @@ function createBuildingResponse_3(buildingName, buildingCode, floors, hasCarouse
 
       const item = {
         title: `🕒현재 빈 강의실[${buildingName} ${getFloorLabel(floor)}]🕒`,
-        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${currentClass}교시 기준※`,
-        buttons: [
-          {
-            'action': 'message',
-            'label': `-`,
-            'messageText': `-`
-          },
-      ]
+        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${currentClass}교시 기준※`
       };
       items.push(item);
     }
@@ -337,14 +316,7 @@ function createBuildingResponseNext_1(buildingName, buildingCode, floors, hasCar
 
       const item = {
         title: `🕒다음 교시 빈 강의실[${buildingName} ${getFloorLabel(floor)}]🕒`,
-        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${nextClass}교시 기준※`,
-        buttons: [
-          {
-            'action': 'message',
-            'label': `-`,
-            'messageText': `-`
-          },
-      ]
+        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${nextClass}교시 기준※`
       };
       items.push(item);
     }
@@ -391,14 +363,7 @@ function createBuildingResponseNext_2(buildingName, buildingCode, floors, hasCar
 
       const item = {
         title: `🕒다음 교시 빈 강의실[${buildingName} ${getFloorLabel(floor)}]🕒`,
-        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${nextClass}교시 기준※`,
-        buttons: [
-          {
-            'action': 'message',
-            'label': `-`,
-            'messageText': `-`
-          },
-      ]
+        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${nextClass}교시 기준※`
       };
       items.push(item);
     }
@@ -445,14 +410,7 @@ function createBuildingResponseNext_3(buildingName, buildingCode, floors, hasCar
 
       const item = {
         title: `🕒다음 교시 빈 강의실[${buildingName} ${getFloorLabel(floor)}]🕒`,
-        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${nextClass}교시 기준※`,
-        buttons: [
-          {
-            'action': 'message',
-            'label': `-`,
-            'messageText': `-`
-          },
-      ]
+        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${nextClass}교시 기준※`
       };
       items.push(item);
     }
@@ -646,25 +604,11 @@ app.post('/today', (req, res) => {
               "items": [
                 {
                     "title": "🍴오늘의 학식[학생식당]🍴",
-                    "description": `한정식▼\n${todayMealMetropole.meal}`,
-                    "buttons": [
-                      {
-                        'action': 'message',
-                        'label': `-`,
-                        'messageText': `-`
-                      },
-                  ]
+                    "description": `한정식▼\n${todayMealMetropole.meal}`
                 },
                 {
                   "title": "🍴오늘의 학식[기숙사]🍴",
-                  "description": `조식▼\n${todayMealMetropoleDormitory.breakfast}\n\n석식▼\n${todayMealMetropoleDormitory.dinner}`,
-                  "buttons": [
-                    {
-                      'action': 'message',
-                      'label': `-`,
-                      'messageText': `-`
-                    },
-                ]
+                  "description": `조식▼\n${todayMealMetropoleDormitory.breakfast}\n\n석식▼\n${todayMealMetropoleDormitory.dinner}`
               }
               ]
             }
@@ -734,25 +678,11 @@ app.post('/tomorrow', (req, res) => {
               "items": [
                 {
                     "title": "🍴내일의 학식[학생식당]🍴",
-                    "description": `한정식▼\n${tomorrowMealMetropole.meal}`,
-                    "buttons": [
-                      {
-                        'action': 'message',
-                        'label': `-`,
-                        'messageText': `-`
-                      },
-                  ]
+                    "description": `한정식▼\n${tomorrowMealMetropole.meal}`
                 },
                 {
                   "title": "🍴내일의 학식[기숙사]🍴",
-                  "description": `조식▼\n${tomorrowMealMetropoleDormitory.breakfast}\n\n석식▼\n${tomorrowMealMetropoleDormitory.dinner}`,
-                  "buttons": [
-                    {
-                      'action': 'message',
-                      'label': `-`,
-                      'messageText': `-`
-                    },
-                ]
+                  "description": `조식▼\n${tomorrowMealMetropoleDormitory.breakfast}\n\n석식▼\n${tomorrowMealMetropoleDormitory.dinner}`
               }
               ]
             }
@@ -796,25 +726,11 @@ app.post('/today_origin', (req, res) => {
               "items": [
                 {
                   "title": "🍴오늘의 학식[학생식당] - 원산지🍴",
-                  "description": `${todayMealMetropole.origin}`,
-                  "buttons": [
-                    {
-                      'action': 'message',
-                      'label': `-`,
-                      'messageText': `-`
-                    },
-                ]
+                  "description": `${todayMealMetropole.origin}`
                 },
                 {
                   "title": "🍴오늘의 학식[기숙사] - 원산지🍴",
-                  "description": `${todayMealMetropoleDormitory.origin}`,
-                  "buttons": [
-                    {
-                      'action': 'message',
-                      'label': `-`,
-                      'messageText': `-`
-                    },
-                ]
+                  "description": `${todayMealMetropoleDormitory.origin}`
                 },
               ]
             }
@@ -858,25 +774,11 @@ app.post('/tomorrow_origin', (req, res) => {
             "items": [
               {
                 "title": "🍴내일의 학식[학생식당] - 원산지🍴",
-                "description": `${tomorrowMealMetropole.origin}`,
-                "buttons": [
-                  {
-                    'action': 'message',
-                    'label': `-`,
-                    'messageText': `-`
-                  },
-              ]
+                "description": `${tomorrowMealMetropole.origin}`
               },
               {
                 "title": "🍴내일의 학식[기숙사] - 원산지🍴",
-                "description": `${tomorrowMealMetropoleDormitory.origin}`,
-                "buttons": [
-                  {
-                    'action': 'message',
-                    'label': `-`,
-                    'messageText': `-`
-                  },
-              ]
+                "description": `${tomorrowMealMetropoleDormitory.origin}`
               },
             ]
           }
@@ -959,14 +861,7 @@ app.post('/week_met', async (req, res) => {
 
     weekMeals.push({
         "title": `🍴${dayOfWeek} 학식[학생식당]🍴`,
-        "description": `한정식▼\n${todayMealMetropole.meal}`,
-        "buttons": [
-          {
-            'action': 'message',
-            'label': `-`,
-            'messageText': `-`
-          },
-      ]
+        "description": `한정식▼\n${todayMealMetropole.meal}`
     });
   }
 
@@ -1020,14 +915,7 @@ app.post('/week_met_dorm', async (req, res) => {
 
     weekMeals.push({
         "title": `🍴${dayOfWeek} 학식[기숙사]🍴`,
-        "description": `조식▼\n${todayMealMetropoleDormitory.breakfast}\n\n석식▼\n${todayMealMetropoleDormitory.dinner}`,
-        "buttons": [
-          {
-            'action': 'message',
-            'label': `-`,
-            'messageText': `-`
-          },
-      ]
+        "description": `조식▼\n${todayMealMetropoleDormitory.breakfast}\n\n석식▼\n${todayMealMetropoleDormitory.dinner}`
     });
   }
 
@@ -1082,14 +970,7 @@ app.post('/week_met_origin', async (req, res) => {
 
     weekMeals.push({
       "title": `🍴${daysOfWeek[i]} 학식[학생식당] - 원산지🍴`,
-      "description": `${tagetdayMealMetropole.origin}`,
-      "buttons": [
-        {
-          'action': 'message',
-          'label': `-`,
-          'messageText': `-`
-        },
-    ]
+      "description": `${tagetdayMealMetropole.origin}`
     });
   }
 
@@ -1100,14 +981,7 @@ app.post('/week_met_origin', async (req, res) => {
         {
           "carousel": {
             "type": "textCard",
-            "items": weekMeals,
-            "buttons": [
-              {
-                'action': 'message',
-                'label': `-`,
-                'messageText': `-`
-              },
-          ]
+            "items": weekMeals
           }
         }
       ],
@@ -1144,14 +1018,7 @@ app.post('/week_met_dorm_origin', async (req, res) => {
 
     weekMeals.push({
       "title": `🍴${daysOfWeek[i]} 학식[기숙사] - 원산지🍴`,
-      "description": `${tagetdayMealMetropoleDormitory.origin}`,
-      "buttons": [
-        {
-          'action': 'message',
-          'label': `-`,
-          'messageText': `-`
-        },
-    ]
+      "description": `${tagetdayMealMetropoleDormitory.origin}`
     });
   }
 
@@ -1162,14 +1029,7 @@ app.post('/week_met_dorm_origin', async (req, res) => {
         {
           "carousel": {
             "type": "textCard",
-            "items": weekMeals,
-            "buttons": [
-              {
-                'action': 'message',
-                'label': `-`,
-                'messageText': `-`
-              },
-          ]
+            "items": weekMeals
           }
         }
       ],
@@ -1204,7 +1064,6 @@ app.post('/lecture_find', async (req, res) => {
             "textCard": {
               "title": "오늘은 주말입니다.",
               "description": "해당 기능이 제공되지 않습니다.",
-          
             }
           }
         ],
