@@ -38,16 +38,20 @@ const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 0, hour: 10, minute: 0 
 //요일 환산
 function gettoDay() {
   const day = new Date();
-  const today = day.getDay();
+  const offset = 9 * 60;
+  const todayUTC = (day.getDay() + 6) % 7;
+  const todayKST = (todayUTC + offset / 60 / 24) % 7;
   const days = ["일", "월", "화", "수", "목", "금", "토"];
-  return days[today];
+  return days[todayKST];
 }
 
 //수업 교시 환산
 function getCurrentClass() {
   const now = new Date();
-  const currentHour = now.getHours();
-  const currentMinute = now.getMinutes();
+  const KST = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+  
+  const currentHour = KST.getHours();
+  const currentMinute = KST.getMinutes();
 
   const classTimes = [
     { start: 9, end: 10, minute: 30 },

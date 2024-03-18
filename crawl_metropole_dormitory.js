@@ -26,7 +26,7 @@ async function writeToGoogleSheets(auth, spreadsheetId, range, dates, breakfasts
 
   try {
     const now = new Date();
-    const timestamp = now.toLocaleString();
+    const timestamp = now.toLocaleString('en-US', { timeZone: 'Asia/Seoul' });
 
     await sheets.spreadsheets.values.clear({
       spreadsheetId,
