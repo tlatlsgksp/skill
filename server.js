@@ -180,7 +180,7 @@ function createBuildingResponse_1(buildingName, buildingCode, floors, hasCarouse
           {
             'action': 'message',
             'label': `-`,
-            'messageText': ``
+            'messageText': `-`
           },
       ]
       };
@@ -234,7 +234,7 @@ function createBuildingResponse_2(buildingName, buildingCode, floors, hasCarouse
           {
             'action': 'message',
             'label': `-`,
-            'messageText': ``
+            'messageText': `-`
           },
       ]
       };
@@ -288,7 +288,7 @@ function createBuildingResponse_3(buildingName, buildingCode, floors, hasCarouse
           {
             'action': 'message',
             'label': `-`,
-            'messageText': ``
+            'messageText': `-`
           },
       ]
       };
@@ -342,7 +342,7 @@ function createBuildingResponseNext_1(buildingName, buildingCode, floors, hasCar
           {
             'action': 'message',
             'label': `-`,
-            'messageText': ``
+            'messageText': `-`
           },
       ]
       };
@@ -396,7 +396,7 @@ function createBuildingResponseNext_2(buildingName, buildingCode, floors, hasCar
           {
             'action': 'message',
             'label': `-`,
-            'messageText': ``
+            'messageText': `-`
           },
       ]
       };
@@ -450,7 +450,7 @@ function createBuildingResponseNext_3(buildingName, buildingCode, floors, hasCar
           {
             'action': 'message',
             'label': `-`,
-            'messageText': ``
+            'messageText': `-`
           },
       ]
       };
@@ -651,7 +651,7 @@ app.post('/today', (req, res) => {
                       {
                         'action': 'message',
                         'label': `-`,
-                        'messageText': ``
+                        'messageText': `-`
                       },
                   ]
                 },
@@ -662,7 +662,7 @@ app.post('/today', (req, res) => {
                     {
                       'action': 'message',
                       'label': `-`,
-                      'messageText': ``
+                      'messageText': `-`
                     },
                 ]
               }
@@ -739,7 +739,7 @@ app.post('/tomorrow', (req, res) => {
                       {
                         'action': 'message',
                         'label': `-`,
-                        'messageText': ``
+                        'messageText': `-`
                       },
                   ]
                 },
@@ -750,7 +750,7 @@ app.post('/tomorrow', (req, res) => {
                     {
                       'action': 'message',
                       'label': `-`,
-                      'messageText': ``
+                      'messageText': `-`
                     },
                 ]
               }
@@ -801,7 +801,7 @@ app.post('/today_origin', (req, res) => {
                     {
                       'action': 'message',
                       'label': `-`,
-                      'messageText': ``
+                      'messageText': `-`
                     },
                 ]
                 },
@@ -812,7 +812,7 @@ app.post('/today_origin', (req, res) => {
                     {
                       'action': 'message',
                       'label': `-`,
-                      'messageText': ``
+                      'messageText': `-`
                     },
                 ]
                 },
@@ -863,7 +863,7 @@ app.post('/tomorrow_origin', (req, res) => {
                   {
                     'action': 'message',
                     'label': `-`,
-                    'messageText': ``
+                    'messageText': `-`
                   },
               ]
               },
@@ -874,7 +874,7 @@ app.post('/tomorrow_origin', (req, res) => {
                   {
                     'action': 'message',
                     'label': `-`,
-                    'messageText': ``
+                    'messageText': `-`
                   },
               ]
               },
@@ -964,7 +964,7 @@ app.post('/week_met', async (req, res) => {
           {
             'action': 'message',
             'label': `-`,
-            'messageText': ``
+            'messageText': `-`
           },
       ]
     });
@@ -1025,7 +1025,7 @@ app.post('/week_met_dorm', async (req, res) => {
           {
             'action': 'message',
             'label': `-`,
-            'messageText': ``
+            'messageText': `-`
           },
       ]
     });
@@ -1087,7 +1087,7 @@ app.post('/week_met_origin', async (req, res) => {
         {
           'action': 'message',
           'label': `-`,
-          'messageText': ``
+          'messageText': `-`
         },
     ]
     });
@@ -1105,7 +1105,7 @@ app.post('/week_met_origin', async (req, res) => {
               {
                 'action': 'message',
                 'label': `-`,
-                'messageText': ``
+                'messageText': `-`
               },
           ]
           }
@@ -1149,7 +1149,7 @@ app.post('/week_met_dorm_origin', async (req, res) => {
         {
           'action': 'message',
           'label': `-`,
-          'messageText': ``
+          'messageText': `-`
         },
     ]
     });
@@ -1167,7 +1167,7 @@ app.post('/week_met_dorm_origin', async (req, res) => {
               {
                 'action': 'message',
                 'label': `-`,
-                'messageText': ``
+                'messageText': `-`
               },
           ]
           }
