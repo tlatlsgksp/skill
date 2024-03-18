@@ -86,7 +86,6 @@ function getCurrentClass() {
 //현재 빈 강의실 추출
 function findAvailableClassrooms(lectureList) {
   const today = gettoDay();
-  console.log(today);
   const currentClass = getCurrentClass();
   const availableClassrooms = [];
 
