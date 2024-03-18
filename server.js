@@ -581,16 +581,17 @@ app.post('/today', (req, res) => {
             "textCard": {
               "title": "오늘은 주말입니다.",
               "description": "학식이 제공되지않습니다.",
-              "buttons": [
-                {
-                  'action': 'message',
-                  'label': `처음으로`,
-                  'messageText': `처음으로`
-                },
-            ]
             }
           }
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
         ]
+
       }
     }
   }
@@ -612,11 +613,6 @@ app.post('/today', (req, res) => {
                         'label': `원산지 확인`,
                         'blockId': `65ed16f940d33a5902c955aa`
                       },
-                      {
-                        'action': 'message',
-                        'label': `처음으로`,
-                        'messageText': `처음으로`
-                      },
                   ]
                 },
                 {
@@ -626,19 +622,22 @@ app.post('/today', (req, res) => {
                     {
                       'action': 'block',
                       'label': `원산지 확인`,
-                      'blockId': `65ee9f1fac1dbb67bfcf55d0`
-                    },
-                    {
-                      'action': 'message',
-                      'label': `처음으로`,
-                      'messageText': `처음으로`
+                      'blockId': `65f830170a28195b33a8e2a1`
                     },
                 ]
               }
               ]
             }
           }
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
         ]
+
       }
     };
   }
@@ -667,16 +666,17 @@ app.post('/tomorrow', (req, res) => {
             "textCard": {
               "title": "내일은 주말입니다.",
               "description": "학식이 제공되지 않습니다.",
-              "buttons": [
-                {
-                  'action': 'message',
-                  'label': `처음으로`,
-                  'messageText': `처음으로`
-                },
-              ]
             }
           }
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
         ]
+
       }
     }
   }
@@ -698,11 +698,6 @@ app.post('/tomorrow', (req, res) => {
                         'label': `원산지 확인`,
                         'blockId': `65ee8171d287ba103c2cd6ac`
                       },
-                      {
-                        'action': 'message',
-                        'label': `처음으로`,
-                        'messageText': `처음으로`
-                      },
                   ]
                 },
                 {
@@ -714,17 +709,20 @@ app.post('/tomorrow', (req, res) => {
                       'label': `원산지 확인`,
                       'blockId': `65f830b7c94fce5471d9a2f9`
                     },
-                    {
-                      'action': 'message',
-                      'label': `처음으로`,
-                      'messageText': `처음으로`
-                    },
                 ]
               }
               ]
             }
           }
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
         ]
+
       }
     };
   }
@@ -750,21 +748,22 @@ app.post('/today_origin', (req, res) => {
             "textCard": {
               "title": "🍴오늘의 학식[학생식당] - 원산지🍴",
               "description": `${todayMealMetropole.origin}`,
-              "buttons": [
-                {
-                  'action': 'block',
-                  'label': `뒤로가기`,
-                  'blockId': `65ca1b7109dcef4315f12fd3`
-                },
-                {
-                  'action': 'message',
-                  'label': `처음으로`,
-                  'messageText': `처음으로`
-                },
-          ]
         }
         }
+        ],
+        "quickReplies": [
+          {
+            'action': 'block',
+            'label': `뒤로가기`,
+            'blockId': `65ca1b7109dcef4315f12fd3`
+          },
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
         ]
+
       }
     };
 
@@ -789,21 +788,22 @@ app.post('/today_origin_dorm', (req, res) => {
             "textCard": {
               "title": "🍴오늘의 학식[기숙사] - 원산지🍴",
               "description": `${todayMealMetropoleDormitory.origin}`,
-              "buttons": [
-                {
-                  'action': 'block',
-                  'label': `뒤로가기`,
-                  'blockId': `65ca1b7109dcef4315f12fd3`
-                },
-                {
-                  'action': 'message',
-                  'label': `처음으로`,
-                  'messageText': `처음으로`
-                },
-            ]
         }
         }
+        ],
+        "quickReplies": [
+          {
+            'action': 'block',
+            'label': `뒤로가기`,
+            'blockId': `65ca1b7109dcef4315f12fd3`
+          },
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
         ]
+
       }
     };
 
@@ -829,20 +829,20 @@ app.post('/tomorrow_origin', (req, res) => {
             "textCard": {
               "title": "🍴내일의 학식[학생식당] - 원산지🍴",
               "description": `${tomorrowMealMetropole.origin}`,
-              "buttons": [
-                {
-                  'action': 'block',
-                  'label': `뒤로가기`,
-                  'blockId': `65ee8168c8612a194feaff1d`
-                },
-                {
-                  'action': 'message',
-                  'label': `처음으로`,
-                  'messageText': `처음으로`
-                },
-            ]
         }
         }
+        ],
+        "quickReplies": [
+          {
+            'action': 'block',
+            'label': `뒤로가기`,
+            'blockId': `65ee8168c8612a194feaff1d`
+          },
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
         ]
       }
     };
@@ -869,20 +869,20 @@ app.post('/tomorrow_origin_dorm', (req, res) => {
             "textCard": {
               "title": "🍴내일의 학식[기숙사] - 원산지🍴",
               "description": `${tomorrowMealMetropoleDormitory.origin}`,
-              "buttons": [
-                {
-                  'action': 'block',
-                  'label': `뒤로가기`,
-                  'blockId': `65ee8168c8612a194feaff1d`
-                },
-                {
-                  'action': 'message',
-                  'label': `처음으로`,
-                  'messageText': `처음으로`
-                },
-            ]
         }
         }
+        ],
+        "quickReplies": [
+          {
+            'action': 'block',
+            'label': `뒤로가기`,
+            'blockId': `65ee8168c8612a194feaff1d`
+          },
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
         ]
       }
     };
@@ -911,13 +911,15 @@ app.post('/week', (req, res) => {
                   'label': `조식, 석식[기숙사]`,
                   'blockId': `65ee8c9b5f95a271a0afa67d`
                 },
-                {
-                  'action': 'message',
-                  'label': `처음으로`,
-                  'messageText': `처음으로`
-                },
             ]
             }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
           }
         ]
       }
@@ -952,16 +954,6 @@ app.post('/week_met', async (req, res) => {
               'met_day' : `${dayOfWeek}`
             }
           },
-          {
-            'action': 'block',
-            'label': `뒤로가기`,
-            'blockId': `65ca1c5709dcef4315f12fe8`
-          },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
         ]
     });
   }
@@ -975,6 +967,18 @@ app.post('/week_met', async (req, res) => {
             "type": "textCard",
             "items": weekMeals
           }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'block',
+          'label': `뒤로가기`,
+          'blockId': `65ca1c5709dcef4315f12fe8`
+        },
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
         }
       ]
     }
@@ -1009,16 +1013,6 @@ app.post('/week_met_dorm', async (req, res) => {
               'met_dorm_day' : `${dayOfWeek}`
             }
           },
-          {
-            'action': 'block',
-            'label': `뒤로가기`,
-            'blockId': `65ca1c5709dcef4315f12fe8`
-          },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
         ]
     });
   }
@@ -1032,6 +1026,18 @@ app.post('/week_met_dorm', async (req, res) => {
             "type": "textCard",
             "items": weekMeals
           }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'block',
+          'label': `뒤로가기`,
+          'blockId': `65ca1c5709dcef4315f12fe8`
+        },
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
         }
       ]
     }
@@ -1059,20 +1065,20 @@ app.post('/week_met_origin', async (req, res) => {
             "textCard": {
               "title": `🍴${met_day} 학식[학생식당] - 원산지🍴`,
               "description": `${tagetdayMealMetropole.origin}`,
-              "buttons": [
-                {
-                  'action': 'block',
-                  'label': `뒤로가기`,
-                  'blockId': `65ee8c4499eaa8487e2a54df`
-                },
-                {
-                  'action': 'message',
-                  'label': `처음으로`,
-                  'messageText': `처음으로`
-                },
-            ]
         }
         }
+        ],
+        "quickReplies": [
+          {
+            'action': 'block',
+            'label': `뒤로가기`,
+            'blockId': `65ee8c4499eaa8487e2a54df`
+          },
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
         ]
       }
     };
@@ -1099,20 +1105,20 @@ app.post('/week_met_dorm_origin', async (req, res) => {
             "textCard": {
               "title": `🍴${met_dorm_day} 학식[기숙사] - 원산지🍴`,
               "description": `${tagetdayMealMetropoleDormitory.origin}`,
-              "buttons": [
-                {
-                  'action': 'block',
-                  'label': `뒤로가기`,
-                  'blockId': `65ee8c9b5f95a271a0afa67d`
-                },
-                {
-                  'action': 'message',
-                  'label': `처음으로`,
-                  'messageText': `처음으로`
-                },
-            ]
         }
         }
+        ],
+        "quickReplies": [
+          {
+            'action': 'block',
+            'label': `뒤로가기`,
+            'blockId': `65ee8c9b5f95a271a0afa67d`
+          },
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
         ]
       }
     };
