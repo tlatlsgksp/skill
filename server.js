@@ -165,7 +165,7 @@ function getCurrentFloor(classroom) {
 function createBuildingResponse_1(buildingName, buildingCode, floors, hasCarousel) {
   const currentClass = getCurrentClass();
   const items = [];
-
+  console.log(currentClass);
   for (const [floor, classrooms] of Object.entries(floors)) {
     if (classrooms.length > 0) {
       // 중복 제거
@@ -1081,6 +1081,13 @@ app.post('/week_met_origin', async (req, res) => {
     weekMeals.push({
       "title": `🍴${daysOfWeek[i]} 학식[학생식당] - 원산지🍴`,
       "description": `${tagetdayMealMetropole.origin}`,
+      "buttons": [
+        {
+          'action': 'message',
+          'label': `-`,
+          'messageText': ``
+        },
+    ]
     });
   }
 
@@ -1136,6 +1143,13 @@ app.post('/week_met_dorm_origin', async (req, res) => {
     weekMeals.push({
       "title": `🍴${daysOfWeek[i]} 학식[기숙사] - 원산지🍴`,
       "description": `${tagetdayMealMetropoleDormitory.origin}`,
+      "buttons": [
+        {
+          'action': 'message',
+          'label': `-`,
+          'messageText': ``
+        },
+    ]
     });
   }
 
