@@ -87,7 +87,7 @@ async function main_met() {
   const spreadsheetId = '1F3kEbduNvPnsIbfdO9gDZzc1yua1LMs627KAwZsYg6o';
   const range = '학식_메트로폴!A2:N';
   const { dates, menus, origins } = await scrapeWebsite();
-  await writeToGoogleSheets(auth, dates, menus, origins);
+  await writeToGoogleSheets(auth, spreadsheetId, range, dates, menus, origins);
 }
 
 main_met();
