@@ -100,7 +100,7 @@ function findAvailableClassrooms(lectureList) {
       const classTime = lecture["시간표"];
       console.log(classTime);
 
-      if (classTime !== "" && classTime.includes(today) && !classTime.includes(currentClass.toString()) && lecture["캠퍼스"] === "메트로폴") {
+      if (classTime !== "" && classTime.includes(today) && currentClass && !classTime.includes(currentClass.toString()) && lecture["캠퍼스"] === "메트로폴") {
         availableClassrooms.push(lecture["강의실"]);
       }
     }
