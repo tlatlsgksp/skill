@@ -98,7 +98,6 @@ function findAvailableClassrooms(lectureList) {
     
     if (lecture.hasOwnProperty("시간표") && lecture.hasOwnProperty("캠퍼스")) {
       const classTime = lecture["시간표"];
-      console.log(classTime);
 
       if (classTime !== "" && classTime.includes(today) && currentClass && !classTime.includes(currentClass.toString()) && lecture["캠퍼스"] === "메트로폴") {
         availableClassrooms.push(lecture["강의실"]);
@@ -126,7 +125,7 @@ function findAvailableClassroomsNext(lectureList) {
     if (lecture.hasOwnProperty("시간표")) {
       const classTime = lecture["시간표"];
 
-      if (classTime !== "" && classTime.includes(today) && !classTime.includes(nextClass.start.toString())) {
+      if (classTime !== "" && classTime.includes(today) && currentClass && !classTime.includes(nextClass.start.toString()) && lecture["캠퍼스"] === "메트로폴") {
         availableClassrooms.push(lecture["강의실"]);
       }
     }
@@ -186,7 +185,7 @@ function createBuildingResponse_1(buildingName, buildingCode, floors, hasCarouse
 
       const item = {
         title: `🕒현재 빈 강의실[${buildingName} ${getFloorLabel(floor)}]🕒`,
-        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${currentClass}교시 기준※`,
+        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${currentClass.toString()}교시 기준※`,
         buttons: [
           {
             'action': 'message',
@@ -242,7 +241,7 @@ function createBuildingResponse_2(buildingName, buildingCode, floors, hasCarouse
 
       const item = {
         title: `🕒현재 빈 강의실[${buildingName} ${getFloorLabel(floor)}]🕒`,
-        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${currentClass}교시 기준※`,
+        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${currentClass.toString()}교시 기준※`,
         buttons: [
           {
             'action': 'message',
@@ -298,7 +297,7 @@ function createBuildingResponse_3(buildingName, buildingCode, floors, hasCarouse
 
       const item = {
         title: `🕒현재 빈 강의실[${buildingName} ${getFloorLabel(floor)}]🕒`,
-        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${currentClass}교시 기준※`,
+        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${currentClass.toString()}교시 기준※`,
         buttons: [
           {
             'action': 'message',
@@ -354,7 +353,7 @@ function createBuildingResponseNext_1(buildingName, buildingCode, floors, hasCar
 
       const item = {
         title: `🕒다음 교시 빈 강의실[${buildingName} ${getFloorLabel(floor)}]🕒`,
-        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${nextClass}교시 기준※`,
+        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${nextClass.toString()}교시 기준※`,
         buttons: [
           {
             'action': 'message',
@@ -410,7 +409,7 @@ function createBuildingResponseNext_2(buildingName, buildingCode, floors, hasCar
 
       const item = {
         title: `🕒다음 교시 빈 강의실[${buildingName} ${getFloorLabel(floor)}]🕒`,
-        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${nextClass}교시 기준※`,
+        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${nextClass.toString()}교시 기준※`,
         buttons: [
           {
             'action': 'message',
@@ -466,7 +465,7 @@ function createBuildingResponseNext_3(buildingName, buildingCode, floors, hasCar
 
       const item = {
         title: `🕒다음 교시 빈 강의실[${buildingName} ${getFloorLabel(floor)}]🕒`,
-        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${nextClass}교시 기준※`,
+        description: `${getFloorLabel(floor)}▼\n(${uniqueClassrooms.join(', ')})\n※${nextClass.toString()}교시 기준※`,
         buttons: [
           {
             'action': 'message',
