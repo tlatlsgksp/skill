@@ -1502,9 +1502,16 @@ app.post('/lecture_info_find', async (req, res) => {
 app.post('/lecture_info_select', async (req, res) => {
   const userId = req.body.userRequest.user.id;
   const userState = userStates[userId];
+  let similarLectures;
+  let lecture_no;
+  if(userState){
+    similarLectures = userState.similarLectures;
+    lecture_no = req.body.action.params.lecture_no;
+  }
+
   let response = {};
 
-  if (!userState || !userState.similarLectures) {
+  if (!userState || !similarLectures) {
     response = {
       "version": "2.0",
       "template": {
@@ -1530,8 +1537,6 @@ app.post('/lecture_info_select', async (req, res) => {
       }
     }
   } else if (similarLectures && similarLectures[lecture_no - 1]) {
-    const similarLectures = userState.similarLectures;
-    const lecture_no = req.body.action.params.lecture_no;
     const selectedLecture = similarLectures[lecture_no - 1];
 
     // lectureInfo에서 해당 강의 정보를 찾기
