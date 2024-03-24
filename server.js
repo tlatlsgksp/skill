@@ -1504,7 +1504,10 @@ app.post('/lecture_info_select', async (req, res) => {
   const userState = userStates[userId];
   const similarLectures = userState.similarLectures;
   const lecture_no = req.body.action.params.lecture_no;
-  if (!userState || !userState.similarLectures) {
+
+  let response = {};
+
+  if (!userState || !similarLectures) {
     response = {
       "version": "2.0",
       "template": {
@@ -1531,28 +1534,78 @@ app.post('/lecture_info_select', async (req, res) => {
     }
   } else if (similarLectures && similarLectures[lecture_no - 1]) {
     const selectedLecture = similarLectures[lecture_no - 1];
-    response = {
-      "version": "2.0",
-      "template": {
-        "outputs": [
-          {
-            "simpleText": {
-              "text": `${selectedLecture}`
+
+    // lectureInfo에서 해당 강의 정보를 찾기
+    const selectedLectureInfo = lectureInfo.find(lecture => 
+      lecture.과목명 === selectedLecture.과목명 &&
+      lecture.교수명 === selectedLecture.교수명 &&
+      lecture.분반 === selectedLecture.분반
+    );
+
+    if (!selectedLectureInfo) {
+      response = {
+        "version": "2.0",
+        "template": {
+          "outputs": [
+            {
+              "simpleText": {
+                "text": `강의 정보를 찾을 수 없습니다.`
+              }
             }
-          }
-        ],
-        "quickReplies": [
-          {
-            'action': 'block',
-            'label': `다시 입력`,
-            'blockId': `65fff8a7a64303558478534d`
-          },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
-        ]
+          ],
+          "quickReplies": [
+            {
+              'action': 'block',
+              'label': `다시 입력`,
+              'blockId': `65fff8a7a64303558478534d`
+            },
+            {
+              'action': 'message',
+              'label': `처음으로`,
+              'messageText': `처음으로`
+            }
+          ]
+        }
+      }
+    } else {
+      response = {
+        "version": "2.0",
+        "template": {
+          "outputs": [
+            {
+              "simpleText": {
+                "text": `선택한 강의 : ${selectedLecture.과목명} ${selectedLecture.교수명}[${selectedLecture.분반}]`
+              }
+            }
+          ],
+          "quickReplies": [
+            {
+              'action': 'block',
+              'label': `다시 입력`,
+              'blockId': `65fff8a7a64303558478534d`
+            },
+            {
+              'action': 'message',
+              'label': `처음으로`,
+              'messageText': `처음으로`
+            },
+            {
+              "action": "message",
+              "label": "강좌 기본정보",
+              "messageText": "과목코드: ${selectedLectureInfo.과목코드}\n과목명: ${selectedLectureInfo.과목명}\n교수명: ${selectedLectureInfo.교수명}\n핸드폰: ${selectedLectureInfo.핸드폰}\nE-MAIL: ${selectedLectureInfo.E-MAIL}\n분반: ${selectedLectureInfo.분반}\n성적평가구분: ${selectedLectureInfo.성적평가구분}\n과정구분: ${selectedLectureInfo.과정구분}\n이수구분: ${selectedLectureInfo.이수구분}\n개설학과: ${selectedLectureInfo.개설학과}\n개설학년: ${selectedLectureInfo.개설학년}\n교재 및 참고 문헌: ${selectedLectureInfo['교재 및 참고 문헌']}"
+            },
+            {
+              "action": "message",
+              "label": "교과개요",
+              "messageText": "교과목개요: ${selectedLectureInfo.교과목개요}\n교과목표: ${selectedLectureInfo.교과목표}"
+            },
+            {
+              "action": "message",
+              "label": "평가항목 및 방법",
+              "messageText": "출석: 반영비율 - ${selectedLectureInfo['평가항목 및 방법'].출석.반영비율}, 평가방법 및 주요내용 - ${selectedLectureInfo['평가항목 및 방법'].출석.평가방법_및_주요내용}\n중간: 반영비율 - ${selectedLectureInfo['평가항목 및 방법'].중간.반영비율}, 평가방법 및 주요내용 - ${selectedLectureInfo['평가항목 및 방법'].중간.평가방법_및_주요내용}\n기말: 반영비율 - ${selectedLectureInfo['평가항목 및 방법'].기말.반영비율}, 평가방법 및 주요내용 - ${selectedLectureInfo['평가항목 및 방법'].기말.평가방법_및_주요내용}\n과제: 반영비율 - ${selectedLectureInfo['평가항목 및 방법'].과제.반영비율}, 평가방법 및 주요내용 - ${selectedLectureInfo['평가항목 및 방법'].과제.평가방법_및_주요내용}\n기타: 반영비율 - ${selectedLectureInfo['평가항목 및 방법'].기타.반영비율}, 평가방법 및 주요내용 - ${selectedLectureInfo['평가항목 및 방법'].기타.평가방법_및_주요내용}\n과제개요: 과제주제 - ${selectedLectureInfo['평가항목 및 방법'].과제개요.과제주제}, 분량 - ${selectedLectureInfo['평가항목 및 방법'].과제개요.분량}, 제출일자 - ${selectedLectureInfo['평가항목 및 방법'].과제개요.제출일자}"
+            }
+          ]
+        }
       }
     }
   } else {
