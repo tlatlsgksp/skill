@@ -1502,12 +1502,9 @@ app.post('/lecture_info_find', async (req, res) => {
 app.post('/lecture_info_select', async (req, res) => {
   const userId = req.body.userRequest.user.id;
   const userState = userStates[userId];
-  const similarLectures = userState.similarLectures;
-  const lecture_no = req.body.action.params.lecture_no;
-
   let response = {};
 
-  if (!userState || !similarLectures) {
+  if (!userState || !userState.similarLectures) {
     response = {
       "version": "2.0",
       "template": {
@@ -1533,6 +1530,8 @@ app.post('/lecture_info_select', async (req, res) => {
       }
     }
   } else if (similarLectures && similarLectures[lecture_no - 1]) {
+    const similarLectures = userState.similarLectures;
+    const lecture_no = req.body.action.params.lecture_no;
     const selectedLecture = similarLectures[lecture_no - 1];
 
     // lectureInfo에서 해당 강의 정보를 찾기
@@ -1592,7 +1591,7 @@ app.post('/lecture_info_select', async (req, res) => {
             {
               "action": "message",
               "label": "강좌 기본정보",
-              "messageText": `과목코드: ${selectedLectureInfo.과목코드}\n과목명: ${selectedLectureInfo.과목명}\n교수명: ${selectedLectureInfo.교수명}\n핸드폰: ${selectedLectureInfo.핸드폰}\nE-MAIL: ${selectedLectureInfo.이메일}\n분반: ${selectedLectureInfo.분반}\n성적평가구분: ${selectedLectureInfo.성적평가구분}\n과정구분: ${selectedLectureInfo.과정구분}\n이수구분: ${selectedLectureInfo.이수구분}\n개설학과: ${selectedLectureInfo.개설학과}\n개설학년: ${selectedLectureInfo.개설학년}\n교재 및 참고 문헌: ${selectedLectureInfo['교재 및 참고 문헌']}`
+              "messageText": `과목코드: ${selectedLectureInfo.과목코드}\n과목명: ${selectedLectureInfo.과목명}\n교수명: ${selectedLectureInfo.교수명}\n핸드폰: ${selectedLectureInfo.핸드폰}\n이메일: ${selectedLectureInfo.이메일}\n분반: ${selectedLectureInfo.분반}\n성적평가구분: ${selectedLectureInfo.성적평가구분}\n과정구분: ${selectedLectureInfo.과정구분}\n이수구분: ${selectedLectureInfo.이수구분}\n개설학과: ${selectedLectureInfo.개설학과}\n개설학년: ${selectedLectureInfo.개설학년}\n교재 및 참고 문헌: ${selectedLectureInfo['교재 및 참고 문헌']}`
             },
             {
               "action": "message",
