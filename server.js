@@ -1447,14 +1447,14 @@ app.post('/lecture_info_find', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": `번호 확인 후 강의 입력 클릭\n과목 교수 분반 순\n${similarLectures.map((lecture, index) => `${index + 1}.${lecture.과목명} ${lecture.교수명}${lecture.분반}`).join('\n')}\n`
+              "text": `※번호 확인 후 강의 선택※\n\n과목 교수 분반 순\n${similarLectures.map((lecture, index) => `${index + 1}.${lecture.과목명} ${lecture.교수명} ${lecture.분반}`).join('\n')}\n`
             }
           }
         ],
         "quickReplies": [
           {
             'action': 'block',
-            'label': `강의 입력`,
+            'label': `강의 선택`,
             'blockId': `65fff8a7a64303558478534d`
           },
           {
@@ -1576,8 +1576,38 @@ app.post('/lecture_info_select', async (req, res) => {
         "template": {
           "outputs": [
             {
-              "simpleText": {
-                "text": `선택한 강의 : ${selectedLecture.과목명} ${selectedLecture.교수명}[${selectedLecture.분반}]`
+              "textCard": {
+                "title": "선택한 강의",
+                "description": `강의명: ${selectedLecture.과목명}\n담당교수: ${selectedLecture.교수명}\n분반: ${selectedLecture.분반}`,
+                "buttons": [
+                  {
+                    "action": "block",
+                    "label": "강좌 기본정보",
+                    "blockId": "66004580d7cbb10c92fb7c3f",
+                    "extra": {
+                      "type": "basicInfo",
+                      "data": selectedLectureInfo
+                    }
+                  },
+                  {
+                    "action": "block",
+                    "label": "교과개요",
+                    "blockId": "66004580d7cbb10c92fb7c3f",
+                    "extra": {
+                      "type": "courseOverview",
+                      "data": selectedLectureInfo
+                    }
+                  },
+                  {
+                    "action": "block",
+                    "label": "평가항목 및 방법",
+                    "blockId": "66004580d7cbb10c92fb7c3f",
+                    "extra": {
+                      "type": "evaluationMethods",
+                      "data": selectedLectureInfo
+                    }
+                  }
+                ]
               }
             }
           ],
@@ -1591,33 +1621,6 @@ app.post('/lecture_info_select', async (req, res) => {
               'action': 'message',
               'label': `처음으로`,
               'messageText': `처음으로`
-            },
-            {
-              "action": "block",
-              "label": "강좌 기본정보",
-              "blockId": "66004580d7cbb10c92fb7c3f",
-              "extra": {
-                "type": "basicInfo",
-                "data": selectedLectureInfo
-              }
-            },
-            {
-              "action": "block",
-              "label": "교과개요",
-              "blockId": "66004580d7cbb10c92fb7c3f",
-              "extra": {
-                "type": "courseOverview",
-                "data": selectedLectureInfo
-              }
-            },
-            {
-              "action": "block",
-              "label": "평가항목 및 방법",
-              "blockId": "66004580d7cbb10c92fb7c3f",
-              "extra": {
-                "type": "evaluationMethods",
-                "data": selectedLectureInfo
-              }
             }
           ]
         }
@@ -1662,8 +1665,9 @@ app.post('/lecture_info_search', async (req, res) => {
       "template": {
         "outputs": [
           {
-            "simpleText": {
-              "text": `과목코드: ${extra.data.과목코드}\n과목명: ${extra.data.과목명}\n교수명: ${extra.data.교수명}\n핸드폰: ${extra.data.핸드폰}\n이메일: ${extra.data.이메일}\n분반: ${extra.data.분반}\n성적평가구분: ${extra.data.성적평가구분}\n과정구분: ${extra.data.과정구분}\n이수구분: ${extra.data.이수구분}\n개설학과: ${extra.data.개설학과}\n개설학년: ${extra.data.개설학년}\n교재 및 참고 문헌: ${extra.data['교재 및 참고 문헌']}`
+            "textCard": {
+              "title": "강좌 기본정보",
+              "description": `과목코드: ${extra.data.과목코드}\n과목명: ${extra.data.과목명}\n교수명: ${extra.data.교수명}\n핸드폰: ${extra.data.핸드폰}\n이메일: ${extra.data.이메일}\n분반: ${extra.data.분반}\n성적평가구분: ${extra.data.성적평가구분}\n과정구분: ${extra.data.과정구분}\n이수구분: ${extra.data.이수구분}\n개설학과: ${extra.data.개설학과}\n개설학년: ${extra.data.개설학년}\n교재 및 참고 문헌: ${extra.data['교재 및 참고 문헌']}`
             }
           }
         ],
@@ -1688,8 +1692,9 @@ app.post('/lecture_info_search', async (req, res) => {
       "template": {
         "outputs": [
           {
-            "simpleText": {
-              "text": `교과목개요: ${extra.data.교과목개요}\n\n교과목표: ${extra.data.교과목표}`
+            "textCard": {
+              "title": "강좌 기본정보",
+              "description": `교과목개요: ${extra.data.교과목개요}\n\n교과목표: ${extra.data.교과목표}`
             }
           }
         ],
@@ -1714,8 +1719,9 @@ app.post('/lecture_info_search', async (req, res) => {
       "template": {
         "outputs": [
           {
-            "simpleText": {
-              "text": `출석▼\n 반영비율: ${extra.data['평가항목 및 방법'].출석.반영비율}\n 평가방법 및 주요내용: ${extra.data['평가항목 및 방법'].출석.평가방법_및_주요내용}\n\n중간▼\n 반영비율: ${extra.data['평가항목 및 방법'].중간.반영비율}\n 평가방법 및 주요내용: ${extra.data['평가항목 및 방법'].중간.평가방법_및_주요내용}\n\n기말▼\n 반영비율: ${extra.data['평가항목 및 방법'].기말.반영비율}\n 평가방법 및 주요내용: ${extra.data['평가항목 및 방법'].기말.평가방법_및_주요내용}\n\n과제▼\n 반영비율: ${extra.data['평가항목 및 방법'].과제.반영비율}\n 평가방법 및 주요내용: ${extra.data['평가항목 및 방법'].과제.평가방법_및_주요내용}\n\n기타▼\n 반영비율: ${extra.data['평가항목 및 방법'].기타.반영비율}\n 평가방법 및 주요내용: ${extra.data['평가항목 및 방법'].기타.평가방법_및_주요내용}\n\n과제개요▼\n 과제주제: ${extra.data['평가항목 및 방법'].과제개요.과제주제}\n 분량 : ${extra.data['평가항목 및 방법'].과제개요.분량}\n 제출일자: ${extra.data['평가항목 및 방법'].과제개요.제출일자}`
+            "textCard": {
+              "title": "강좌 기본정보",
+              "description": `출석▼\n 반영비율: ${extra.data['평가항목 및 방법'].출석.반영비율}\n 평가방법 및 주요내용: ${extra.data['평가항목 및 방법'].출석.평가방법_및_주요내용}\n\n중간▼\n 반영비율: ${extra.data['평가항목 및 방법'].중간.반영비율}\n 평가방법 및 주요내용: ${extra.data['평가항목 및 방법'].중간.평가방법_및_주요내용}\n\n기말▼\n 반영비율: ${extra.data['평가항목 및 방법'].기말.반영비율}\n 평가방법 및 주요내용: ${extra.data['평가항목 및 방법'].기말.평가방법_및_주요내용}\n\n과제▼\n 반영비율: ${extra.data['평가항목 및 방법'].과제.반영비율}\n 평가방법 및 주요내용: ${extra.data['평가항목 및 방법'].과제.평가방법_및_주요내용}\n\n기타▼\n 반영비율: ${extra.data['평가항목 및 방법'].기타.반영비율}\n 평가방법 및 주요내용: ${extra.data['평가항목 및 방법'].기타.평가방법_및_주요내용}\n\n과제개요▼\n 과제주제: ${extra.data['평가항목 및 방법'].과제개요.과제주제}\n 분량 : ${extra.data['평가항목 및 방법'].과제개요.분량}\n 제출일자: ${extra.data['평가항목 및 방법'].과제개요.제출일자}`
             }
           }
         ],
