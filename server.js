@@ -488,14 +488,15 @@ function removeDuplicates(arr) {
 }
 
 function findSimilarLectures(userInput, lectureInfo) {
+  if (userInput){
   const userInputProcessed = userInput.replace(/\s+/g, '').toUpperCase();
 
   const similarLectures = lectureInfo.filter(item => {
     const subjectWithoutSpaces = item.과목명.replace(/\s+/g, '').toUpperCase();
     return subjectWithoutSpaces.includes(userInputProcessed);
   });
-
   return similarLectures;
+}
 }
 
 //서버 초기화
