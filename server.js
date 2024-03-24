@@ -1663,7 +1663,7 @@ app.post('/lecture_info_search', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": `과목코드: ${selectedLectureInfo.과목코드}\n과목명: ${selectedLectureInfo.과목명}\n교수명: ${selectedLectureInfo.교수명}\n핸드폰: ${selectedLectureInfo.핸드폰}\n이메일: ${selectedLectureInfo.이메일}\n분반: ${selectedLectureInfo.분반}\n성적평가구분: ${selectedLectureInfo.성적평가구분}\n과정구분: ${selectedLectureInfo.과정구분}\n이수구분: ${selectedLectureInfo.이수구분}\n개설학과: ${selectedLectureInfo.개설학과}\n개설학년: ${selectedLectureInfo.개설학년}\n교재 및 참고 문헌: ${selectedLectureInfo['교재 및 참고 문헌']}`
+              "text": `과목코드: ${extra.data.과목코드}\n과목명: ${extra.data.과목명}\n교수명: ${extra.data.교수명}\n핸드폰: ${extra.data.핸드폰}\n이메일: ${extra.data.이메일}\n분반: ${extra.data.분반}\n성적평가구분: ${extra.data.성적평가구분}\n과정구분: ${extra.data.과정구분}\n이수구분: ${extra.data.이수구분}\n개설학과: ${extra.data.개설학과}\n개설학년: ${extra.data.개설학년}\n교재 및 참고 문헌: ${extra.data['교재 및 참고 문헌']}`
             }
           }
         ],
@@ -1689,7 +1689,7 @@ app.post('/lecture_info_search', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": `교과목개요: ${selectedLectureInfo.교과목개요}\n\n교과목표: ${selectedLectureInfo.교과목표}`
+              "text": `교과목개요: ${extra.data.교과목개요}\n\n교과목표: ${extra.data.교과목표}`
             }
           }
         ],
@@ -1715,7 +1715,7 @@ app.post('/lecture_info_search', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": `출석▼\n 반영비율: ${selectedLectureInfo['평가항목 및 방법'].출석.반영비율}\n 평가방법 및 주요내용: ${selectedLectureInfo['평가항목 및 방법'].출석.평가방법_및_주요내용}\n\n중간▼\n 반영비율: ${selectedLectureInfo['평가항목 및 방법'].중간.반영비율}\n 평가방법 및 주요내용: ${selectedLectureInfo['평가항목 및 방법'].중간.평가방법_및_주요내용}\n\n기말▼\n 반영비율: ${selectedLectureInfo['평가항목 및 방법'].기말.반영비율}\n 평가방법 및 주요내용: ${selectedLectureInfo['평가항목 및 방법'].기말.평가방법_및_주요내용}\n\n과제▼\n 반영비율: ${selectedLectureInfo['평가항목 및 방법'].과제.반영비율}\n 평가방법 및 주요내용: ${selectedLectureInfo['평가항목 및 방법'].과제.평가방법_및_주요내용}\n\n기타▼\n 반영비율: ${selectedLectureInfo['평가항목 및 방법'].기타.반영비율}\n 평가방법 및 주요내용: ${selectedLectureInfo['평가항목 및 방법'].기타.평가방법_및_주요내용}\n\n과제개요▼\n 과제주제: ${selectedLectureInfo['평가항목 및 방법'].과제개요.과제주제}\n 분량 : ${selectedLectureInfo['평가항목 및 방법'].과제개요.분량}\n 제출일자: ${selectedLectureInfo['평가항목 및 방법'].과제개요.제출일자}`
+              "text": `출석▼\n 반영비율: ${extra.data['평가항목 및 방법'].출석.반영비율}\n 평가방법 및 주요내용: ${extra.data['평가항목 및 방법'].출석.평가방법_및_주요내용}\n\n중간▼\n 반영비율: ${extra.data['평가항목 및 방법'].중간.반영비율}\n 평가방법 및 주요내용: ${extra.data['평가항목 및 방법'].중간.평가방법_및_주요내용}\n\n기말▼\n 반영비율: ${extra.data['평가항목 및 방법'].기말.반영비율}\n 평가방법 및 주요내용: ${extra.data['평가항목 및 방법'].기말.평가방법_및_주요내용}\n\n과제▼\n 반영비율: ${extra.data['평가항목 및 방법'].과제.반영비율}\n 평가방법 및 주요내용: ${extra.data['평가항목 및 방법'].과제.평가방법_및_주요내용}\n\n기타▼\n 반영비율: ${extra.data['평가항목 및 방법'].기타.반영비율}\n 평가방법 및 주요내용: ${extra.data['평가항목 및 방법'].기타.평가방법_및_주요내용}\n\n과제개요▼\n 과제주제: ${extra.data['평가항목 및 방법'].과제개요.과제주제}\n 분량 : ${extra.data['평가항목 및 방법'].과제개요.분량}\n 제출일자: ${extra.data['평가항목 및 방법'].과제개요.제출일자}`
             }
           }
         ],
