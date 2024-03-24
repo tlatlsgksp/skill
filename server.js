@@ -1435,7 +1435,10 @@ app.post('/lecture_info_find', async (req, res) => {
   const userId = req.body.userRequest.user.id;
   const userInput = req.body.action.params.lecture_name;
   const similarLectures = findSimilarLectures(userInput, lectureInfo);
-  
+  userStates[userId] = {
+    userInput: userInput,
+    similarLectures: similarLectures
+  };
   let response = {};
   if (similarLectures.length > 0) {
     response = {
@@ -1444,16 +1447,11 @@ app.post('/lecture_info_find', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": `번호 확인 후 강의 입력 클릭\n과목 교수 분반 순\n${similarLectures.map((lecture, index) => `${index + 1}.${lecture.과목명} ${lecture.교수명}${lecture.분반}`).join('\n')}\n`
+              "text": `강의를 선택해주세요.\n과목 교수 분반 순\n${similarLectures.map((lecture, index) => `${index + 1}.${lecture.과목명} ${lecture.교수명}${lecture.분반}`).join('\n')}\n`
             }
           }
         ],
         "quickReplies": [
-          {
-            'action': 'block',
-            'label': `강의 입력`,
-            'blockId': `65fff8a7a64303558478534d`
-          },
           {
             'action': 'block',
             'label': `다시 입력`,
@@ -1464,7 +1462,14 @@ app.post('/lecture_info_find', async (req, res) => {
             'label': `처음으로`,
             'messageText': `처음으로`
           }
-        ]
+        ].concat(similarLectures.map((lecture, index) => ({
+          'action': 'block',
+          'label': `${index + 1}`,
+          'blockId': `65fff8a7a64303558478534d`,
+          'extra': {
+            'lecture_no': index
+          }
+        })))
       }
     }
   } else {
@@ -1499,6 +1504,7 @@ app.post('/lecture_info_find', async (req, res) => {
 app.post('/lecture_info_select', async (req, res) => {
   const userId = req.body.userRequest.user.id;
   const userState = userStates[userId];
+  const { lecture_no } = req.body.action.clientExtra;
 
   if (!userState || !userState.similarLectures) {
     res.json({ message: "강의를 선택하기 위한 사용자의 상태를 찾을 수 없습니다." });
@@ -1506,10 +1512,9 @@ app.post('/lecture_info_select', async (req, res) => {
   }
 
   const similarLectures = userState.similarLectures;
-  const lecture_no = req.body.action.params.lecture_no;
   
-  if (similarLectures[lecture_no - 1]) {
-    const selectedLecture = similarLectures[lecture_no - 1];
+  if (similarLectures[lecture_no]) {
+    const selectedLecture = similarLectures[lecture_no];
     response = {
       "version": "2.0",
       "template": {
