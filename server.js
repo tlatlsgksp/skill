@@ -1431,20 +1431,6 @@ app.post('/empty_lecture_next_3', async (req, res) => {
 });
 
 app.post('/lecture_info', async (req, res) => {
-  first_response = {
-    "version": "2.0",
-    "template": {
-      "outputs": [
-        {
-          "simpleText": {
-            "text": `강의명을 입력해주세요.`
-          }
-        }
-      ]
-    }
-  }
-  res.json(first_response);
-
   const userInput = req.body.action.params.lecture_name;
   const similarLectures = findSimilarLectures(userInput, lectureInfo);
   let response = {};
