@@ -4,12 +4,15 @@ const schedule = require('node-schedule');
 const { main_met } = require('./crawl_metropole');
 const { main_met_dorm } = require('./crawl_metropole_dormitory');
 const { main_lecturelist } = require('./load_lecturelist');
+const { main_lectureinfo } = require('./load_lectureinfo');
 const app = express();
 const port = 8080;
 let mealMetropole;
 let mealMetropoleDormitory;
 let lectureList;
+let lectureInfo;
 let serverInitialized = false;
+let addedClassrooms = [];
 app.use(express.json());
 app.use(express.static(__dirname));
 
@@ -95,8 +98,18 @@ function findAvailableClassrooms(lectureList) {
     if (lecture.hasOwnProperty("시간표") && lecture.hasOwnProperty("캠퍼스")) {
       const classTime = lecture["시간표"];
       
-      if (classTime !== "" && classTime.includes(today) && currentClass && !classTime.includes(currentClass.toString()) && lecture["캠퍼스"] === "메트로폴") {
-        availableClassrooms.push(lecture["강의실"]);
+      if (classTime !== "" && lecture["캠퍼스"] === "메트로폴") {
+        if (classTime.includes(today) && classTime.includes(currentClass.toString())) {
+          if (!addedClassrooms.includes(lecture["강의실"])) {
+            availableClassrooms.push(lecture["강의실"]);
+            addedClassrooms.push(lecture["강의실"]);
+          }
+        } else {
+          if (addedClassrooms.includes(lecture["강의실"])) {
+            const index = addedClassrooms.indexOf(lecture["강의실"]);
+            addedClassrooms.splice(index, 1);
+          }
+        }
       }
     }
     else {
@@ -107,7 +120,7 @@ function findAvailableClassrooms(lectureList) {
   return availableClassrooms;
 }
 
-//다음 교시 빈 강의실 추출
+// 다음 교시 빈 강의실 추출
 function findAvailableClassroomsNext(lectureList) {
   const today = gettoDay();
   const nextClass = getCurrentClass() + 1;
@@ -116,15 +129,25 @@ function findAvailableClassroomsNext(lectureList) {
   for (const lectureKey in lectureList) {
     const lecture = lectureList[lectureKey];
 
-    if (lecture.hasOwnProperty("시간표")) {
+    if (lecture.hasOwnProperty("시간표") && lecture.hasOwnProperty("캠퍼스")) {
       const classTime = lecture["시간표"];
 
-      if (classTime !== "" && classTime.includes(today) && nextClass && !classTime.includes(nextClass.toString()) && lecture["캠퍼스"] === "메트로폴") {
-        availableClassrooms.push(lecture["강의실"]);
+      if (classTime !== "" && lecture["캠퍼스"] === "메트로폴") {
+        if (classTime.includes(today) && classTime.includes(nextClass.toString())) {
+          if (!addedClassrooms.includes(lecture["강의실"])) {
+            availableClassrooms.push(lecture["강의실"]);
+            addedClassrooms.push(lecture["강의실"]);
+          }
+        } else {
+          if (addedClassrooms.includes(lecture["강의실"])) {
+            const index = addedClassrooms.indexOf(lecture["강의실"]);
+            addedClassrooms.splice(index, 1);
+          }
+        }
       }
     }
     else {
-      console.log("Lecture does not have '시간표' property:", lecture);
+      console.log("Lecture does not have '시간표' or '캠퍼스' property:", lecture);
     }
   }
 
@@ -463,6 +486,17 @@ function removeDuplicates(arr) {
   return [...new Set(arr)];
 }
 
+function findSimilarLectures(userInput, lectureInfo) {
+  const userInputProcessed = userInput.replace(/\s+/g, '').toUpperCase(); // 입력된 강의명을 띄어쓰기 제거하고 대문자로 변환
+
+  const similarLectures = lectureInfo.filter(item => {
+    const subjectWithoutSpaces = item.과목명.replace(/\s+/g, '').toUpperCase(); // 각 과목의 과목명을 띄어쓰기 제거하고 대문자로 변환
+    return subjectWithoutSpaces.includes(userInputProcessed); // 입력된 강의명이 포함되어 있는지 확인
+  });
+
+  return similarLectures;
+}
+
 //서버 초기화
 async function initialize() {
   try {
@@ -470,6 +504,7 @@ async function initialize() {
     await main_met();
     await main_met_dorm();
     await main_lecturelist();
+    await main_lectureinfo();
     fs.readFile('./crawl_met.json', 'utf8', (err, data) => {
       if (err) throw err;
       mealMetropole = JSON.parse(data);
@@ -482,14 +517,28 @@ async function initialize() {
       if (err) throw err;
       lectureList = JSON.parse(data);
     });
+    fs.readFile('./lectureinfo.json', 'utf8', (err, data) => {
+      if (err) throw err;
+      lectureInfo = JSON.parse(data);
+    });
     console.log('서버 초기화 완료');
     serverInitialized = true;
   } catch (error) {
     console.error('Error during initialization:', error.message);
   }
 }
-
 initialize();
+
+
+
+
+
+
+
+
+
+
+
 
 //엔드포인트
 app.get('/', (req, res) => {
@@ -549,10 +598,15 @@ app.post('/shutdown', (req, res) => {
 //서버 업데이트
 app.post('/update', async (req, res) => {
   try {
-    await main_lecturekist();
+    await main_lecturelist();
+    await main_lectureinfo();
     fs.readFile('./lecturelist.json', 'utf8', (err, data) => {
       if (err) throw err;
-      mealMetropoleDormitory = JSON.parse(data);
+      lectureList = JSON.parse(data);
+    });
+    fs.readFile('./lectureinfo.json', 'utf8', (err, data) => {
+      if (err) throw err;
+      lectureInfo = JSON.parse(data);
     });
     res.json({ message: '데이터가 업데이트되었습니다.' });
   } catch (error) {
@@ -1374,6 +1428,67 @@ app.post('/empty_lecture_next_3', async (req, res) => {
 
   const response = createBuildingResponseNext_3('충효관', buildingCode, sortedFloors, false);
   res.json(response);
+});
+
+app.post('/lecture_info', async (req, res) => {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `강의명을 입력해주세요.`
+          }
+        }
+      ]
+    }
+  }
+  res.json(response);
+});
+
+app.post('/lecture_info_find', async (req, res) => {
+  const userInput = req.body.action.params.lecture_name;
+  const similarLectures = findSimilarLectures(userInput, lectureInfo);
+  let response = {};
+  if (similarLectures.length > 0) {
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": `아래의 강의 중에서 선택하세요.\n${similarLectures.map((lecture, index) => `${index + 1}. ${lecture.과목명} ${lecture.교수명} 분반[${lecture.분반}]`).join('\n')}\n`
+            }
+          }
+        ]
+      }
+    }
+  } else {
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": `일치하거나 유사한 강의가 없습니다.`
+            }
+          }
+        ]
+      }
+    }
+  }
+  res.json(response);
+});
+
+app.post('/lecture_info_select', async (req, res) => {
+  const selectedNumber = req.body.selectedNumber;
+  
+  if (similarLectures[selectedNumber - 1]) {
+    const selectedLecture = similarLectures[selectedNumber - 1];
+    res.json(selectedLecture);
+  } else {
+    res.json({ message: "올바른 번호를 선택해주세요." });
+  }
 });
 
 app.listen(port, () => {
