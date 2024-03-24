@@ -1431,7 +1431,7 @@ app.post('/empty_lecture_next_3', async (req, res) => {
 });
 
 app.post('/lecture_info', async (req, res) => {
-  response = {
+  first_response = {
     "version": "2.0",
     "template": {
       "outputs": [
@@ -1443,8 +1443,8 @@ app.post('/lecture_info', async (req, res) => {
       ]
     }
   }
-  res.json(response);
-  
+  res.json(first_response);
+
   const userInput = req.body.action.params.lecture_name;
   const similarLectures = findSimilarLectures(userInput, lectureInfo);
   let response = {};
