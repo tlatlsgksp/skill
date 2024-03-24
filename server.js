@@ -1525,8 +1525,8 @@ app.post('/lecture_info_select', async (req, res) => {
         "quickReplies": [
           {
             'action': 'block',
-            'label': `다시 입력`,
-            'blockId': `65fff8a7a64303558478534d`
+            'label': `뒤로가기`,
+            'blockId': `65ffd578dad261262541fc58`
           },
           {
             'action': 'message',
@@ -1538,6 +1538,9 @@ app.post('/lecture_info_select', async (req, res) => {
     }
   } else if (similarLectures && similarLectures[lecture_no - 1]) {
     const selectedLecture = similarLectures[lecture_no - 1];
+    let lectureBasicInfo;
+    let courseOverview;
+    let evaluationMethods;
     
     const selectedLectureInfo = lectureInfo.find(lecture => 
       lecture.과목명 === selectedLecture.과목명 &&
@@ -1545,7 +1548,8 @@ app.post('/lecture_info_select', async (req, res) => {
       lecture.분반 === selectedLecture.분반
     );
 
-    const lectureBasicInfo = {
+    if(selectedLectureInfo){
+    lectureBasicInfo = {
       "과목코드": selectedLectureInfo.과목코드,
       "과목명": selectedLectureInfo.과목명,
       "교수명": selectedLectureInfo.교수명,
@@ -1560,12 +1564,12 @@ app.post('/lecture_info_select', async (req, res) => {
       "교재 및 참고 문헌": selectedLectureInfo.교재_및_참고_문헌
     };
     
-    const courseOverview = {
+    courseOverview = {
       "교과목개요": selectedLectureInfo.교과목개요,
       "교과목표": selectedLectureInfo.교과목표
     };
     
-    const evaluationMethods = {
+    evaluationMethods = {
       "출석": {
         "반영비율": selectedLectureInfo.평가항목_및_방법.출석.반영비율,
         "평가방법_및_주요내용": selectedLectureInfo.평가항목_및_방법.출석.평가방법_및_주요내용
@@ -1592,6 +1596,7 @@ app.post('/lecture_info_select', async (req, res) => {
         "제출일자": selectedLectureInfo.평가항목_및_방법.과제개요.제출일자
       }
     };
+  }
 
     if (!selectedLectureInfo) {
       response = {
