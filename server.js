@@ -1436,7 +1436,8 @@ app.post('/lecture_info_find', async (req, res) => {
   const userInput = req.body.action.params.lecture_name;
   const similarLectures = findSimilarLectures(userInput, lectureInfo);
   userStates[userId] = {
-    similarLectures: similarLectures
+    userInput: userInput,
+    similarLectures: findSimilarLectures(userInput, lectureInfo)
   };
   let response = {};
   if (similarLectures.length > 0) {
@@ -1502,8 +1503,8 @@ app.post('/lecture_info_select', async (req, res) => {
   const userId = req.body.userRequest.user.id;
   const userState = userStates[userId];
 
-  if (!userState) {
-    res.json({ message: "사용자의 상태를 찾을 수 없습니다." });
+  if (!userState || !userState.similarLectures) {
+    res.json({ message: "강의를 선택하기 위한 사용자의 상태를 찾을 수 없습니다." });
     return;
   }
 
