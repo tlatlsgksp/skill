@@ -1642,7 +1642,7 @@ app.post('/lecture_info_select', async (req, res) => {
   res.json(response);
 });
 
-app.post('/lecture_info_select', async (req, res) => {
+app.post('/lecture_info_search', async (req, res) => {
   const selectedOption = req.body.action.clientExtra;
   const userId = req.body.userRequest.user.id;
   const userState = userStates[userId];
