@@ -488,11 +488,11 @@ function removeDuplicates(arr) {
 }
 
 function findSimilarLectures(userInput, lectureInfo) {
-  const userInputProcessed = userInput.replace(/\s+/g, '').toUpperCase(); // 입력된 강의명을 띄어쓰기 제거하고 대문자로 변환
+  const userInputProcessed = userInput.replace(/\s+/g, '').toUpperCase();
 
   const similarLectures = lectureInfo.filter(item => {
-    const subjectWithoutSpaces = item.과목명.replace(/\s+/g, '').toUpperCase(); // 각 과목의 과목명을 띄어쓰기 제거하고 대문자로 변환
-    return subjectWithoutSpaces.includes(userInputProcessed); // 입력된 강의명이 포함되어 있는지 확인
+    const subjectWithoutSpaces = item.과목명.replace(/\s+/g, '').toUpperCase();
+    return subjectWithoutSpaces.includes(userInputProcessed);
   });
 
   return similarLectures;
@@ -1435,19 +1435,19 @@ app.post('/lecture_info_find', async (req, res) => {
   const userId = req.body.userRequest.user.id;
   const userInput = req.body.action.params.lecture_name;
   const similarLectures = findSimilarLectures(userInput, lectureInfo);
-  userStates[userId] = {
-    userInput: userInput,
-    similarLectures: findSimilarLectures(userInput, lectureInfo)
-  };
   let response = {};
   if (similarLectures.length > 0) {
+    userStates[userId] = {
+      userInput: userInput,
+      similarLectures: findSimilarLectures(userInput, lectureInfo)
+    };
     response = {
       "version": "2.0",
       "template": {
         "outputs": [
           {
             "simpleText": {
-              "text": `맨 앞 번호 확인 후 강의 입력 클릭\n과목 교수 분반 순\n${similarLectures.map((lecture, index) => `${index + 1}.${lecture.과목명} ${lecture.교수명}${lecture.분반}`).join('\n')}\n`
+              "text": `번호 확인 후 강의 입력 클릭\n과목 교수 분반 순\n${similarLectures.map((lecture, index) => `${index + 1}.${lecture.과목명} ${lecture.교수명}${lecture.분반}`).join('\n')}\n`
             }
           }
         ],
