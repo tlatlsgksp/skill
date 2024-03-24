@@ -490,7 +490,6 @@ function removeDuplicates(arr) {
 function findSimilarLectures(userInput, lectureInfo) {
   if (userInput){
     const userInputProcessed = userInput.replace(/\s+/g, '').toUpperCase();
-
     const similarLectures = lectureInfo.filter(item => {
       const subjectWithoutSpaces = item.과목명.replace(/\s+/g, '').toUpperCase();
       return subjectWithoutSpaces.includes(userInputProcessed);
@@ -1441,7 +1440,7 @@ app.post('/lecture_info_find', async (req, res) => {
     similarLectures: findSimilarLectures(userInput, lectureInfo)
   };
   let response = {};
-  if (similarLectures.length > 0) {
+  if (similarLectures && similarLectures.length > 0) {
     response = {
       "version": "2.0",
       "template": {
@@ -1530,7 +1529,7 @@ app.post('/lecture_info_select', async (req, res) => {
         ]
       }
     }
-  } else if (similarLectures[lecture_no - 1]) {
+  } else if (similarLectures && similarLectures[lecture_no - 1]) {
     const selectedLecture = similarLectures[lecture_no - 1];
     response = {
       "version": "2.0",
