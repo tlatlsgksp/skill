@@ -1435,12 +1435,9 @@ app.post('/lecture_info_find', async (req, res) => {
   const userId = req.body.userRequest.user.id;
   const userInput = req.body.action.params.lecture_name;
   const similarLectures = findSimilarLectures(userInput, lectureInfo);
+  
   let response = {};
   if (similarLectures.length > 0) {
-    userStates[userId] = {
-      userInput: userInput,
-      similarLectures: findSimilarLectures(userInput, lectureInfo)
-    };
     response = {
       "version": "2.0",
       "template": {
