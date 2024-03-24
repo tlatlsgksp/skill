@@ -1441,7 +1441,7 @@ app.post('/lecture_info_find', async (req, res) => {
     similarLectures: findSimilarLectures(userInput, lectureInfo)
   };
   let response = {};
-  if (similarLectures || similarLectures.length > 0) {
+  if (similarLectures.length > 0) {
     response = {
       "version": "2.0",
       "template": {
@@ -1503,16 +1503,34 @@ app.post('/lecture_info_find', async (req, res) => {
 app.post('/lecture_info_select', async (req, res) => {
   const userId = req.body.userRequest.user.id;
   const userState = userStates[userId];
-
-  if (!userState || !userState.similarLectures) {
-    res.json({ message: "강의를 선택하기 위한 사용자의 상태를 찾을 수 없습니다." });
-    return;
-  }
-
   const similarLectures = userState.similarLectures;
   const lecture_no = req.body.action.params.lecture_no;
-  
-  if (similarLectures || similarLectures[lecture_no - 1]) {
+  if (!userState || !userState.similarLectures) {
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": `사용자 정보를 찾을 수 없습니다.`
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'block',
+            'label': `다시 입력`,
+            'blockId': `65fff8a7a64303558478534d`
+          },
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+      }
+    }
+  } else if (similarLectures[lecture_no - 1]) {
     const selectedLecture = similarLectures[lecture_no - 1];
     response = {
       "version": "2.0",
