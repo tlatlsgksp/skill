@@ -1444,6 +1444,38 @@ app.post('/lecture_info', async (req, res) => {
     }
   }
   res.json(response);
+  
+  const userInput = req.body.action.params.lecture_name;
+  const similarLectures = findSimilarLectures(userInput, lectureInfo);
+  let response = {};
+  if (similarLectures.length > 0) {
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": `아래의 강의 중에서 선택하세요.\n${similarLectures.map((lecture, index) => `${index + 1}. ${lecture.과목명} ${lecture.교수명} 분반[${lecture.분반}]`).join('\n')}\n`
+            }
+          }
+        ]
+      }
+    }
+  } else {
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": `일치하거나 유사한 강의가 없습니다.`
+            }
+          }
+        ]
+      }
+    }
+  }
+  res.json(response);
 });
 
 app.post('/lecture_info_find', async (req, res) => {
