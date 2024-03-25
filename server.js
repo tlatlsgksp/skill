@@ -581,12 +581,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post('/cancle', (req, res) => {
-  serverInitialized = false;
-  initialize();
-  res.json({ message: '서버 재시작' });
-});
-
 //서버 재시작
 app.post('/restart', (req, res) => {
   serverInitialized = false;
@@ -621,6 +615,30 @@ app.post('/update', async (req, res) => {
     console.error('Error during update:', error.message);
     res.status(500).json({ error: '업데이트 중 오류가 발생했습니다.' });
   }
+});
+
+//탈출블록
+app.post('/cancle', (req, res) => {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `입력이 취소 되었습니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
 });
 
 //오늘의 학식 - 학생식당, 기숙사
