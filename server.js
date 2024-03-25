@@ -1501,7 +1501,7 @@ app.post('/lecture_info_select', async (req, res) => {
   const similarLectures = findSimilarLectures(userInput, lectureInfo);
 
   let response = {};
-
+  if(similarLectures){
   if (similarLectures && similarLectures[lecture_no - 1]) {
     const selectedLecture = similarLectures[lecture_no - 1];
     
@@ -1615,6 +1615,7 @@ app.post('/lecture_info_select', async (req, res) => {
       }
     }
   }
+}
   res.json(response);
 });
 
