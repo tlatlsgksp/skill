@@ -1538,9 +1538,11 @@ app.post('/lecture_info_select', async (req, res) => {
   if(extra && extra.type === "back_search"){
     userInput = extra.userInput_search;
     lecture_no = extra.lecture_no_search;
+    console.log('뒤로가기 > '+userInput.toString() + lecture_no.toString());
   } else{
     userInput = req.body.action.params.lecture_name_out_find;
     lecture_no = req.body.action.params.lecture_no;
+    console.log(userInput.toString() + lecture_no.toString());
   }
 
   const similarLectures = findSimilarLectures(userInput, lectureInfo);
