@@ -642,6 +642,7 @@ app.post('/cancle', (req, res) => {
 
 //오늘의 학식 - 학생식당, 기숙사
 app.post('/today', (req, res) => {
+  try{
   const offset = 1000 * 60 * 60 * 9
   const KST = new Date((new Date()).getTime() + offset)
   const today = KST.getDay();
@@ -722,10 +723,33 @@ app.post('/today', (req, res) => {
   }
 
   res.json(response);
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
 
 //내일의 학식 - 학생식당, 기숙사
 app.post('/tomorrow', (req, res) => {
+  try{
   const offset = 1000 * 60 * 60 * 9
   const KST = new Date((new Date()).getTime() + offset)
   KST.setDate(KST.getDate() + 1);
@@ -807,10 +831,33 @@ app.post('/tomorrow', (req, res) => {
   }
 
   res.json(response);
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
 
 //오늘의 학식 - 학생식당 원산지
 app.post('/today_origin', (req, res) => {
+  try{
   const offset = 1000 * 60 * 60 * 9
   const KST = new Date((new Date()).getTime() + offset)
   const today = KST.getDay();
@@ -871,10 +918,33 @@ app.post('/today_origin', (req, res) => {
     };
   }
   res.json(response);
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
 
 //오늘의 학식 - 기숙사 원산지
 app.post('/today_origin_dorm', (req, res) => {
+  try{
   const offset = 1000 * 60 * 60 * 9
   const KST = new Date((new Date()).getTime() + offset)
   const today = KST.getDay();
@@ -935,10 +1005,33 @@ app.post('/today_origin_dorm', (req, res) => {
     };
   }
   res.json(response);
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
 
 //내일의 학식 - 학생식당 원산지
 app.post('/tomorrow_origin', (req, res) => {
+  try{
   const offset = 1000 * 60 * 60 * 9
   const KST = new Date((new Date()).getTime() + offset)
   KST.setDate(KST.getDate() + 1);
@@ -999,10 +1092,33 @@ app.post('/tomorrow_origin', (req, res) => {
     };
   }
   res.json(response);
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
 
 //내일의 학식 - 기숙사 원산지
 app.post('/tomorrow_origin_dorm', (req, res) => {
+  try{
   const offset = 1000 * 60 * 60 * 9
   const KST = new Date((new Date()).getTime() + offset)
   KST.setDate(KST.getDate() + 1);
@@ -1063,11 +1179,33 @@ app.post('/tomorrow_origin_dorm', (req, res) => {
     };
   }
   res.json(response);
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
 
 //이번주 학식 - 학생식당, 기숙사
 app.post('/week', (req, res) => {
-
+try{
   const response = {
       "version": "2.0",
       "template": {
@@ -1100,11 +1238,34 @@ app.post('/week', (req, res) => {
       }
     };
   res.json(response);
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
 
 
 //이번주 학식 - 학생식당
 app.post('/week_met', async (req, res) => {
+  try{
   const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
 
   const weekMeals = [];
@@ -1160,10 +1321,33 @@ app.post('/week_met', async (req, res) => {
   };
 
   res.json(response);
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
 
 //이번주 학식 - 기숙사
 app.post('/week_met_dorm', async (req, res) => {
+  try{
   const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
 
   const weekMeals = [];
@@ -1219,10 +1403,33 @@ app.post('/week_met_dorm', async (req, res) => {
   };
 
   res.json(response);
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
 
 //이번주 학식 = 학생식당 원산지
 app.post('/week_met_origin', async (req, res) => {
+  try{
   const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
   const { met_day } = req.body.action.clientExtra;
   
@@ -1259,10 +1466,33 @@ app.post('/week_met_origin', async (req, res) => {
     };
   res.json(response);
   }
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
 
 //이번주 학식 = 기숙사 원산지
 app.post('/week_met_dorm_origin', async (req, res) => {
+  try{
   const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
   const { met_dorm_day } = req.body.action.clientExtra;
   
@@ -1299,11 +1529,34 @@ app.post('/week_met_dorm_origin', async (req, res) => {
     };
   res.json(response);
   }
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
 
 
 //빈 강의실 찾기
 app.post('/lecture_find', async (req, res) => {
+  try{
   const offset = 1000 * 60 * 60 * 9
   const KST = new Date((new Date()).getTime() + offset)
   const today = KST.getDay();
@@ -1400,10 +1653,33 @@ app.post('/lecture_find', async (req, res) => {
     };
   }
   res.json(response);
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
 
 //현재 빈 강의실 - 우당관
 app.post('/empty_lecture_now_1', async (req, res) => {
+  try{
   const offset = 1000 * 60 * 60 * 9
   const KST = new Date((new Date()).getTime() + offset)
   const today = KST.getDay();
@@ -1481,10 +1757,33 @@ app.post('/empty_lecture_now_1', async (req, res) => {
     response = createBuildingResponse_1('우당관', buildingCode, sortedFloors, false);
   }
   res.json(response);
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
 
 //현재 빈 강의실 - 선덕관
 app.post('/empty_lecture_now_2', async (req, res) => {
+  try{
   const offset = 1000 * 60 * 60 * 9
   const KST = new Date((new Date()).getTime() + offset)
   const today = KST.getDay();
@@ -1562,10 +1861,33 @@ app.post('/empty_lecture_now_2', async (req, res) => {
   response = createBuildingResponse_2('선덕관', buildingCode, sortedFloors, false);
 }
   res.json(response);
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
 
 //현재 빈 강의실 - 충효관
 app.post('/empty_lecture_now_3', async (req, res) => {
+  try{
   const offset = 1000 * 60 * 60 * 9
   const KST = new Date((new Date()).getTime() + offset)
   const today = KST.getDay();
@@ -1643,10 +1965,33 @@ app.post('/empty_lecture_now_3', async (req, res) => {
     response = createBuildingResponse_3('충효관', buildingCode, sortedFloors, false);
   }
   res.json(response);
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
 
 //다음 교시 빈 강의실 - 우당관
 app.post('/empty_lecture_next_1', async (req, res) => {
+  try {
   const offset = 1000 * 60 * 60 * 9
   const KST = new Date((new Date()).getTime() + offset)
   const today = KST.getDay();
@@ -1724,10 +2069,33 @@ app.post('/empty_lecture_next_1', async (req, res) => {
     response = createBuildingResponseNext_1('우당관', buildingCode, sortedFloors, false);
   }
   res.json(response);
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
 
 //다음 교시 빈 강의실 - 선덕관
 app.post('/empty_lecture_next_2', async (req, res) => {
+  try {
   const offset = 1000 * 60 * 60 * 9
   const KST = new Date((new Date()).getTime() + offset)
   const today = KST.getDay();
@@ -1805,10 +2173,33 @@ app.post('/empty_lecture_next_2', async (req, res) => {
     response = createBuildingResponseNext_2('선덕관', buildingCode, sortedFloors, false);
   }
   res.json(response);
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
 
 //다음 교시 빈 강의실 - 충효관
 app.post('/empty_lecture_next_3', async (req, res) => {
+  try {
   const offset = 1000 * 60 * 60 * 9
   const KST = new Date((new Date()).getTime() + offset)
   const today = KST.getDay();
@@ -1886,9 +2277,32 @@ app.post('/empty_lecture_next_3', async (req, res) => {
   response = createBuildingResponseNext_3('충효관', buildingCode, sortedFloors, false);
 }
   res.json(response);
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
 
 app.post('/lecture_info_find', async (req, res) => {
+  try {
   const extra = req.body.action.clientExtra;
   let userInput;
   let response = {};
@@ -1958,9 +2372,32 @@ app.post('/lecture_info_find', async (req, res) => {
     }
   }
   res.json(response);
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
 
 app.post('/lecture_info_select', async (req, res) => {
+  try {
   const extra = req.body.action.clientExtra;
   let userInput;
   let lecture_no;
@@ -2102,9 +2539,32 @@ app.post('/lecture_info_select', async (req, res) => {
     }
   }
   res.json(response);
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
 
 app.post('/lecture_info_search', async (req, res) => {
+  try {
   const extra = req.body.action.clientExtra;
   const userInput = req.body.action.params.lecture_name_out_select;
   const lecture_no = req.body.action.params.lecture_no_out_select;
@@ -2221,9 +2681,32 @@ app.post('/lecture_info_search', async (req, res) => {
     }
   }
 res.json(response);
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
 
 app.post('/lecture_professor_find', async (req, res) => {
+  try {
   const extra = req.body.action.clientExtra;
   let userInput;
   let response = {};
@@ -2294,9 +2777,32 @@ app.post('/lecture_professor_find', async (req, res) => {
     }
   }
   res.json(response);
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
 
 app.post('/lecture_professor_select', async (req, res) => {
+  try {
   let userInput;
   let professor_no;
   let response = {};
@@ -2412,6 +2918,28 @@ app.post('/lecture_professor_select', async (req, res) => {
     }
   }
   res.json(response);
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
 
 app.listen(port, () => {
