@@ -9,7 +9,7 @@ const RANGE = '메트로폴 강의 계획서!A4:AB';
 
 // 헤더 정의
 const HEADER = [
-  "No", "과목코드", "과목명", "교수명", "핸드폰", "E-MAIL", "분반", "성적평가구분", "과정구분", "이수구분",
+  "No", "과목코드", "과목명", "교수명", "핸드폰", "이메일", "분반", "성적평가구분", "과정구분", "이수구분",
   "개설학과", "개설학년", "교과목개요", "교과목표", "교재 및 참고 문헌", "평가항목 및 방법",
 ];
 
@@ -85,6 +85,7 @@ async function saveToJsonFile(data, filePath, header) {
           }
         }
         rowData["과목명"] = row[2].replace(/\s+/g, '').toUpperCase();
+        rowData["교수명"] = row[3].replace(/\s+/g, '');
         return rowData;
       });
   

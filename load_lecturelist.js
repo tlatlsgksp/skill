@@ -52,8 +52,10 @@ async function saveToJsonFile(data, filePath, header) {
     const jsonData = data.map(row => {
       const rowData = {};
       for (let i = 0; i < header.length; i++) {
-        rowData[header[i]] = row[i] || ''; // 값이 없을 경우 빈 문자열로 저장
+        rowData[header[i]] = row[i] || '';
       }
+      rowData["과목명"] = row[2].replace(/\s+/g, '').toUpperCase();
+      rowData["교수명"] = row[8].replace(/\s+/g, '');
       return rowData;
     });
 
