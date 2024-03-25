@@ -1437,7 +1437,7 @@ app.post('/lecture_info_find', async (req, res) => {
   const userId = req.body.userRequest.user.id;
   let userInput;
   let similarLectures;
-  if(extra.backlist && extra.backinput){
+  if(extra && extra.backlist && extra.backinput && extra.dir === "back"){
     userInput = extra.backinput;
     similarLectures = extra.backlist;
   }else {
@@ -1515,16 +1515,14 @@ app.post('/lecture_info_select', async (req, res) => {
   let userInput;
   let similarLectures;
   let lecture_no;
-  if(extra.backlist && extra.backno && extra.dir === "back"){
+  if(extra && extra.backlist && extra.backno && extra.dir === "back"){
     userInput = extra.backinput;
     similarLectures = extra.backlist;
     lecture_no = extra.backno;
   } else{
-    if(userState){
-      userInput = userState.userInput;
-      similarLectures = userState.similarLectures;
-      lecture_no = req.body.action.params.lecture_no;
-    }
+    userInput = userState.userInput;
+    similarLectures = userState.similarLectures;
+    lecture_no = req.body.action.params.lecture_no;
   }
   
 
@@ -1708,7 +1706,7 @@ app.post('/lecture_info_search', async (req, res) => {
   const extra = req.body.action.clientExtra;
   let response = {};
 
-  if (extra && extra.type === "basicInfo" && extra.dir === "front") {
+  if (extra && extra.type === "basicInfo") {
     response = {
       "version": "2.0",
       "template": {
