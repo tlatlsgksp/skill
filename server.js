@@ -1433,21 +1433,8 @@ app.post('/empty_lecture_next_3', async (req, res) => {
 });
 
 app.post('/lecture_info_find', async (req, res) => {
-  const extra = req.body.action.clientExtra;
-  const userId = req.body.userRequest.user.id;
-  let userInput;
-  let similarLectures;
-  if(extra && extra.backlist && extra.backinput && extra.dir === "back"){
-    userInput = extra.backinput;
-    similarLectures = extra.backlist;
-  }else {
-    userInput = req.body.action.params.lecture_name;
-    similarLectures = findSimilarLectures(userInput, lectureInfo);
-  }
-  userStates[userId] = {
-    userInput: userInput,
-    similarLectures: findSimilarLectures(userInput, lectureInfo)
-  };
+  const userInput = req.body.action.params.lecture_name;
+  const similarLectures = findSimilarLectures(userInput, lectureInfo);
   let response = {};
   if (similarLectures && similarLectures.length > 0) {
     response = {
@@ -1509,51 +1496,13 @@ app.post('/lecture_info_find', async (req, res) => {
 });
 
 app.post('/lecture_info_select', async (req, res) => {
-  const userId = req.body.userRequest.user.id;
-  const userState = userStates[userId];
-  const extra = req.body.action.clientExtra;
-  let userInput;
-  let similarLectures;
-  let lecture_no;
-  if(extra && extra.backlist && extra.backno && extra.dir === "back"){
-    userInput = extra.backinput;
-    similarLectures = extra.backlist;
-    lecture_no = extra.backno;
-  } else{
-    userInput = userState.userInput;
-    similarLectures = userState.similarLectures;
-    lecture_no = req.body.action.params.lecture_no;
-  }
-  
+  const userInput = req.body.action.params.lecture_name_out_find
+  const lecture_no = req.body.action.params.lecture_no;
+  const similarLectures = findSimilarLectures(userInput, lectureInfo);
 
   let response = {};
 
-  if (!userState || !similarLectures) {
-    response = {
-      "version": "2.0",
-      "template": {
-        "outputs": [
-          {
-            "simpleText": {
-              "text": `사용자 정보를 찾을 수 없습니다.`
-            }
-          }
-        ],
-        "quickReplies": [
-          {
-            'action': 'block',
-            'label': `뒤로가기`,
-            'blockId': `65ffd578dad261262541fc58`
-          },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
-        ]
-      }
-    }
-  } else if (similarLectures && similarLectures[lecture_no - 1]) {
+  if (similarLectures && similarLectures[lecture_no - 1]) {
     const selectedLecture = similarLectures[lecture_no - 1];
     
     const selectedLectureInfo = lectureInfo.find(lecture => 
@@ -1577,13 +1526,7 @@ app.post('/lecture_info_select', async (req, res) => {
             {
               'action': 'block',
               'label': `다시 입력`,
-              'blockId': `65ffd578dad261262541fc58`,
-              "extra": {
-                "dir": 'back',
-                "backinput": userInput,
-                "backlist": similarLectures,
-                "backno": lecture_no
-              }
+              'blockId': `65fff8a7a64303558478534d`
             },
             {
               'action': 'message',
@@ -1609,11 +1552,6 @@ app.post('/lecture_info_select', async (req, res) => {
                     "blockId": "66004580d7cbb10c92fb7c3f",
                     "extra": {
                       "type": "basicInfo",
-                      "data": selectedLectureInfo,
-                      "dir": 'front',
-                      "backinput": userInput,
-                      "backlist": similarLectures,
-                      "backno": lecture_no
                     }
                   },
                   {
@@ -1622,11 +1560,6 @@ app.post('/lecture_info_select', async (req, res) => {
                     "blockId": "66004580d7cbb10c92fb7c3f",
                     "extra": {
                       "type": "courseOverview",
-                      "data": selectedLectureInfo,
-                      "dir": 'front',
-                      "backinput": userInput,
-                      "backlist": similarLectures,
-                      "backno": lecture_no
                     }
                   },
                   {
@@ -1635,11 +1568,6 @@ app.post('/lecture_info_select', async (req, res) => {
                     "blockId": "66004580d7cbb10c92fb7c3f",
                     "extra": {
                       "type": "evaluationMethods",
-                      "data": selectedLectureInfo,
-                      "dir": 'front',
-                      "backinput": userInput,
-                      "backlist": similarLectures,
-                      "backno": lecture_no
                     }
                   }
                 ]
@@ -1650,13 +1578,7 @@ app.post('/lecture_info_select', async (req, res) => {
             {
               'action': 'block',
               'label': `다시 입력`,
-              'blockId': `65ffd578dad261262541fc58`,
-              "extra": {
-                "dir": 'back',
-                "backinput": userInput,
-                "backlist": similarLectures,
-                "backno": lecture_no
-              }
+              'blockId': `65fff8a7a64303558478534d`
             },
             {
               'action': 'message',
@@ -1682,13 +1604,7 @@ app.post('/lecture_info_select', async (req, res) => {
           {
             'action': 'block',
             'label': `다시 입력`,
-            'blockId': `65ffd578dad261262541fc58`,
-            "extra": {
-              "dir": 'back',
-              "backinput": userInput,
-              "backlist": similarLectures,
-              "backno": lecture_no
-            }
+            'blockId': `65fff8a7a64303558478534d`
           },
           {
             'action': 'message',
@@ -1704,6 +1620,15 @@ app.post('/lecture_info_select', async (req, res) => {
 
 app.post('/lecture_info_search', async (req, res) => {
   const extra = req.body.action.clientExtra;
+  const userInput = req.body.action.params.lecture_name_out_select;
+  const lecture_no = req.body.action.params.lecture_no_out_select;
+  const similarLectures = findSimilarLectures(userInput, lectureInfo);
+  const selectedLecture = similarLectures[lecture_no - 1];
+  const selectedLectureInfo = lectureInfo.find(lecture => 
+    lecture.과목명 === selectedLecture.과목명 &&
+    lecture.교수명 === selectedLecture.교수명 &&
+    lecture.분반 === selectedLecture.분반
+  );
   let response = {};
 
   if (extra && extra.type === "basicInfo") {
@@ -1714,7 +1639,7 @@ app.post('/lecture_info_search', async (req, res) => {
           {
             "textCard": {
               "title": "강좌 기본정보",
-              "description": `과목코드: ${extra.data.과목코드}\n과목명: ${extra.data.과목명}\n교수명: ${extra.data.교수명}\n핸드폰: ${extra.data.핸드폰}\n이메일: ${extra.data.이메일}\n분반: ${extra.data.분반}\n성적평가구분: ${extra.data.성적평가구분}\n과정구분: ${extra.data.과정구분}\n이수구분: ${extra.data.이수구분}\n개설학과: ${extra.data.개설학과}\n개설학년: ${extra.data.개설학년}\n교재 및 참고 문헌: ${extra.data['교재 및 참고 문헌']}`
+              "description": `과목코드: ${selectedLectureInfo.과목코드}\n과목명: ${selectedLectureInfo.과목명}\n교수명: ${selectedLectureInfo.교수명}\n핸드폰: ${selectedLectureInfo.핸드폰}\n이메일: ${selectedLectureInfo.이메일}\n분반: ${selectedLectureInfo.분반}\n성적평가구분: ${selectedLectureInfo.성적평가구분}\n과정구분: ${selectedLectureInfo.과정구분}\n이수구분: ${selectedLectureInfo.이수구분}\n개설학과: ${selectedLectureInfo.개설학과}\n개설학년: ${selectedLectureInfo.개설학년}\n교재 및 참고 문헌: ${selectedLectureInfo['교재 및 참고 문헌']}`
             }
           }
         ],
@@ -1722,13 +1647,7 @@ app.post('/lecture_info_search', async (req, res) => {
           {
             'action': 'block',
             'label': `뒤로 가기`,
-            'blockId': `65fff8a7a64303558478534d`,
-            'extra': {
-              "dir": 'back',
-              "backinput": extra.backinput,
-              "backlist": extra.backlist,
-              "backno": extra.backno
-            }
+            'blockId': `65fff8a7a64303558478534d`
           },
           {
             'action': 'message',
@@ -1747,7 +1666,7 @@ app.post('/lecture_info_search', async (req, res) => {
           {
             "textCard": {
               "title": "교과개요",
-              "description": `교과목개요: ${extra.data.교과목개요}\n\n교과목표: ${extra.data.교과목표}`
+              "description": `교과목개요: ${selectedLectureInfo.교과목개요}\n\n교과목표: ${selectedLectureInfo.교과목표}`
             }
           }
         ],
@@ -1755,13 +1674,7 @@ app.post('/lecture_info_search', async (req, res) => {
           {
             'action': 'block',
             'label': `뒤로 가기`,
-            'blockId': `65fff8a7a64303558478534d`,
-            'extra': {
-              "dir": 'back',
-              "backinput": extra.backinput,
-              "backlist": extra.backlist,
-              "backno": extra.backno
-            }
+            'blockId': `65fff8a7a64303558478534d`
           },
           {
             'action': 'message',
@@ -1780,7 +1693,7 @@ app.post('/lecture_info_search', async (req, res) => {
           {
             "textCard": {
               "title": "평가항목 및 방법",
-              "description": `출석▼\n 반영비율: ${extra.data['평가항목 및 방법'].출석.반영비율}\n 평가방법 및 주요내용: ${extra.data['평가항목 및 방법'].출석.평가방법_및_주요내용}\n\n중간▼\n 반영비율: ${extra.data['평가항목 및 방법'].중간.반영비율}\n 평가방법 및 주요내용: ${extra.data['평가항목 및 방법'].중간.평가방법_및_주요내용}\n\n기말▼\n 반영비율: ${extra.data['평가항목 및 방법'].기말.반영비율}\n 평가방법 및 주요내용: ${extra.data['평가항목 및 방법'].기말.평가방법_및_주요내용}\n\n과제▼\n 반영비율: ${extra.data['평가항목 및 방법'].과제.반영비율}\n 평가방법 및 주요내용: ${extra.data['평가항목 및 방법'].과제.평가방법_및_주요내용}\n\n기타▼\n 반영비율: ${extra.data['평가항목 및 방법'].기타.반영비율}\n 평가방법 및 주요내용: ${extra.data['평가항목 및 방법'].기타.평가방법_및_주요내용}\n\n과제개요▼\n 과제주제: ${extra.data['평가항목 및 방법'].과제개요.과제주제}\n 분량 : ${extra.data['평가항목 및 방법'].과제개요.분량}\n 제출일자: ${extra.data['평가항목 및 방법'].과제개요.제출일자}`
+              "description": `출석▼\n 반영비율: ${selectedLectureInfo['평가항목 및 방법'].출석.반영비율}\n 평가방법 및 주요내용: ${selectedLectureInfo['평가항목 및 방법'].출석.평가방법_및_주요내용}\n\n중간▼\n 반영비율: ${selectedLectureInfo['평가항목 및 방법'].중간.반영비율}\n 평가방법 및 주요내용: ${selectedLectureInfo['평가항목 및 방법'].중간.평가방법_및_주요내용}\n\n기말▼\n 반영비율: ${selectedLectureInfo['평가항목 및 방법'].기말.반영비율}\n 평가방법 및 주요내용: ${selectedLectureInfo['평가항목 및 방법'].기말.평가방법_및_주요내용}\n\n과제▼\n 반영비율: ${selectedLectureInfo['평가항목 및 방법'].과제.반영비율}\n 평가방법 및 주요내용: ${selectedLectureInfo['평가항목 및 방법'].과제.평가방법_및_주요내용}\n\n기타▼\n 반영비율: ${selectedLectureInfo['평가항목 및 방법'].기타.반영비율}\n 평가방법 및 주요내용: ${selectedLectureInfo['평가항목 및 방법'].기타.평가방법_및_주요내용}\n\n과제개요▼\n 과제주제: ${selectedLectureInfo['평가항목 및 방법'].과제개요.과제주제}\n 분량 : ${selectedLectureInfo['평가항목 및 방법'].과제개요.분량}\n 제출일자: ${selectedLectureInfo['평가항목 및 방법'].과제개요.제출일자}`
             }
           }
         ],
@@ -1788,13 +1701,7 @@ app.post('/lecture_info_search', async (req, res) => {
           {
             'action': 'block',
             'label': `뒤로 가기`,
-            'blockId': `65fff8a7a64303558478534d`,
-            'extra': {
-              "dir": 'back',
-              "backinput": extra.backinput,
-              "backlist": extra.backlist,
-              "backno": extra.backno
-            }
+            'blockId': `65fff8a7a64303558478534d`
           },
           {
             'action': 'message',
