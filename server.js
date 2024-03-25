@@ -86,12 +86,16 @@ function getCurrentClass() {
   return null;
 }
 
+function findUniqElem(arr1, arr2) {
+  return [...new Set([...arr1, ...arr2])];
+}
+
 //현재 빈 강의실 추출
 function findAvailableClassrooms(lectureList) {
   const today = gettoDay();
   const currentClass = getCurrentClass();
-  let availableClassrooms = [];
-  let currentClassroom = null;
+  const availableClassrooms = [];
+  const unavailableClassrooms = [];
 
   for (const lectureKey in lectureList) {
     const lecture = lectureList[lectureKey];
@@ -99,20 +103,18 @@ function findAvailableClassrooms(lectureList) {
     if (lecture.hasOwnProperty("시간표") && lecture.hasOwnProperty("캠퍼스")) {
       const classTime = lecture["시간표"];
       
-      if (classTime !== "" && classTime.includes(today) && currentClass && classTime.includes(currentClass.toString()) && lecture["캠퍼스"] === "메트로폴") {
-        currentClassroom = lecture["강의실"];
-      } else if (classTime !== "" && classTime.includes(today) && lecture["캠퍼스"] === "메트로폴") {
+      if (classTime !== "" && classTime.includes(today) && currentClass && !classTime.includes(currentClass.toString()) && lecture["캠퍼스"] === "메트로폴") {
         availableClassrooms.push(lecture["강의실"]);
+      } else if (classTime !== "" && classTime.includes(today) && currentClass && classTime.includes(currentClass.toString()) && lecture["캠퍼스"] === "메트로폴") {
+        unavailableClassrooms.push(lecture["강의실"]);
       }
-    } else {
+    }
+    else {
       console.log("Lecture does not have '시간표' or '캠퍼스' property:", lecture);
     }
   }
 
-  // 현재 수업 중인 강의실을 제외한 나머지 강의실 제거
-  availableClassrooms = availableClassrooms.filter(classroom => classroom !== currentClassroom);
-
-  return availableClassrooms;
+  return findUniqElem(availableClassrooms, unavailableClassrooms);
 }
 
 //다음 교시 빈 강의실 추출
@@ -120,6 +122,7 @@ function findAvailableClassroomsNext(lectureList) {
   const today = gettoDay();
   const nextClass = getCurrentClass() + 1;
   const availableClassrooms = [];
+  const unavailableClassrooms = [];
 
   for (const lectureKey in lectureList) {
     const lecture = lectureList[lectureKey];
@@ -129,6 +132,8 @@ function findAvailableClassroomsNext(lectureList) {
 
       if (classTime !== "" && classTime.includes(today) && nextClass && !classTime.includes(nextClass.toString()) && lecture["캠퍼스"] === "메트로폴") {
         availableClassrooms.push(lecture["강의실"]);
+      } else if (classTime !== "" && classTime.includes(today) && nextClass && classTime.includes(nextClass.toString()) && lecture["캠퍼스"] === "메트로폴") {
+        unavailableClassrooms.push(lecture["강의실"]);
       }
     }
     else {
@@ -136,7 +141,7 @@ function findAvailableClassroomsNext(lectureList) {
     }
   }
 
-  return availableClassrooms;
+  return findUniqElem(availableClassrooms, unavailableClassrooms);
 }
 
 //층수 기입
