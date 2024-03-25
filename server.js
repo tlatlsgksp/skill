@@ -1538,10 +1538,12 @@ app.post('/lecture_info_select', async (req, res) => {
   if(extra && extra.type === "back_search" && extra.userInput_search && extra.lecture_no_search){
     userInput = extra.userInput_search;
     lecture_no = extra.lecture_no_search;
+  }else if (extra && extra.type === "back_select" && extra.userInput_select && extra.lecture_no_select){
+    userInput = extra.userInput_select;
+    lecture_no = extra.lecture_no_select;
   } else{
     userInput = req.body.action.params.lecture_name_out_find;
     lecture_no = req.body.action.params.lecture_no;
-    console.log(userInput.toString() + lecture_no.toString());
   }
 
   const similarLectures = findSimilarLectures(userInput, lectureInfo);
@@ -1571,6 +1573,15 @@ app.post('/lecture_info_select', async (req, res) => {
               'action': 'block',
               'label': `다시 입력`,
               'blockId': `65fff8a7a64303558478534d`,
+              'extra':{
+                'type': 'back_select',
+                'userInput_select': userInput
+              }
+            },
+            {
+              'action': 'block',
+              'label': `뒤로가기`,
+              'blockId': `65ffd578dad261262541fc58`,
               'extra':{
                 'type': 'back_select',
                 'userInput_select': userInput
@@ -1633,6 +1644,15 @@ app.post('/lecture_info_select', async (req, res) => {
               }
             },
             {
+              'action': 'block',
+              'label': `뒤로가기`,
+              'blockId': `65ffd578dad261262541fc58`,
+              'extra':{
+                'type': 'back_select',
+                'userInput_select': userInput
+              }
+            },
+            {
               'action': 'message',
               'label': `처음으로`,
               'messageText': `처음으로`
@@ -1657,6 +1677,15 @@ app.post('/lecture_info_select', async (req, res) => {
             'action': 'block',
             'label': `다시 입력`,
             'blockId': `65fff8a7a64303558478534d`,
+            'extra':{
+              'type': 'back_select',
+              'userInput_select': userInput
+            }
+          },
+          {
+            'action': 'block',
+            'label': `뒤로가기`,
+            'blockId': `65ffd578dad261262541fc58`,
             'extra':{
               'type': 'back_select',
               'userInput_select': userInput
