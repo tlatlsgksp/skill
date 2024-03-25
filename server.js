@@ -1436,6 +1436,11 @@ app.post('/lecture_info_find', async (req, res) => {
   const userId = req.body.userRequest.user.id;
   const userInput = req.body.action.params.lecture_name;
   const similarLectures = findSimilarLectures(userInput, lectureInfo);
+  const extra = req.body.action.clientExtra;
+  if(extra.backlist && extra.backinput){
+    userInput = extra.backinput;
+    similarLectures = extra.backlist;
+  }
   userStates[userId] = {
     userInput: userInput,
     similarLectures: findSimilarLectures(userInput, lectureInfo)
@@ -1503,12 +1508,22 @@ app.post('/lecture_info_find', async (req, res) => {
 app.post('/lecture_info_select', async (req, res) => {
   const userId = req.body.userRequest.user.id;
   const userState = userStates[userId];
+  const extra = req.body.action.clientExtra;
+  let userInput;
   let similarLectures;
   let lecture_no;
-  if(userState){
-    similarLectures = userState.similarLectures;
-    lecture_no = req.body.action.params.lecture_no;
+  if(extra.backlist && extra.backno){
+    userInput = extra.backinput;
+    similarLectures = extra.backlist;
+    lecture_no = extra.backno;
+  }else{
+    if(userState){
+      userInput = userState.userInput;
+      similarLectures = userState.similarLectures;
+      lecture_no = req.body.action.params.lecture_no;
+    }
   }
+  
 
   let response = {};
 
@@ -1587,7 +1602,10 @@ app.post('/lecture_info_select', async (req, res) => {
                     "blockId": "66004580d7cbb10c92fb7c3f",
                     "extra": {
                       "type": "basicInfo",
-                      "data": selectedLectureInfo
+                      "data": selectedLectureInfo,
+                      "backinput": userInput,
+                      "backlist": similarLectures,
+                      "backno": lecture_no
                     }
                   },
                   {
@@ -1596,7 +1614,10 @@ app.post('/lecture_info_select', async (req, res) => {
                     "blockId": "66004580d7cbb10c92fb7c3f",
                     "extra": {
                       "type": "courseOverview",
-                      "data": selectedLectureInfo
+                      "data": selectedLectureInfo,
+                      "backinput": userInput,
+                      "backlist": similarLectures,
+                      "backno": lecture_no
                     }
                   },
                   {
@@ -1605,7 +1626,10 @@ app.post('/lecture_info_select', async (req, res) => {
                     "blockId": "66004580d7cbb10c92fb7c3f",
                     "extra": {
                       "type": "evaluationMethods",
-                      "data": selectedLectureInfo
+                      "data": selectedLectureInfo,
+                      "backinput": userInput,
+                      "backlist": similarLectures,
+                      "backno": lecture_no
                     }
                   }
                 ]
@@ -1676,7 +1700,12 @@ app.post('/lecture_info_search', async (req, res) => {
           {
             'action': 'block',
             'label': `뒤로 가기`,
-            'blockId': `65fff8a7a64303558478534d`
+            'blockId': `65fff8a7a64303558478534d`,
+            'extra': {
+              backinput: extra.backinput,
+              backlist: extra.backlist,
+              backno: extra.backno
+            }
           },
           {
             'action': 'message',
@@ -1703,7 +1732,12 @@ app.post('/lecture_info_search', async (req, res) => {
           {
             'action': 'block',
             'label': `뒤로 가기`,
-            'blockId': `65fff8a7a64303558478534d`
+            'blockId': `65fff8a7a64303558478534d`,
+            'extra': {
+              backinput: extra.backinput,
+              backlist: extra.backlist,
+              backno: extra.backno
+            }
           },
           {
             'action': 'message',
@@ -1730,7 +1764,12 @@ app.post('/lecture_info_search', async (req, res) => {
           {
             'action': 'block',
             'label': `뒤로 가기`,
-            'blockId': `65fff8a7a64303558478534d`
+            'blockId': `65fff8a7a64303558478534d`,
+            'extra': {
+              backinput: extra.backinput,
+              backlist: extra.backlist,
+              backno: extra.backno
+            }
           },
           {
             'action': 'message',
