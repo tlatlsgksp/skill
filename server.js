@@ -487,6 +487,17 @@ function findSimilarLectures(userInput, lectureInfo) {
   }
 }
 
+function findSimilarProfessors(userInput, lectureInfo) {
+  if (userInput){
+    const userInputProcessed = userInput.replace(/\s+/g, '').toUpperCase();
+    const similarProfessors = lectureInfo.filter(item => {
+      const subjectWithoutSpaces = item.교수명.replace(/\s+/g, '').toUpperCase();
+      return subjectWithoutSpaces.includes(userInputProcessed);
+    });
+    return similarProfessors;
+  }
+}
+
 //서버 초기화
 async function initialize() {
   try {
@@ -807,8 +818,32 @@ app.post('/today_origin', (req, res) => {
   const targetDay = daysOfWeek[today];
   const todayMealMetropole = mealMetropole.data.find(item => item.date === targetDay);
   const todayMealMetropoleDormitory = mealMetropoleDormitory.data.find(item => item.date === targetDay);
+  let response;
 
-  const response = {
+  if (today === 6 || today === 0) {
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "textCard": {
+              "title": "오늘은 주말입니다.",
+              "description": "학식이 제공되지않습니다.",
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+
+      }
+    }
+  }else{
+  response = {
       "version": "2.0",
       "template": {
         "outputs": [
@@ -834,7 +869,7 @@ app.post('/today_origin', (req, res) => {
 
       }
     };
-
+  }
   res.json(response);
 });
 
@@ -847,8 +882,32 @@ app.post('/today_origin_dorm', (req, res) => {
   const targetDay = daysOfWeek[today];
   const todayMealMetropole = mealMetropole.data.find(item => item.date === targetDay);
   const todayMealMetropoleDormitory = mealMetropoleDormitory.data.find(item => item.date === targetDay);
+  let response;
 
-  const response = {
+  if (today === 6 || today === 0) {
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "textCard": {
+              "title": "오늘은 주말입니다.",
+              "description": "학식이 제공되지않습니다.",
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+
+      }
+    }
+  } else{
+  response = {
       "version": "2.0",
       "template": {
         "outputs": [
@@ -874,7 +933,7 @@ app.post('/today_origin_dorm', (req, res) => {
 
       }
     };
-
+  }
   res.json(response);
 });
 
@@ -888,8 +947,32 @@ app.post('/tomorrow_origin', (req, res) => {
   const targetDay = daysOfWeek[tomorrow];
   const tomorrowMealMetropole = mealMetropole.data.find(item => item.date === targetDay);
   const tomorrowMealMetropoleDormitory = mealMetropoleDormitory.data.find(item => item.date === targetDay);
+  let response;
 
-  const response = {
+  if (tomorrow === 0 || tomorrow === 6) {
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "textCard": {
+              "title": "내일은 주말입니다.",
+              "description": "학식이 제공되지 않습니다.",
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+
+      }
+    }
+  } else {
+  response = {
       "version": "2.0",
       "template": {
         "outputs": [
@@ -914,7 +997,7 @@ app.post('/tomorrow_origin', (req, res) => {
         ]
       }
     };
-
+  }
   res.json(response);
 });
 
@@ -928,8 +1011,32 @@ app.post('/tomorrow_origin_dorm', (req, res) => {
   const targetDay = daysOfWeek[tomorrow];
   const tomorrowMealMetropole = mealMetropole.data.find(item => item.date === targetDay);
   const tomorrowMealMetropoleDormitory = mealMetropoleDormitory.data.find(item => item.date === targetDay);
+  let response;
 
-  const response = {
+  if (tomorrow === 0 || tomorrow === 6) {
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "textCard": {
+              "title": "내일은 주말입니다.",
+              "description": "학식이 제공되지 않습니다.",
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+
+      }
+    }
+  } else {
+  response = {
       "version": "2.0",
       "template": {
         "outputs": [
@@ -954,7 +1061,7 @@ app.post('/tomorrow_origin_dorm', (req, res) => {
         ]
       }
     };
-
+  }
   res.json(response);
 });
 
@@ -1203,7 +1310,7 @@ app.post('/lecture_find', async (req, res) => {
   const currentHour = KST.getHours();
   const currentMinute = KST.getMinutes();
   const isClassTime = currentHour > 8 || (currentHour === 8 && currentMinute >= 30) && (currentHour < 23 || (currentHour === 23 && currentMinute <= 30));
-
+  let response;
 
   if (today === 6 || today === 0) {
     response = {
@@ -1297,35 +1404,138 @@ app.post('/lecture_find', async (req, res) => {
 
 //현재 빈 강의실 - 우당관
 app.post('/empty_lecture_now_1', async (req, res) => {
-  const empty = findAvailableClassrooms(lectureList);
+  const offset = 1000 * 60 * 60 * 9
+  const KST = new Date((new Date()).getTime() + offset)
+  const today = KST.getDay();
+  const currentHour = KST.getHours();
+  const currentMinute = KST.getMinutes();
+  const isClassTime = currentHour > 8 || (currentHour === 8 && currentMinute >= 30) && (currentHour < 23 || (currentHour === 23 && currentMinute <= 30));
+  let response;
 
-  const buildingCode = '1';
-  const floors = {
-    '1': [], '2': [], '3': [], '4': [], '5': [],
-    '6': [], '7': [], '8': [], '9': [], '0': [],
-  };
-
-  empty.forEach(classroom => {
-    const currentBuildingCode = classroom.charAt(0);
-    const floorName = getCurrentFloor(classroom);
-
-    if (currentBuildingCode === buildingCode) {
-      if (!floors[floorName]) {
-        floors[floorName] = [];
+  if (today === 6 || today === 0) {
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "textCard": {
+              "title": "오늘은 주말입니다.",
+              "description": "해당 기능이 제공되지 않습니다.",
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          },
+        ]
       }
-
-      floors[floorName].push(classroom);
     }
-  });
+  } else if (!isClassTime){
+      response = {
+        "version": "2.0",
+        "template": {
+          "outputs": [
+            {
+              "textCard": {
+                "title": "수업시간이 아닙니다.",
+                "description": "해당 기능이 제공되지 않습니다.",
+              }
+            }
+          ],
+          "quickReplies": [
+            {
+              'action': 'message',
+              'label': `처음으로`,
+              'messageText': `처음으로`
+            },
+          ]
+        }
+      }
+    } else {
+    const empty = findAvailableClassrooms(lectureList);
 
-  const sortedFloors = sortFloors(floors);
+    const buildingCode = '1';
+    const floors = {
+      '1': [], '2': [], '3': [], '4': [], '5': [],
+      '6': [], '7': [], '8': [], '9': [], '0': [],
+    };
 
-  const response = createBuildingResponse_1('우당관', buildingCode, sortedFloors, false);
+    empty.forEach(classroom => {
+      const currentBuildingCode = classroom.charAt(0);
+      const floorName = getCurrentFloor(classroom);
+
+      if (currentBuildingCode === buildingCode) {
+        if (!floors[floorName]) {
+          floors[floorName] = [];
+        }
+
+        floors[floorName].push(classroom);
+      }
+    });
+
+    const sortedFloors = sortFloors(floors);
+
+    response = createBuildingResponse_1('우당관', buildingCode, sortedFloors, false);
+  }
   res.json(response);
 });
 
 //현재 빈 강의실 - 선덕관
 app.post('/empty_lecture_now_2', async (req, res) => {
+  const offset = 1000 * 60 * 60 * 9
+  const KST = new Date((new Date()).getTime() + offset)
+  const today = KST.getDay();
+  const currentHour = KST.getHours();
+  const currentMinute = KST.getMinutes();
+  const isClassTime = currentHour > 8 || (currentHour === 8 && currentMinute >= 30) && (currentHour < 23 || (currentHour === 23 && currentMinute <= 30));
+  let response;
+
+  if (today === 6 || today === 0) {
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "textCard": {
+              "title": "오늘은 주말입니다.",
+              "description": "해당 기능이 제공되지 않습니다.",
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          },
+        ]
+      }
+    }
+  } else if (!isClassTime){
+      response = {
+        "version": "2.0",
+        "template": {
+          "outputs": [
+            {
+              "textCard": {
+                "title": "수업시간이 아닙니다.",
+                "description": "해당 기능이 제공되지 않습니다.",
+              }
+            }
+          ],
+          "quickReplies": [
+            {
+              'action': 'message',
+              'label': `처음으로`,
+              'messageText': `처음으로`
+            },
+          ]
+        }
+      }
+    } else {
   const empty = findAvailableClassrooms(lectureList);
 
   const buildingCode = '2';
@@ -1349,99 +1559,307 @@ app.post('/empty_lecture_now_2', async (req, res) => {
 
   const sortedFloors = sortFloors(floors);
 
-  const response = createBuildingResponse_2('선덕관', buildingCode, sortedFloors, false);
+  response = createBuildingResponse_2('선덕관', buildingCode, sortedFloors, false);
+}
   res.json(response);
 });
 
 //현재 빈 강의실 - 충효관
 app.post('/empty_lecture_now_3', async (req, res) => {
-  const empty = findAvailableClassrooms(lectureList);
+  const offset = 1000 * 60 * 60 * 9
+  const KST = new Date((new Date()).getTime() + offset)
+  const today = KST.getDay();
+  const currentHour = KST.getHours();
+  const currentMinute = KST.getMinutes();
+  const isClassTime = currentHour > 8 || (currentHour === 8 && currentMinute >= 30) && (currentHour < 23 || (currentHour === 23 && currentMinute <= 30));
+  let response;
 
-  const buildingCode = '3';
-  const floors = {
-    '1': [], '2': [], '3': [], '4': [], '5': [],
-    '6': [], '7': [], '8': [], '9': [], '0': [],
-  };
-
-  empty.forEach(classroom => {
-    const currentBuildingCode = classroom.charAt(0);
-    const floorName = getCurrentFloor(classroom);
-
-    if (currentBuildingCode === buildingCode) {
-      if (!floors[floorName]) {
-        floors[floorName] = [];
+  if (today === 6 || today === 0) {
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "textCard": {
+              "title": "오늘은 주말입니다.",
+              "description": "해당 기능이 제공되지 않습니다.",
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          },
+        ]
       }
-
-      floors[floorName].push(classroom);
     }
-  });
+  } else if (!isClassTime){
+        response = {
+          "version": "2.0",
+          "template": {
+            "outputs": [
+              {
+                "textCard": {
+                  "title": "수업시간이 아닙니다.",
+                  "description": "해당 기능이 제공되지 않습니다.",
+                }
+              }
+            ],
+            "quickReplies": [
+              {
+                'action': 'message',
+                'label': `처음으로`,
+                'messageText': `처음으로`
+              },
+            ]
+          }
+        }
+      } else {
+    const empty = findAvailableClassrooms(lectureList);
 
-  const sortedFloors = sortFloors(floors);
+    const buildingCode = '3';
+    const floors = {
+      '1': [], '2': [], '3': [], '4': [], '5': [],
+      '6': [], '7': [], '8': [], '9': [], '0': [],
+    };
 
-  const response = createBuildingResponse_3('충효관', buildingCode, sortedFloors, false);
+    empty.forEach(classroom => {
+      const currentBuildingCode = classroom.charAt(0);
+      const floorName = getCurrentFloor(classroom);
+
+      if (currentBuildingCode === buildingCode) {
+        if (!floors[floorName]) {
+          floors[floorName] = [];
+        }
+
+        floors[floorName].push(classroom);
+      }
+    });
+
+    const sortedFloors = sortFloors(floors);
+
+    response = createBuildingResponse_3('충효관', buildingCode, sortedFloors, false);
+  }
   res.json(response);
 });
 
 //다음 교시 빈 강의실 - 우당관
 app.post('/empty_lecture_next_1', async (req, res) => {
-  const empty = findAvailableClassroomsNext(lectureList);
+  const offset = 1000 * 60 * 60 * 9
+  const KST = new Date((new Date()).getTime() + offset)
+  const today = KST.getDay();
+  const currentHour = KST.getHours();
+  const currentMinute = KST.getMinutes();
+  const isClassTime = currentHour > 8 || (currentHour === 8 && currentMinute >= 30) && (currentHour < 23 || (currentHour === 23 && currentMinute <= 30));
+  let response;
 
-  const buildingCode = '1';
-  const floors = {
-    '1': [], '2': [], '3': [], '4': [], '5': [],
-    '6': [], '7': [], '8': [], '9': [], '0': [],
-  };
-
-  empty.forEach(classroom => {
-    const currentBuildingCode = classroom.charAt(0);
-    const floorName = getCurrentFloor(classroom);
-
-    if (currentBuildingCode === buildingCode) {
-      if (!floors[floorName]) {
-        floors[floorName] = [];
+  if (today === 6 || today === 0) {
+      response = {
+        "version": "2.0",
+        "template": {
+          "outputs": [
+            {
+              "textCard": {
+                "title": "오늘은 주말입니다.",
+                "description": "해당 기능이 제공되지 않습니다.",
+              }
+            }
+          ],
+          "quickReplies": [
+            {
+              'action': 'message',
+              'label': `처음으로`,
+              'messageText': `처음으로`
+            },
+          ]
+        }
       }
+    } else if (!isClassTime){
+        response = {
+          "version": "2.0",
+          "template": {
+            "outputs": [
+              {
+                "textCard": {
+                  "title": "수업시간이 아닙니다.",
+                  "description": "해당 기능이 제공되지 않습니다.",
+                }
+              }
+            ],
+            "quickReplies": [
+              {
+                'action': 'message',
+                'label': `처음으로`,
+                'messageText': `처음으로`
+              },
+            ]
+          }
+        }
+      } else {
+    const empty = findAvailableClassroomsNext(lectureList);
 
-      floors[floorName].push(classroom);
-    }
-  });
+    const buildingCode = '1';
+    const floors = {
+      '1': [], '2': [], '3': [], '4': [], '5': [],
+      '6': [], '7': [], '8': [], '9': [], '0': [],
+    };
 
-  const sortedFloors = sortFloors(floors);
+    empty.forEach(classroom => {
+      const currentBuildingCode = classroom.charAt(0);
+      const floorName = getCurrentFloor(classroom);
 
-  const response = createBuildingResponseNext_1('우당관', buildingCode, sortedFloors, false);
+      if (currentBuildingCode === buildingCode) {
+        if (!floors[floorName]) {
+          floors[floorName] = [];
+        }
+
+        floors[floorName].push(classroom);
+      }
+    });
+
+    const sortedFloors = sortFloors(floors);
+
+    response = createBuildingResponseNext_1('우당관', buildingCode, sortedFloors, false);
+  }
   res.json(response);
 });
 
 //다음 교시 빈 강의실 - 선덕관
 app.post('/empty_lecture_next_2', async (req, res) => {
-  const empty = findAvailableClassroomsNext(lectureList);
+  const offset = 1000 * 60 * 60 * 9
+  const KST = new Date((new Date()).getTime() + offset)
+  const today = KST.getDay();
+  const currentHour = KST.getHours();
+  const currentMinute = KST.getMinutes();
+  const isClassTime = currentHour > 8 || (currentHour === 8 && currentMinute >= 30) && (currentHour < 23 || (currentHour === 23 && currentMinute <= 30));
+  let response;
 
-  const buildingCode = '2';
-  const floors = {
-    '1': [], '2': [], '3': [], '4': [], '5': [],
-    '6': [], '7': [], '8': [], '9': [], '0': [],
-  };
-
-  empty.forEach(classroom => {
-    const currentBuildingCode = classroom.charAt(0);
-    const floorName = getCurrentFloor(classroom);
-
-    if (currentBuildingCode === buildingCode) {
-      if (!floors[floorName]) {
-        floors[floorName] = [];
+  if (today === 6 || today === 0) {
+      response = {
+        "version": "2.0",
+        "template": {
+          "outputs": [
+            {
+              "textCard": {
+                "title": "오늘은 주말입니다.",
+                "description": "해당 기능이 제공되지 않습니다.",
+              }
+            }
+          ],
+          "quickReplies": [
+            {
+              'action': 'message',
+              'label': `처음으로`,
+              'messageText': `처음으로`
+            },
+          ]
+        }
       }
+    } else if (!isClassTime){
+        response = {
+          "version": "2.0",
+          "template": {
+            "outputs": [
+              {
+                "textCard": {
+                  "title": "수업시간이 아닙니다.",
+                  "description": "해당 기능이 제공되지 않습니다.",
+                }
+              }
+            ],
+            "quickReplies": [
+              {
+                'action': 'message',
+                'label': `처음으로`,
+                'messageText': `처음으로`
+              },
+            ]
+          }
+        }
+      } else {
+    const empty = findAvailableClassroomsNext(lectureList);
 
-      floors[floorName].push(classroom);
-    }
-  });
+    const buildingCode = '2';
+    const floors = {
+      '1': [], '2': [], '3': [], '4': [], '5': [],
+      '6': [], '7': [], '8': [], '9': [], '0': [],
+    };
 
-  const sortedFloors = sortFloors(floors);
+    empty.forEach(classroom => {
+      const currentBuildingCode = classroom.charAt(0);
+      const floorName = getCurrentFloor(classroom);
 
-  const response = createBuildingResponseNext_2('선덕관', buildingCode, sortedFloors, false);
+      if (currentBuildingCode === buildingCode) {
+        if (!floors[floorName]) {
+          floors[floorName] = [];
+        }
+
+        floors[floorName].push(classroom);
+      }
+    });
+
+    const sortedFloors = sortFloors(floors);
+
+    response = createBuildingResponseNext_2('선덕관', buildingCode, sortedFloors, false);
+  }
   res.json(response);
 });
 
 //다음 교시 빈 강의실 - 충효관
 app.post('/empty_lecture_next_3', async (req, res) => {
+  const offset = 1000 * 60 * 60 * 9
+  const KST = new Date((new Date()).getTime() + offset)
+  const today = KST.getDay();
+  const currentHour = KST.getHours();
+  const currentMinute = KST.getMinutes();
+  const isClassTime = currentHour > 8 || (currentHour === 8 && currentMinute >= 30) && (currentHour < 23 || (currentHour === 23 && currentMinute <= 30));
+  let response;
+
+  if (today === 6 || today === 0) {
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "textCard": {
+              "title": "오늘은 주말입니다.",
+              "description": "해당 기능이 제공되지 않습니다.",
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          },
+        ]
+      }
+    }
+  } else if (!isClassTime){
+      response = {
+        "version": "2.0",
+        "template": {
+          "outputs": [
+            {
+              "textCard": {
+                "title": "수업시간이 아닙니다.",
+                "description": "해당 기능이 제공되지 않습니다.",
+              }
+            }
+          ],
+          "quickReplies": [
+            {
+              'action': 'message',
+              'label': `처음으로`,
+              'messageText': `처음으로`
+            },
+          ]
+        }
+      }
+    } else {
   const empty = findAvailableClassroomsNext(lectureList);
 
   const buildingCode = '3';
@@ -1465,7 +1883,8 @@ app.post('/empty_lecture_next_3', async (req, res) => {
 
   const sortedFloors = sortFloors(floors);
 
-  const response = createBuildingResponseNext_3('충효관', buildingCode, sortedFloors, false);
+  response = createBuildingResponseNext_3('충효관', buildingCode, sortedFloors, false);
+}
   res.json(response);
 });
 
@@ -1489,14 +1908,14 @@ app.post('/lecture_info_find', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": `※번호 확인 후 강의 선택※\n\n과목 교수 분반 순\n${similarLectures.map((lecture, index) => `${index + 1}.${lecture.과목명} ${lecture.교수명} ${lecture.분반}`).join('\n')}\n`
+              "text": `※번호 확인 후 번호 입력 클릭※\n\n과목 - 교수 - 분반 순\n\n${similarLectures.map((lecture, index) => `${index + 1}.${lecture.과목명} ${lecture.교수명} ${lecture.분반}`).join('\n')}\n`
             }
           }
         ],
         "quickReplies": [
           {
             'action': 'block',
-            'label': `강의 선택`,
+            'label': `번호 입력`,
             'blockId': `65fff8a7a64303558478534d`//select
           },
           {
@@ -1603,7 +2022,7 @@ app.post('/lecture_info_select', async (req, res) => {
             {
               "textCard": {
                 "title": "선택한 강의",
-                "description": `강의명: ${selectedLecture.과목명}\n담당교수: ${selectedLecture.교수명}\n분반: ${selectedLecture.분반}`,
+                "description": `강의명: ${selectedLecture.과목명}\n교수명: ${selectedLecture.교수명}\n분반: ${selectedLecture.분반}`,
                 "buttons": [
                   {
                     "action": "block",
@@ -1802,6 +2221,195 @@ app.post('/lecture_info_search', async (req, res) => {
     }
   }
 res.json(response);
+});
+
+app.post('/lecture_professor_find', async (req, res) => {
+  const extra = req.body.action.clientExtra;
+  let userInput;
+  let response = {};
+
+  if(extra && extra.type === "back_select" && extra.userInput_select){
+    userInput = extra.userInput_select;
+  } else{
+    userInput = req.body.action.params.professor_name;
+  }
+
+  const similarProfessors = findSimilarProfessors(userInput, lectureList);
+  
+  if (similarProfessors && similarProfessors.length > 0) {
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": `※번호 확인 후 번호 입력 클릭※\n\n교수 - 소속 순\n\n${similarProfessors.map((lecture, index) => `${index + 1}.${lecture.교수명} ${lecture.소속}`).join('\n')}\n`
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'block',
+            'label': `번호 입력`,
+            'blockId': `660181fd4311bb7fed54a75f`//select
+          },
+          {
+            'action': 'block',
+            'label': `다시 입력`,
+            'blockId': `65ffd650a64303558478508f`//find
+          },
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+      }
+    }
+  } else {
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": `일치하거나 유사한 교수가 없습니다.`
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'block',
+            'label': `다시 입력`,
+            'blockId': `65ffd650a64303558478508f`//find
+          },
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+      }
+    }
+  }
+  res.json(response);
+});
+
+app.post('/lecture_professor_select', async (req, res) => {
+  const extra = req.body.action.clientExtra;
+  let userInput;
+  let professor_no;
+  let response = {};
+
+  userInput = req.body.action.params.professor_name_out_find;
+  professor_no = req.body.action.params.professor_no;
+
+  const similarProfessors = findSimilarProfessors(userInput, lectureList);
+  const similarProfessors2 = findSimilarProfessors(userInput, lectureInfo);
+  
+  if (similarProfessors && similarProfessors[professor_no - 1]) {
+    const selectedProfessors = similarProfessors[professor_no - 1];
+    const selectedProfessors2 = similarProfessors2[professor_no - 1];
+    
+    const selectedProfessorInfo = lectureList.find(lecture => 
+      lecture.교수명 === selectedProfessors.교수명 &&
+      lecture.소속 === selectedProfessors.소속
+    );
+    const selectedProfessorInfo2 = lectureInfo.find(lecture => 
+      lecture.교수명 === selectedProfessors2.교수명
+    );
+
+    if (!selectedProfessorInfo) {
+      response = {
+        "version": "2.0",
+        "template": {
+          "outputs": [
+            {
+              "simpleText": {
+                "text": `교수 정보를 찾을 수 없습니다.`
+              }
+            }
+          ],
+          "quickReplies": [
+            {
+              'action': 'block',
+              'label': `뒤로가기`,
+              'blockId': `660187634311bb7fed54a7ce`,//find2
+              'extra':{
+                'type': 'back_select',
+                'userInput_select': userInput,
+              }
+            },
+            {
+              'action': 'message',
+              'label': `처음으로`,
+              'messageText': `처음으로`
+            }
+          ]
+        }
+      }
+    } else {
+      response = {
+        "version": "2.0",
+        "template": {
+          "outputs": [
+            {
+              "textCard": {
+                "title": `${selectedProfessorInfo.교수명}[${selectedProfessorInfo.소속}] 정보`,
+                "description": `교수명: ${selectedProfessorInfo.교수명}\n소속: ${selectedProfessorInfo.소속}\n핸드폰: ${selectedProfessorInfo2.핸드폰}\n이메일: ${selectedProfessorInfo2.이메일}`,
+              }
+            }
+          ],
+          "quickReplies": [
+            {
+              'action': 'block',
+              'label': `뒤로가기`,
+              'blockId': `660187634311bb7fed54a7ce`,//find2
+              'extra':{
+                'type': 'back_select',
+                'userInput_select': userInput,
+              }
+            },
+            {
+              'action': 'message',
+              'label': `처음으로`,
+              'messageText': `처음으로`
+            }
+          ]
+        }
+      };
+    }
+  } else {
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": `올바른 번호를 입력해주세요.`
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'block',
+            'label': `뒤로가기`,
+            'blockId': `660187634311bb7fed54a7ce`,//find2
+            'extra':{
+              'type': 'back_select',
+                'userInput_select': userInput,
+            }
+          },
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+      }
+    }
+  }
+  res.json(response);
 });
 
 app.listen(port, () => {
