@@ -1685,7 +1685,7 @@ app.post('/lecture_info_select', async (req, res) => {
           {
             'action': 'block',
             'label': `뒤로가기`,
-            'blockId': `65ffd578dad261262541fc58`,
+            'blockId': `66014e049cc5814a007f0ff9`,
             'extra':{
               'type': 'back_select',
               'userInput_select': userInput
@@ -1732,7 +1732,7 @@ app.post('/lecture_info_search', async (req, res) => {
           {
             'action': 'block',
             'label': `뒤로 가기`,
-            'blockId': `65fff8a7a64303558478534d`,
+            'blockId': `66014fc63190593813f158f6`,
               'extra':{
                 'type': 'back_search',
                 'userInput_search': userInput,
@@ -1764,7 +1764,7 @@ app.post('/lecture_info_search', async (req, res) => {
           {
             'action': 'block',
             'label': `뒤로 가기`,
-            'blockId': `65fff8a7a64303558478534d`,
+            'blockId': `66014fc63190593813f158f6`,
             'extra':{
               'type': 'back_search',
               'userInput_search': userInput,
@@ -1796,7 +1796,7 @@ app.post('/lecture_info_search', async (req, res) => {
           {
             'action': 'block',
             'label': `뒤로 가기`,
-            'blockId': `65fff8a7a64303558478534d`,
+            'blockId': `66014fc63190593813f158f6`,
             'extra':{
               'type': 'back_search',
               'userInput_search': userInput,
