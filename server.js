@@ -1433,13 +1433,16 @@ app.post('/empty_lecture_next_3', async (req, res) => {
 });
 
 app.post('/lecture_info_find', async (req, res) => {
-  const userId = req.body.userRequest.user.id;
-  const userInput = req.body.action.params.lecture_name;
-  const similarLectures = findSimilarLectures(userInput, lectureInfo);
   const extra = req.body.action.clientExtra;
+  const userId = req.body.userRequest.user.id;
+  let userInput;
+  let similarLectures;
   if(extra.backlist && extra.backinput){
     userInput = extra.backinput;
     similarLectures = extra.backlist;
+  }else {
+    userInput = req.body.action.params.lecture_name;
+    similarLectures = findSimilarLectures(userInput, lectureInfo);
   }
   userStates[userId] = {
     userInput: userInput,
@@ -1512,11 +1515,11 @@ app.post('/lecture_info_select', async (req, res) => {
   let userInput;
   let similarLectures;
   let lecture_no;
-  if(extra.backlist && extra.backno){
+  if(extra.backlist && extra.backno && extra.dir === "back"){
     userInput = extra.backinput;
     similarLectures = extra.backlist;
     lecture_no = extra.backno;
-  }else{
+  } else{
     if(userState){
       userInput = userState.userInput;
       similarLectures = userState.similarLectures;
@@ -1576,7 +1579,13 @@ app.post('/lecture_info_select', async (req, res) => {
             {
               'action': 'block',
               'label': `다시 입력`,
-              'blockId': `65fff8a7a64303558478534d`
+              'blockId': `65ffd578dad261262541fc58`,
+              "extra": {
+                "dir": 'back',
+                "backinput": userInput,
+                "backlist": similarLectures,
+                "backno": lecture_no
+              }
             },
             {
               'action': 'message',
@@ -1603,6 +1612,7 @@ app.post('/lecture_info_select', async (req, res) => {
                     "extra": {
                       "type": "basicInfo",
                       "data": selectedLectureInfo,
+                      "dir": 'front',
                       "backinput": userInput,
                       "backlist": similarLectures,
                       "backno": lecture_no
@@ -1615,6 +1625,7 @@ app.post('/lecture_info_select', async (req, res) => {
                     "extra": {
                       "type": "courseOverview",
                       "data": selectedLectureInfo,
+                      "dir": 'front',
                       "backinput": userInput,
                       "backlist": similarLectures,
                       "backno": lecture_no
@@ -1627,6 +1638,7 @@ app.post('/lecture_info_select', async (req, res) => {
                     "extra": {
                       "type": "evaluationMethods",
                       "data": selectedLectureInfo,
+                      "dir": 'front',
                       "backinput": userInput,
                       "backlist": similarLectures,
                       "backno": lecture_no
@@ -1640,7 +1652,13 @@ app.post('/lecture_info_select', async (req, res) => {
             {
               'action': 'block',
               'label': `다시 입력`,
-              'blockId': `65fff8a7a64303558478534d`
+              'blockId': `65ffd578dad261262541fc58`,
+              "extra": {
+                "dir": 'back',
+                "backinput": userInput,
+                "backlist": similarLectures,
+                "backno": lecture_no
+              }
             },
             {
               'action': 'message',
@@ -1666,7 +1684,13 @@ app.post('/lecture_info_select', async (req, res) => {
           {
             'action': 'block',
             'label': `다시 입력`,
-            'blockId': `65fff8a7a64303558478534d`
+            'blockId': `65ffd578dad261262541fc58`,
+            "extra": {
+              "dir": 'back',
+              "backinput": userInput,
+              "backlist": similarLectures,
+              "backno": lecture_no
+            }
           },
           {
             'action': 'message',
@@ -1684,7 +1708,7 @@ app.post('/lecture_info_search', async (req, res) => {
   const extra = req.body.action.clientExtra;
   let response = {};
 
-  if (extra && extra.type === "basicInfo") {
+  if (extra && extra.type === "basicInfo" && extra.dir === "front") {
     response = {
       "version": "2.0",
       "template": {
@@ -1702,9 +1726,10 @@ app.post('/lecture_info_search', async (req, res) => {
             'label': `뒤로 가기`,
             'blockId': `65fff8a7a64303558478534d`,
             'extra': {
-              backinput: extra.backinput,
-              backlist: extra.backlist,
-              backno: extra.backno
+              "dir": 'back',
+              "backinput": extra.backinput,
+              "backlist": extra.backlist,
+              "backno": extra.backno
             }
           },
           {
@@ -1734,9 +1759,10 @@ app.post('/lecture_info_search', async (req, res) => {
             'label': `뒤로 가기`,
             'blockId': `65fff8a7a64303558478534d`,
             'extra': {
-              backinput: extra.backinput,
-              backlist: extra.backlist,
-              backno: extra.backno
+              "dir": 'back',
+              "backinput": extra.backinput,
+              "backlist": extra.backlist,
+              "backno": extra.backno
             }
           },
           {
@@ -1766,9 +1792,10 @@ app.post('/lecture_info_search', async (req, res) => {
             'label': `뒤로 가기`,
             'blockId': `65fff8a7a64303558478534d`,
             'extra': {
-              backinput: extra.backinput,
-              backlist: extra.backlist,
-              backno: extra.backno
+              "dir": 'back',
+              "backinput": extra.backinput,
+              "backlist": extra.backlist,
+              "backno": extra.backno
             }
           },
           {
