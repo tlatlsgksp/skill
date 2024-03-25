@@ -1893,7 +1893,7 @@ app.post('/lecture_info_find', async (req, res) => {
   let userInput;
   let response = {};
 
-  if(extra && extra.type === "back_select" && extra.userInput_select){
+  if(extra && extra.type === "back_select"){
     userInput = extra.userInput_select;
   } else{
     userInput = req.body.action.params.lecture_name;
@@ -1966,7 +1966,7 @@ app.post('/lecture_info_select', async (req, res) => {
   let lecture_no;
   let response = {};
 
-  if(extra && extra.type === "back_search" && extra.userInput_search && extra.lecture_no_search){
+  if(extra && extra.type === "back_search"){
     userInput = extra.userInput_search;
     lecture_no = extra.lecture_no_search;
   }else{
