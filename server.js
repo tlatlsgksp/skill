@@ -1540,7 +1540,7 @@ app.post('/lecture_info_select', async (req, res) => {
     lecture_no = extra.lecture_no_search;
   }else if (extra && extra.type === "back_select" && extra.userInput_select){
     userInput = extra.userInput_select;
-    lecture_no = req.body.userRequest.utterance;
+    lecture_no = req.body.action.params.lecture_no_2;
   } else{
     userInput = req.body.action.params.lecture_name_out_find;
     lecture_no = req.body.action.params.lecture_no;
