@@ -1540,7 +1540,7 @@ app.post('/lecture_info_select', async (req, res) => {
     lecture_no = extra.lecture_no_search;
   }else if (extra && extra.type === "back_select" && extra.userInput_select && extra.lecture_no_select){
     userInput = extra.userInput_select;
-    lecture_no = req.body.action.params.lecture_no;
+    lecture_no = req.body.userRequest.utterance;
   } else{
     userInput = req.body.action.params.lecture_name_out_find;
     lecture_no = req.body.action.params.lecture_no;
@@ -1572,7 +1572,7 @@ app.post('/lecture_info_select', async (req, res) => {
             {
               'action': 'block',
               'label': `다시 입력`,
-              'blockId': `65fff8a7a64303558478534d`,//select2dd
+              'blockId': `66014fc63190593813f158f6`,//select2
               'extra':{
                 'type': 'back_select',
                 'userInput_select': userInput,
@@ -1637,7 +1637,7 @@ app.post('/lecture_info_select', async (req, res) => {
             {
               'action': 'block',
               'label': `다시 입력`,
-              'blockId': `65fff8a7a64303558478534d`,//select2dd
+              'blockId': `66014fc63190593813f158f6`,//select2
               'extra':{
                 'type': 'back_select',
                 'userInput_select': userInput,
@@ -1676,7 +1676,7 @@ app.post('/lecture_info_select', async (req, res) => {
           {
             'action': 'block',
             'label': `다시 입력`,
-            'blockId': `65fff8a7a64303558478534d`,//select2dd
+            'blockId': `66014fc63190593813f158f6`,//select2
             'extra':{
               'type': 'return_select',
               'userInput_select': userInput,
