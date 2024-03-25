@@ -1575,7 +1575,8 @@ app.post('/lecture_info_select', async (req, res) => {
               'blockId': `66014fc63190593813f158f6`,//select2
               'extra':{
                 'type': 'back_select',
-                'userInput_select': userInput
+                'userInput_select': userInput,
+                'lecture_no_select': lecture_no
               }
             },
             {
@@ -1584,6 +1585,7 @@ app.post('/lecture_info_select', async (req, res) => {
               'blockId': `66014e049cc5814a007f0ff9`,//find2
               'extra':{
                 'type': 'back_select',
+                'userInput_select': userInput,
                 'userInput_select': userInput
               }
             },
@@ -1640,7 +1642,9 @@ app.post('/lecture_info_select', async (req, res) => {
               'blockId': `66014fc63190593813f158f6`,//select2
               'extra':{
                 'type': 'back_select',
-                'userInput_select': userInput
+                'userInput_select': userInput,
+                'lecture_no_select': lecture_no
+
               }
             },
             {
@@ -1649,6 +1653,7 @@ app.post('/lecture_info_select', async (req, res) => {
               'blockId': `66014e049cc5814a007f0ff9`,//find2
               'extra':{
                 'type': 'back_select',
+                'userInput_select': userInput,
                 'userInput_select': userInput
               }
             },
@@ -1678,8 +1683,9 @@ app.post('/lecture_info_select', async (req, res) => {
             'label': `다시 입력`,
             'blockId': `66014fc63190593813f158f6`,//select2
             'extra':{
-              'type': 'back_select',
-              'userInput_select': userInput
+              'type': 'return_select',
+              'userInput_select': userInput,
+              'lecture_no_select': lecture_no
             }
           },
           {
@@ -1688,7 +1694,8 @@ app.post('/lecture_info_select', async (req, res) => {
             'blockId': `66014e049cc5814a007f0ff9`,//find2
             'extra':{
               'type': 'back_select',
-              'userInput_select': userInput
+                'userInput_select': userInput,
+                'userInput_select': userInput
             }
           },
           {
