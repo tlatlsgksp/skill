@@ -1572,7 +1572,7 @@ app.post('/lecture_info_select', async (req, res) => {
             {
               'action': 'block',
               'label': `다시 입력`,
-              'blockId': `65fff8a7a64303558478534d`,
+              'blockId': `66014fc63190593813f158f6`,
               'extra':{
                 'type': 'back_select',
                 'userInput_select': userInput
@@ -1637,7 +1637,7 @@ app.post('/lecture_info_select', async (req, res) => {
             {
               'action': 'block',
               'label': `다시 입력`,
-              'blockId': `65fff8a7a64303558478534d`,
+              'blockId': `66014fc63190593813f158f6`,
               'extra':{
                 'type': 'back_select',
                 'userInput_select': userInput
@@ -1676,7 +1676,7 @@ app.post('/lecture_info_select', async (req, res) => {
           {
             'action': 'block',
             'label': `다시 입력`,
-            'blockId': `65fff8a7a64303558478534d`,
+            'blockId': `66014fc63190593813f158f6`,
             'extra':{
               'type': 'back_select',
               'userInput_select': userInput
