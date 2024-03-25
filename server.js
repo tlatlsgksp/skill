@@ -1485,12 +1485,12 @@ app.post('/lecture_info_find', async (req, res) => {
           {
             'action': 'block',
             'label': `강의 선택`,
-            'blockId': `65fff8a7a64303558478534d`
+            'blockId': `65fff8a7a64303558478534d`//select
           },
           {
             'action': 'block',
             'label': `다시 입력`,
-            'blockId': `65ffd578dad261262541fc58`
+            'blockId': `65ffd578dad261262541fc58`//find
           },
           {
             'action': 'message',
@@ -1515,7 +1515,7 @@ app.post('/lecture_info_find', async (req, res) => {
           {
             'action': 'block',
             'label': `다시 입력`,
-            'blockId': `65ffd578dad261262541fc58`
+            'blockId': `65ffd578dad261262541fc58`//find
           },
           {
             'action': 'message',
@@ -1572,7 +1572,7 @@ app.post('/lecture_info_select', async (req, res) => {
             {
               'action': 'block',
               'label': `다시 입력`,
-              'blockId': `66014fc63190593813f158f6`,
+              'blockId': `66014fc63190593813f158f6`,//select2
               'extra':{
                 'type': 'back_select',
                 'userInput_select': userInput
@@ -1581,7 +1581,7 @@ app.post('/lecture_info_select', async (req, res) => {
             {
               'action': 'block',
               'label': `뒤로가기`,
-              'blockId': `66014e049cc5814a007f0ff9`,
+              'blockId': `66014e049cc5814a007f0ff9`,//find2
               'extra':{
                 'type': 'back_select',
                 'userInput_select': userInput
@@ -1608,7 +1608,7 @@ app.post('/lecture_info_select', async (req, res) => {
                   {
                     "action": "block",
                     "label": "강좌 기본정보",
-                    "blockId": "66004580d7cbb10c92fb7c3f",
+                    "blockId": "66004580d7cbb10c92fb7c3f",//search
                     "extra": {
                       "menu": "basicInfo",
                     }
@@ -1616,7 +1616,7 @@ app.post('/lecture_info_select', async (req, res) => {
                   {
                     "action": "block",
                     "label": "교과개요",
-                    "blockId": "66004580d7cbb10c92fb7c3f",
+                    "blockId": "66004580d7cbb10c92fb7c3f",//search
                     "extra": {
                       "menu": "courseOverview",
                     }
@@ -1624,7 +1624,7 @@ app.post('/lecture_info_select', async (req, res) => {
                   {
                     "action": "block",
                     "label": "평가항목 및 방법",
-                    "blockId": "66004580d7cbb10c92fb7c3f",
+                    "blockId": "66004580d7cbb10c92fb7c3f",//search
                     "extra": {
                       "menu": "evaluationMethods",
                     }
@@ -1637,7 +1637,7 @@ app.post('/lecture_info_select', async (req, res) => {
             {
               'action': 'block',
               'label': `다시 입력`,
-              'blockId': `66014fc63190593813f158f6`,
+              'blockId': `66014fc63190593813f158f6`,//select2
               'extra':{
                 'type': 'back_select',
                 'userInput_select': userInput
@@ -1646,7 +1646,7 @@ app.post('/lecture_info_select', async (req, res) => {
             {
               'action': 'block',
               'label': `뒤로가기`,
-              'blockId': `66014e049cc5814a007f0ff9`,
+              'blockId': `66014e049cc5814a007f0ff9`,//find2
               'extra':{
                 'type': 'back_select',
                 'userInput_select': userInput
@@ -1676,7 +1676,7 @@ app.post('/lecture_info_select', async (req, res) => {
           {
             'action': 'block',
             'label': `다시 입력`,
-            'blockId': `66014fc63190593813f158f6`,
+            'blockId': `66014fc63190593813f158f6`,//select2
             'extra':{
               'type': 'back_select',
               'userInput_select': userInput
@@ -1685,7 +1685,7 @@ app.post('/lecture_info_select', async (req, res) => {
           {
             'action': 'block',
             'label': `뒤로가기`,
-            'blockId': `66014e049cc5814a007f0ff9`,
+            'blockId': `66014e049cc5814a007f0ff9`,//find2
             'extra':{
               'type': 'back_select',
               'userInput_select': userInput
@@ -1732,7 +1732,7 @@ app.post('/lecture_info_search', async (req, res) => {
           {
             'action': 'block',
             'label': `뒤로 가기`,
-            'blockId': `66014fc63190593813f158f6`,
+            'blockId': `66014fc63190593813f158f6`,//select2
               'extra':{
                 'type': 'back_search',
                 'userInput_search': userInput,
@@ -1764,7 +1764,7 @@ app.post('/lecture_info_search', async (req, res) => {
           {
             'action': 'block',
             'label': `뒤로 가기`,
-            'blockId': `66014fc63190593813f158f6`,
+            'blockId': `66014fc63190593813f158f6`,//select2
             'extra':{
               'type': 'back_search',
               'userInput_search': userInput,
@@ -1796,7 +1796,7 @@ app.post('/lecture_info_search', async (req, res) => {
           {
             'action': 'block',
             'label': `뒤로 가기`,
-            'blockId': `66014fc63190593813f158f6`,
+            'blockId': `66014fc63190593813f158f6`,//select2
             'extra':{
               'type': 'back_search',
               'userInput_search': userInput,
