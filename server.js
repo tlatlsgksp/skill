@@ -1538,10 +1538,7 @@ app.post('/lecture_info_select', async (req, res) => {
   if(extra && extra.type === "back_search" && extra.userInput_search && extra.lecture_no_search){
     userInput = extra.userInput_search;
     lecture_no = extra.lecture_no_search;
-  }else if (extra && extra.type === "back_select" && extra.userInput_select){
-    userInput = extra.userInput_select;
-    lecture_no = req.body.action.params.lecture_no_2;
-  } else{
+  }else{
     userInput = req.body.action.params.lecture_name_out_find;
     lecture_no = req.body.action.params.lecture_no;
   }
@@ -1569,15 +1566,6 @@ app.post('/lecture_info_select', async (req, res) => {
             }
           ],
           "quickReplies": [
-            {
-              'action': 'block',
-              'label': `다시 입력`,
-              'blockId': `66014fc63190593813f158f6`,//select2
-              'extra':{
-                'type': 'back_select',
-                'userInput_select': userInput,
-              }
-            },
             {
               'action': 'block',
               'label': `뒤로가기`,
@@ -1636,15 +1624,6 @@ app.post('/lecture_info_select', async (req, res) => {
           "quickReplies": [
             {
               'action': 'block',
-              'label': `다시 입력`,
-              'blockId': `66014fc63190593813f158f6`,//select2
-              'extra':{
-                'type': 'back_select',
-                'userInput_select': userInput,
-              }
-            },
-            {
-              'action': 'block',
               'label': `뒤로가기`,
               'blockId': `66014e049cc5814a007f0ff9`,//find2
               'extra':{
@@ -1673,15 +1652,6 @@ app.post('/lecture_info_select', async (req, res) => {
           }
         ],
         "quickReplies": [
-          {
-            'action': 'block',
-            'label': `다시 입력`,
-            'blockId': `66014fc63190593813f158f6`,//select2
-            'extra':{
-              'type': 'return_select',
-              'userInput_select': userInput,
-            }
-          },
           {
             'action': 'block',
             'label': `뒤로가기`,
