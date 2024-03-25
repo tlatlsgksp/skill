@@ -1483,7 +1483,6 @@ app.post('/empty_lecture_next_3', async (req, res) => {
 
 app.post('/lecture_info_find', async (req, res) => {
   const extra = req.body.action.clientExtra;
-  const cancle = req.body.userRequest.utterance;
   let userInput;
   let response = {};
 
@@ -1495,27 +1494,7 @@ app.post('/lecture_info_find', async (req, res) => {
 
   const similarLectures = findSimilarLectures(userInput, lectureInfo);
   
-  if(cancle === "?"){
-    response = {
-      "version": "2.0",
-      "template": {
-        "outputs": [
-          {
-            "simpleText": {
-              "text": `입력이 취소 되었습니다.`
-            }
-          }
-        ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
-        ]
-      }
-    }
-  }else if (similarLectures && similarLectures.length > 0) {
+  if (similarLectures && similarLectures.length > 0) {
     response = {
       "version": "2.0",
       "template": {
@@ -1576,7 +1555,6 @@ app.post('/lecture_info_find', async (req, res) => {
 
 app.post('/lecture_info_select', async (req, res) => {
   const extra = req.body.action.clientExtra;
-  const cancle = req.body.userRequest.utterance;
   let userInput;
   let lecture_no;
   let response = {};
@@ -1591,27 +1569,7 @@ app.post('/lecture_info_select', async (req, res) => {
 
   const similarLectures = findSimilarLectures(userInput, lectureInfo);
   
-  if(cancle === "?"){
-    response = {
-      "version": "2.0",
-      "template": {
-        "outputs": [
-          {
-            "simpleText": {
-              "text": `입력이 취소 되었습니다.`
-            }
-          }
-        ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
-        ]
-      }
-    }
-  }else if (similarLectures && similarLectures[lecture_no - 1]) {
+  if (similarLectures && similarLectures[lecture_no - 1]) {
     const selectedLecture = similarLectures[lecture_no - 1];
     
     const selectedLectureInfo = lectureInfo.find(lecture => 
@@ -1744,11 +1702,18 @@ app.post('/lecture_info_search', async (req, res) => {
   const userInput = req.body.action.params.lecture_name_out_select;
   const lecture_no = req.body.action.params.lecture_no_out_select;
   const similarLectures = findSimilarLectures(userInput, lectureInfo);
+  const similarLectures2 = findSimilarLectures(userInput, lectureList);
   const selectedLecture = similarLectures[lecture_no - 1];
+  const selectedLecture2 = similarLectures2[lecture_no - 1];
   const selectedLectureInfo = lectureInfo.find(lecture => 
     lecture.과목명 === selectedLecture.과목명 &&
     lecture.교수명 === selectedLecture.교수명 &&
     lecture.분반 === selectedLecture.분반
+  );
+  const selectedLectureInfo2 = lectureList.find(lecture => 
+    lecture.과목명 === selectedLecture2.과목명 &&
+    lecture.교수명 === selectedLecture2.교수명 &&
+    lecture.분반 === selectedLecture2.분반
   );
   let response = {};
 
@@ -1760,7 +1725,7 @@ app.post('/lecture_info_search', async (req, res) => {
           {
             "textCard": {
               "title": "강좌 기본정보",
-              "description": `과목코드: ${selectedLectureInfo.과목코드}\n과목명: ${selectedLectureInfo.과목명}\n교수명: ${selectedLectureInfo.교수명}\n핸드폰: ${selectedLectureInfo.핸드폰}\n이메일: ${selectedLectureInfo.이메일}\n분반: ${selectedLectureInfo.분반}\n성적평가구분: ${selectedLectureInfo.성적평가구분}\n과정구분: ${selectedLectureInfo.과정구분}\n이수구분: ${selectedLectureInfo.이수구분}\n개설학과: ${selectedLectureInfo.개설학과}\n개설학년: ${selectedLectureInfo.개설학년}\n교재 및 참고 문헌: ${selectedLectureInfo['교재 및 참고 문헌']}`
+              "description": `과목코드: ${selectedLectureInfo.과목코드}\n과목명: ${selectedLectureInfo.과목명}\n시간표: ${selectedLectureInfo2.시간표}\n교수명: ${selectedLectureInfo.교수명}\n핸드폰: ${selectedLectureInfo.핸드폰}\n이메일: ${selectedLectureInfo.이메일}\n분반: ${selectedLectureInfo.분반}\n성적평가구분: ${selectedLectureInfo.성적평가구분}\n과정구분: ${selectedLectureInfo.과정구분}\n이수구분: ${selectedLectureInfo.이수구분}\n개설학과: ${selectedLectureInfo.개설학과}\n개설학년: ${selectedLectureInfo.개설학년}\n교재 및 참고 문헌: ${selectedLectureInfo['교재 및 참고 문헌']}`
             }
           }
         ],
