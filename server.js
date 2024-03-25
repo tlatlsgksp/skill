@@ -112,7 +112,7 @@ function findAvailableClassrooms(lectureList) {
     else {
       console.log("Lecture does not have '시간표' or '캠퍼스' property:", lecture);
     }
-  }console.log(unavailableClassrooms.toString());
+  }
 
   return findUniqElem(availableClassrooms, unavailableClassrooms);
 }
