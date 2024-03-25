@@ -1435,6 +1435,7 @@ app.post('/empty_lecture_next_3', async (req, res) => {
 app.post('/lecture_info_find', async (req, res) => {
   const userInput = req.body.action.params.lecture_name;
   const similarLectures = findSimilarLectures(userInput, lectureInfo);
+  console.log(userInput.toString());
   let response = {};
   if (similarLectures && similarLectures.length > 0) {
     response = {
@@ -1498,10 +1499,11 @@ app.post('/lecture_info_find', async (req, res) => {
 app.post('/lecture_info_select', async (req, res) => {
   const userInput = req.body.action.params.lecture_name_out_find
   const lecture_no = req.body.action.params.lecture_no;
+  console.log(userInput.toString());
+  console.log(lecture_no.toString());
   const similarLectures = findSimilarLectures(userInput, lectureInfo);
 
   let response = {};
-  if(similarLectures){
   if (similarLectures && similarLectures[lecture_no - 1]) {
     const selectedLecture = similarLectures[lecture_no - 1];
     
@@ -1615,7 +1617,6 @@ app.post('/lecture_info_select', async (req, res) => {
       }
     }
   }
-}
   res.json(response);
 });
 
