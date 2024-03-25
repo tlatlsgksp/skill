@@ -87,7 +87,7 @@ function getCurrentClass() {
 }
 
 function findUniqElem(arr1, arr2) {
-  return [...new Set([...arr1, ...arr2])];
+  return arr1.filter(x => !arr2.includes(x));
 }
 
 //현재 빈 강의실 추출
