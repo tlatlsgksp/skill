@@ -1483,6 +1483,7 @@ app.post('/empty_lecture_next_3', async (req, res) => {
 
 app.post('/lecture_info_find', async (req, res) => {
   const extra = req.body.action.clientExtra;
+  const cancle = req.body.userRequest.utterance;
   let userInput;
   let response = {};
 
@@ -1494,7 +1495,27 @@ app.post('/lecture_info_find', async (req, res) => {
 
   const similarLectures = findSimilarLectures(userInput, lectureInfo);
   
-  if (similarLectures && similarLectures.length > 0) {
+  if(cancle === "?"){
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": `입력이 취소 되었습니다.`
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+      }
+    }
+  }else if (similarLectures && similarLectures.length > 0) {
     response = {
       "version": "2.0",
       "template": {
@@ -1555,6 +1576,7 @@ app.post('/lecture_info_find', async (req, res) => {
 
 app.post('/lecture_info_select', async (req, res) => {
   const extra = req.body.action.clientExtra;
+  const cancle = req.body.userRequest.utterance;
   let userInput;
   let lecture_no;
   let response = {};
@@ -1569,7 +1591,27 @@ app.post('/lecture_info_select', async (req, res) => {
 
   const similarLectures = findSimilarLectures(userInput, lectureInfo);
   
-  if (similarLectures && similarLectures[lecture_no - 1]) {
+  if(cancle === "?"){
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": `입력이 취소 되었습니다.`
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+      }
+    }
+  }else if (similarLectures && similarLectures[lecture_no - 1]) {
     const selectedLecture = similarLectures[lecture_no - 1];
     
     const selectedLectureInfo = lectureInfo.find(lecture => 
