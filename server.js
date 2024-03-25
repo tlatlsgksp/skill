@@ -57,6 +57,7 @@ function getCurrentClass() {
   const currentMinute = KST.getMinutes();
 
   const classTimes = [
+    { start: 8, end: 9, minute: 30 },
     { start: 9, end: 10, minute: 30 },
     { start: 10, end: 11, minute: 30 },
     { start: 11, end: 12, minute: 30 },
@@ -80,7 +81,7 @@ function getCurrentClass() {
       (currentHour > classTime.start && currentHour < classTime.end) ||
       (currentHour === classTime.end && currentMinute <= classTime.minute)
     ) {
-      return i + 1;
+      return i;
     }
   }
 
@@ -118,7 +119,7 @@ function findAvailableClassrooms(lectureList) {
     }
   }
 
-  return availableClassrooms;
+  return addedClassrooms;
 }
 
 // 다음 교시 빈 강의실 추출
@@ -152,7 +153,7 @@ function findAvailableClassroomsNext(lectureList) {
     }
   }
 
-  return availableClassrooms;
+  return addedClassrooms;
 }
 
 //층수 기입
