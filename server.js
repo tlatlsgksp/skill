@@ -1538,10 +1538,7 @@ app.post('/lecture_info_select', async (req, res) => {
   if(extra && extra.type === "back_search" && extra.userInput_search && extra.lecture_no_search){
     userInput = extra.userInput_search;
     lecture_no = extra.lecture_no_search;
-  }else if (extra && extra.type === "back_select" && extra.userInput_select && extra.lecture_no_select){
-    userInput = extra.userInput_select;
-    lecture_no = extra.lecture_no_select;
-  } else{
+  }else{
     userInput = req.body.action.params.lecture_name_out_find;
     lecture_no = req.body.action.params.lecture_no;
   }
