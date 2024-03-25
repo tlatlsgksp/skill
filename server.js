@@ -1438,8 +1438,7 @@ app.post('/lecture_info_find', async (req, res) => {
   let response = {};
 
   if(extra && extra.type === "back"){
-    userInput = req.body.action.params.lecture_name_out_find;
-    console.log('select >> find' + userInput.toString());
+    userInput = req.body.action.params.lecture_name_back_find;
   } else{
     userInput = req.body.action.params.lecture_name;
   }
@@ -1512,10 +1511,8 @@ app.post('/lecture_info_select', async (req, res) => {
   let response = {};
 
   if(extra && extra.type === "back"){
-    userInput = req.body.action.params.lecture_name_out_search;
-    lecture_no = req.body.action.params.lecture_no_out_search;
-    console.log('search >> select' + userInput.toString());
-    console.log('search >> select' + lecture_no.toString());
+    userInput = req.body.action.params.lecture_name_back_search;
+    lecture_no = req.body.action.params.lecture_no_back_search;
   } else{
     userInput = req.body.action.params.lecture_name_out_find;
     lecture_no = req.body.action.params.lecture_no;
