@@ -581,6 +581,12 @@ app.use((req, res, next) => {
   next();
 });
 
+app.post('/cancle', (req, res) => {
+  serverInitialized = false;
+  initialize();
+  res.json({ message: '서버 재시작' });
+});
+
 //서버 재시작
 app.post('/restart', (req, res) => {
   serverInitialized = false;
