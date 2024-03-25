@@ -57,6 +57,7 @@ function getCurrentClass() {
   const currentMinute = KST.getMinutes();
 
   const classTimes = [
+    { start: 8, end: 9, minute: 30 },
     { start: 9, end: 10, minute: 30 },
     { start: 10, end: 11, minute: 30 },
     { start: 11, end: 12, minute: 30 },
@@ -80,7 +81,7 @@ function getCurrentClass() {
       (currentHour > classTime.start && currentHour < classTime.end) ||
       (currentHour === classTime.end && currentMinute <= classTime.minute)
     ) {
-      return i + 1;
+      return i;
     }
   }
 
@@ -1187,6 +1188,10 @@ app.post('/lecture_find', async (req, res) => {
   const offset = 1000 * 60 * 60 * 9
   const KST = new Date((new Date()).getTime() + offset)
   const today = KST.getDay();
+  const currentHour = KST.getHours();
+  const currentMinute = KST.getMinutes();
+  const isClassTime = currentHour > 8 || (currentHour === 8 && currentMinute >= 30) && (currentHour < 23 || (currentHour === 23 && currentMinute <= 30));
+
 
   if (today === 6 || today === 0) {
     response = {
@@ -1209,8 +1214,28 @@ app.post('/lecture_find', async (req, res) => {
         ]
       }
     }
-  }
-  else {
+  } else if (!isClassTime){
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "textCard": {
+              "title": "수업시간이 아닙니다.",
+              "description": "해당 기능이 제공되지 않습니다.",
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          },
+        ]
+      }
+    }
+  } else {
     response = {
       "version": "2.0",
       "template": {
@@ -1437,8 +1462,8 @@ app.post('/lecture_info_find', async (req, res) => {
   let userInput;
   let response = {};
 
-  if(extra && extra.type === "back"){
-    userInput = req.body.action.params.lecture_name_back_find;
+  if(extra && extra.type === "back_select"){
+    userInput = extra.userInput_select;
   } else{
     userInput = req.body.action.params.lecture_name;
   }
@@ -1510,9 +1535,9 @@ app.post('/lecture_info_select', async (req, res) => {
   let lecture_no;
   let response = {};
 
-  if(extra && extra.type === "back"){
-    userInput = req.body.action.params.lecture_name_back_search;
-    lecture_no = req.body.action.params.lecture_no_back_search;
+  if(extra && extra.type === "back_search"){
+    userInput = extra.userInput_search;
+    lecture_no = extra.lecture_no_search;
   } else{
     userInput = req.body.action.params.lecture_name_out_find;
     lecture_no = req.body.action.params.lecture_no;
@@ -1546,7 +1571,8 @@ app.post('/lecture_info_select', async (req, res) => {
               'label': `다시 입력`,
               'blockId': `65fff8a7a64303558478534d`,
               'extra':{
-                'type': 'back'
+                'type': 'back_select',
+                'userInput_select': userInput
               }
             },
             {
@@ -1601,7 +1627,8 @@ app.post('/lecture_info_select', async (req, res) => {
               'label': `다시 입력`,
               'blockId': `65fff8a7a64303558478534d`,
               'extra':{
-                'type': 'back'
+                'type': 'back_select',
+                'userInput_select': userInput
               }
             },
             {
@@ -1630,7 +1657,8 @@ app.post('/lecture_info_select', async (req, res) => {
             'label': `다시 입력`,
             'blockId': `65fff8a7a64303558478534d`,
             'extra':{
-              'type': 'back'
+              'type': 'back_select',
+              'userInput_select': userInput
             }
           },
           {
@@ -1676,7 +1704,9 @@ app.post('/lecture_info_search', async (req, res) => {
             'label': `뒤로 가기`,
             'blockId': `65fff8a7a64303558478534d`,
               'extra':{
-                'type': 'back'
+                'type': 'back_search',
+                'userInput_search': userInput,
+                'lecture_no_search': lecture_no
               }
           },
           {
@@ -1706,7 +1736,9 @@ app.post('/lecture_info_search', async (req, res) => {
             'label': `뒤로 가기`,
             'blockId': `65fff8a7a64303558478534d`,
             'extra':{
-              'type': 'back'
+              'type': 'back_search',
+              'userInput_search': userInput,
+              'lecture_no_search': lecture_no
             }
           },
           {
@@ -1736,7 +1768,9 @@ app.post('/lecture_info_search', async (req, res) => {
             'label': `뒤로 가기`,
             'blockId': `65fff8a7a64303558478534d`,
             'extra':{
-              'type': 'back'
+              'type': 'back_search',
+              'userInput_search': userInput,
+              'lecture_no_search': lecture_no
             }
           },
           {
