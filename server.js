@@ -2234,7 +2234,8 @@ app.post('/lecture_professor_find', async (req, res) => {
     userInput = req.body.action.params.professor_name;
   }
 
-  const similarProfessors = findSimilarProfessors(userInput, lectureList);
+  let similarProfessors = findSimilarProfessors(userInput, lectureList);
+  similarProfessors = removeDuplicates(similarProfessors);
   
   if (similarProfessors && similarProfessors.length > 0) {
     response = {
@@ -2296,7 +2297,6 @@ app.post('/lecture_professor_find', async (req, res) => {
 });
 
 app.post('/lecture_professor_select', async (req, res) => {
-  const extra = req.body.action.clientExtra;
   let userInput;
   let professor_no;
   let response = {};
@@ -2304,8 +2304,10 @@ app.post('/lecture_professor_select', async (req, res) => {
   userInput = req.body.action.params.professor_name_out_find;
   professor_no = req.body.action.params.professor_no;
 
-  const similarProfessors = findSimilarProfessors(userInput, lectureList);
-  const similarProfessors2 = findSimilarProfessors(userInput, lectureInfo);
+  let similarProfessors = findSimilarProfessors(userInput, lectureList);
+  let similarProfessors2 = findSimilarProfessors(userInput, lectureInfo);
+  similarProfessors = removeDuplicates(similarProfessors);
+  similarProfessors2 = removeDuplicates(similarProfessors2);
   
   if (similarProfessors && similarProfessors[professor_no - 1]) {
     const selectedProfessors = similarProfessors[professor_no - 1];
