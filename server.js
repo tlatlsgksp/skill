@@ -2684,11 +2684,12 @@ app.post('/lecture_info_select', async (req, res) => {
               'label': `시간표에 저장`,
               'blockId': `660981bc73a80e4a1e58d2e3`,//schedule_save
               'extra':{
-                'type': 'save',
-                'lectures': selectedLecture.과목명,
-                'professor': selectedLecture.교수명,
-                'time': selectedLecture.시간표,
-                'place': selectedLecture.강의실
+                'save': {
+                  'lectures': selectedLecture.과목명,
+                  'professor': selectedLecture.교수명,
+                  'time': selectedLecture.시간표,
+                  'place': selectedLecture.강의실
+                }
               }
             },
             {
@@ -3426,11 +3427,12 @@ app.post('/lecture_professor_info_select', async (req, res) => {
               'label': `시간표에 저장`,
               'blockId': `660981bc73a80e4a1e58d2e3`,//schedule_save
               'extra':{
-                'type': 'save',
-                'lectures': selectedLecture.과목명,
-                'professor': selectedLecture.교수명,
-                'time': selectedLecture.시간표,
-                'place': selectedLecture.강의실
+                'save': {
+                  'lectures': selectedLecture.과목명,
+                  'professor': selectedLecture.교수명,
+                  'time': selectedLecture.시간표,
+                  'place': selectedLecture.강의실
+                }
               }
             },
             {
@@ -3667,10 +3669,10 @@ app.post('/lecture_schedule_save', async (req, res) => {
   try {
     const extra = req.body.action.clientExtra;
     const userId = req.body.userRequest.user.id;
-    const lectures = extra.lectures;
-    const professor = extra.professor;
-    const time = extra.time;
-    const place = extra.place;
+    const lectures = extra.save.lectures;
+    const professor = extra.save.professor;
+    const time = extra.save.time;
+    const place = extra.save.place;
     const auth = await authorize();
     let response;
 
