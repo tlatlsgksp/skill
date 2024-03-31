@@ -2748,7 +2748,8 @@ app.post('/lecture_info_search', async (req, res) => {
   const selectedLectureInfo2 = lectureList.find(lecture => 
     lecture.과목명 === selectedLecture2.과목명 &&
     lecture.교수명 === selectedLecture2.교수명 &&
-    lecture.분반 === selectedLecture2.분반
+    lecture.분반 === selectedLecture2.분반 &&
+    lecture.캠퍼스 === "메트로폴"
   );
   let response = {};
 
@@ -3483,7 +3484,8 @@ app.post('/lecture_professor_info_search', async (req, res) => {
   const selectedLectureInfo2 = lectureList.find(lecture => 
     lecture.과목명 === selectedLecture2.과목명 &&
     lecture.교수명 === selectedLecture2.교수명 &&
-    lecture.분반 === selectedLecture2.분반
+    lecture.분반 === selectedLecture2.분반 &&
+    lecture.캠퍼스 === "메트로폴"
   );
   let response = {};
 
