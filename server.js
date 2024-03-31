@@ -2723,6 +2723,7 @@ res.json(response);
 }
 });
 
+//교수 정보 검색
 app.post('/lecture_professor_find', async (req, res) => {
   try {
   const extra = req.body.action.clientExtra;
@@ -2752,12 +2753,12 @@ app.post('/lecture_professor_find', async (req, res) => {
           {
             'action': 'block',
             'label': `번호 입력`,
-            'blockId': `660181fd4311bb7fed54a75f`//select
+            'blockId': `660181fd4311bb7fed54a75f`//pro_select
           },
           {
             'action': 'block',
             'label': `다시 입력`,
-            'blockId': `65ffd650a64303558478508f`//find
+            'blockId': `65ffd650a64303558478508f`//pro_find
           },
           {
             'action': 'message',
@@ -2782,7 +2783,7 @@ app.post('/lecture_professor_find', async (req, res) => {
           {
             'action': 'block',
             'label': `다시 입력`,
-            'blockId': `65ffd650a64303558478508f`//find
+            'blockId': `65ffd650a64303558478508f`//pro_find
           },
           {
             'action': 'message',
@@ -2818,15 +2819,21 @@ app.post('/lecture_professor_find', async (req, res) => {
 }
 });
 
+//교수
 app.post('/lecture_professor_select', async (req, res) => {
   //try {
   let userInput;
   let professor_no;
   let response = {};
 
-  userInput = req.body.action.params.professor_name_out_find;
-  professor_no = req.body.action.params.professor_no;
-
+  if(extra && extra.type === "back_find" && extra.userInput_find){ // pro_info_find로부터 받아온 extra값
+    userInput = extra.userInput_find;
+    professor_no = extra.professor_no_find;
+  } else{
+    userInput = req.body.action.params.professor_name_out_find;
+    professor_no = req.body.action.params.professor_no;
+  }
+  
   let similarProfessors = findSimilarProfessors(userInput, lectureList);
   let similarProfessors2 = findSimilarProfessors(userInput, lectureInfo);
   
@@ -2841,7 +2848,7 @@ app.post('/lecture_professor_select', async (req, res) => {
       lecture.교수명 === selectedProfessors2.교수명
     );
 
-    if (!selectedProfessorInfo) {
+    if (!selectedProfessorInfo && !selectedProfessorInfo2) {
       response = {
         "version": "2.0",
         "template": {
@@ -2856,7 +2863,7 @@ app.post('/lecture_professor_select', async (req, res) => {
             {
               'action': 'block',
               'label': `뒤로가기`,
-              'blockId': `660187634311bb7fed54a7ce`,//find2
+              'blockId': `660187634311bb7fed54a7ce`,//pro_find2
               'extra':{
                 'type': 'back_select',
                 'userInput_select': userInput,
@@ -2883,10 +2890,11 @@ app.post('/lecture_professor_select', async (req, res) => {
                   {
                     'action': 'block',
                     'label': `개설강좌 리스트`,
-                    'blockId': `66093382eb6af05590a00433`, //info_pro_find2
+                    'blockId': `66093382eb6af05590a00433`, //pro_info_find2
                     'extra': {
                       'type': 'pro_name',
-                      'professor_name': selectedProfessorInfo.교수명
+                      'professor_name': selectedProfessorInfo.교수명,
+                      'professor_no': professor_no
                     }
                   },
                 ]
@@ -2927,7 +2935,7 @@ app.post('/lecture_professor_select', async (req, res) => {
           {
             'action': 'block',
             'label': `뒤로가기`,
-            'blockId': `660187634311bb7fed54a7ce`,//find2
+            'blockId': `660187634311bb7fed54a7ce`,//pro_find2
             'extra':{
               'type': 'back_select',
                 'userInput_select': userInput,
@@ -2999,7 +3007,8 @@ app.post('/example', (req, res) => {
 app.post('/lecture_professor_info_find', async (req, res) => {
   try {
   const extra = req.body.action.clientExtra;
-  const userInput = extra.professor_name; //from lecture_professor_select
+  const userInput = extra.professor_name; //lecture_professor_select으로부터 받은 extra값
+  const professor_no = extra.professor_no;
   let response = {};
 
   const similarLectures = findSimilarProfessorsNofilter(userInput, lectureInfo);
@@ -3019,12 +3028,17 @@ app.post('/lecture_professor_info_find', async (req, res) => {
           {
             'action': 'block',
             'label': `번호 입력`,
-            'blockId': `65fff8a7a64303558478534d`//select
+            'blockId': `6609338b4311bb7fed55c7ee`//pro_info_select
           },
           {
             'action': 'block',
             'label': `뒤로가기`,
-            'blockId': `6609341bcdd882158c75c80c`//select2
+            'blockId': `6609341bcdd882158c75c80c`,//pro_select2
+            'extra':{
+              'type': 'back_find',
+                'userInput_find': userInput,
+                'professor_no_find': professor_no
+            }
           },
           {
             'action': 'message',
@@ -3049,7 +3063,11 @@ app.post('/lecture_professor_info_find', async (req, res) => {
           {
             'action': 'block',
             'label': `뒤로가기`,
-            'blockId': `6609341bcdd882158c75c80c`//select2
+            'blockId': `6609341bcdd882158c75c80c`,//pro_select2
+            'extra':{
+              'type': 'back_find',
+                'userInput_find': userInput,
+            }
           },
           {
             'action': 'message',
