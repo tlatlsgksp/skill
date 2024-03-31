@@ -2615,8 +2615,12 @@ app.post('/lecture_info_select', async (req, res) => {
                     "extra": {
                       "menu": "basicInfo",
                       'userInput': userInput,
-                      'lecture_no': lecture_no
-                      
+                      'lecture_no': lecture_no,
+                      'select':{
+                        'lectures': selectedLectureInfo.과목명,
+                        'professor': selectedLectureInfo.교수명,
+                        'classes': selectedLectureInfo.분반
+                      }
                     }
                   },
                   {
@@ -2626,7 +2630,12 @@ app.post('/lecture_info_select', async (req, res) => {
                     "extra": {
                       "menu": "courseOverview",
                       'userInput': userInput,
-                      'lecture_no': lecture_no
+                      'lecture_no': lecture_no,
+                      'select':{
+                        'lectures': selectedLectureInfo.과목명,
+                        'professor': selectedLectureInfo.교수명,
+                        'classes': selectedLectureInfo.분반
+                      }
                     }
                   },
                   {
@@ -2636,7 +2645,12 @@ app.post('/lecture_info_select', async (req, res) => {
                     "extra": {
                       "menu": "evaluationMethods",
                       'userInput': userInput,
-                      'lecture_no': lecture_no
+                      'lecture_no': lecture_no,
+                      'select':{
+                        'lectures': selectedLectureInfo.과목명,
+                        'professor': selectedLectureInfo.교수명,
+                        'classes': selectedLectureInfo.분반
+                      }
                     }
                   }
                 ]
@@ -2736,19 +2750,22 @@ app.post('/lecture_info_search', async (req, res) => {
   const extra = req.body.action.clientExtra;
   const userInput = extra.userInput;
   const lecture_no = extra.lecture_no;
+  const lectures = extra.select.lectures;
+  const professor = extra.select.professor;
+  const classes = extra.select.classes;
   const similarLectures = findSimilarLectures(userInput, lectureInfo);
   const similarLectures2 = findSimilarLectures(userInput, lectureList);
   const selectedLecture = similarLectures[lecture_no - 1];
   const selectedLecture2 = similarLectures2[lecture_no - 1];
   const selectedLectureInfo = lectureInfo.find(lecture => 
-    lecture.과목명 === selectedLecture.과목명 &&
-    lecture.교수명 === selectedLecture.교수명 &&
-    lecture.분반 === selectedLecture.분반
+    lecture.과목명 === lectures &&
+    lecture.교수명 === professor &&
+    lecture.분반 === classes
   );
   const selectedLectureInfo2 = lectureList.find(lecture => 
-    lecture.과목명 === selectedLecture2.과목명 &&
-    lecture.교수명 === selectedLecture2.교수명 &&
-    lecture.분반 === selectedLecture2.분반
+    lecture.과목명 === lectures &&
+    lecture.교수명 === professor &&
+    lecture.분반 === classes
   );
   let response = {};
 
