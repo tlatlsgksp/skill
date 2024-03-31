@@ -2928,7 +2928,7 @@ app.post('/lecture_professor_select', async (req, res) => {
                     'label': `개설강좌 리스트`,
                     'blockId': `66093382eb6af05590a00433`, //pro_info_find2
                     'extra': {
-                      'professor_name': selectedProfessorInfo.교수명,
+                      'userInput': userInput,
                       'professor_no': professor_no
                     }
                   },
