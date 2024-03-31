@@ -164,6 +164,39 @@ function getTimeIndex(time) {
   return indices;
 }
 
+function getColumnIndex(timeIndex) {
+  // 요일과 교시 정보를 파싱하여 열 인덱스를 계산
+  const [day, hour] = timeIndex.split('(');
+  let columnIndex = 0;
+  
+  // 요일에 따른 열 인덱스 계산
+  switch (day) {
+    case '월':
+      columnIndex = 1;
+      break;
+    case '화':
+      columnIndex = 16;
+      break;
+    case '수':
+      columnIndex = 31;
+      break;
+    case '목':
+      columnIndex = 46;
+      break;
+    case '금':
+      columnIndex = 61;
+      break;
+    default:
+      break;
+  }
+  
+  // 교시에 따른 열 인덱스 계산
+  const hourIndex = parseInt(hour, 10);
+  columnIndex += hourIndex;
+  
+  return columnIndex;
+}
+
 //함수
 //요일 환산
 function gettoDay() {
@@ -3685,10 +3718,14 @@ app.post('/lecture_schedule_save', async (req, res) => {
       const userRowIndex = userRow.rowIndex;
       const timeIndices = getTimeIndex(time);
 
-      timeIndices.forEach(async (timeIndex) => {
-        const updateData = [Array(timeIndex).fill(''), lectures, professor, place];
-        await writeToGoogleSheets(auth, SPREADSHEET_ID, `시간표!${userRowIndex}:${userRowIndex}`, updateData);
-      });
+      for (const timeIndex of timeIndices) {
+        const columnIndex = getColumnIndex(timeIndex); // 요일과 시간에 해당하는 열 인덱스 계산
+        const range = `시간표!${userRowIndex}:${userRowIndex}`;
+        const updateData = Array.from({ length: 15 }).fill(''); // 열 개수에 맞는 빈 배열 생성
+        const combinedData = `${lectures}, ${professor}, ${place}`; // 강의, 교수, 장소를 합친 문자열 생성
+        updateData[columnIndex] = combinedData; // 각 요일과 시간에 해당하는 열에 합친 데이터 저장
+        await writeToGoogleSheets(auth, SPREADSHEET_ID, range, [updateData]); // 구글 시트에 데이터 쓰기
+      }
 
       response = {
         "version": "2.0",
