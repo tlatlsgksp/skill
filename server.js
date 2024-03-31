@@ -3082,6 +3082,8 @@ app.post('/lecture_professor_info_find', async (req, res) => {
             'blockId': `6609338b4311bb7fed55c7ee`,//pro_info_select
             'extra':{
               'userInput': userInput,
+              'professor_no': professor_no,
+              'professor_name': professor_name
             }
           },
           {
