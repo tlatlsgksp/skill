@@ -1,4 +1,5 @@
 const express = require('express');
+const { google } = require('googleapis');
 const fs = require('fs');
 const schedule = require('node-schedule');
 const { main_met } = require('./crawl_metropole');
@@ -14,7 +15,10 @@ let lectureInfo;
 let serverInitialized = false;
 app.use(express.json());
 app.use(express.static(__dirname));
-
+const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
+const CREDENTIALS_PATH = 'credentials.json';
+const SPREADSHEET_ID = '1F3kEbduNvPnsIbfdO9gDZzc1yua1LMs627KAwZsYg6o';
+const RANGE = '메트로폴 강의 계획서!A4:AB';
 
 //스케줄러
 const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 0, hour: 10, minute: 0 }, async function() {
@@ -35,6 +39,109 @@ const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 0, hour: 10, minute: 0 
     console.error('Error in schedule:', error.message);
   }
 });
+
+// Google Sheets API 인증 정보 가져오기
+async function authorize() {
+  const credentials = JSON.parse(await fs.readFile(CREDENTIALS_PATH));
+  const { client_email, private_key } = credentials;
+
+  const auth = new google.auth.JWT({
+    email: client_email,
+    key: private_key,
+    scopes: SCOPES,
+  });
+
+  return auth;
+}
+
+// Google Sheets에서 데이터 읽기
+async function readFromGoogleSheets(auth, spreadsheetId, range) {
+  const sheets = google.sheets({ version: 'v4', auth });
+
+  try {
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId: spreadsheetId,
+      range: range,
+    });
+
+    const values = response.data.values;
+    return values;
+  } catch (error) {
+    console.error('Error reading data from Google Sheets:', error.message);
+    return null;
+  }
+}
+
+// Google Sheets에 데이터 쓰기
+async function writeToGoogleSheets(auth, spreadsheetId, range, values) {
+  const sheets = google.sheets({ version: 'v4', auth });
+
+  const resource = {
+    values: values,
+  };
+
+  try {
+    const response = await sheets.spreadsheets.values.update({
+      spreadsheetId: spreadsheetId,
+      range: range,
+      valueInputOption: 'RAW',
+      resource: resource,
+    });
+
+    console.log(`${response.data.updatedCells} cells updated.`);
+    return true;
+  } catch (error) {
+    console.error('Error writing data to Google Sheets:', error.message);
+    return false;
+  }
+}
+
+// 사용자 ID로 시트에서 해당 행을 찾는 함수
+async function findUserRow(userId) {
+  const sheets = google.sheets({ version: 'v4', auth });
+  
+  try {
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId: spreadsheetId,
+      range: '시간표!A:A',
+    });
+
+    const rows = response.data.values;
+    if (rows && rows.length > 0) {
+      // 사용자 ID가 있는 행을 찾음
+      const userRow = rows.find(row => row[0] === userId);
+      if (userRow) {
+        const rowIndex = rows.indexOf(userRow) + 1; // 행 인덱스 +1 (시트의 행 번호는 1부터 시작)
+        return { rowIndex };
+      }
+    }
+
+    // 사용자 ID가 없는 경우, 새로운 행을 추가
+    const newRow = [[userId]];
+    const result = await sheets.spreadsheets.values.append({
+      spreadsheetId: spreadsheetId,
+      range: '시간표!A:A',
+      valueInputOption: 'RAW',
+      resource: { values: newRow },
+    });
+
+    const rowIndex = result.data.updates.updatedRows[0];
+    return { rowIndex };
+  } catch (error) {
+    console.error('Error finding or creating user row:', error);
+    return null;
+  }
+}
+
+// 시간표의 시간 문자열을 이용하여 열 인덱스를 계산하는 함수
+function getTimeIndex(time) {
+  // 시간표의 열 이름과 일치하는지 확인하여 인덱스 반환
+  // 예: '월(1)' -> 2, '화(1)' -> 3, '금(15)' -> 77
+  // 시간표의 열 이름에 따라 적절히 수정해야 함
+  // 적절한 시간표의 열이 없는 경우 -1을 반환
+  const columnNames = ['월(1)', '화(1)', '수(1)', '목(1)', '금(1)', '월(2)', '화(2)', '수(2)', '목(2)', '금(2)', '월(3)', '화(3)', '수(3)', '목(3)', '금(3)', '월(4)', '화(4)', '수(4)', '목(4)', '금(4)', '월(5)', '화(5)', '수(5)', '목(5)', '금(5)', '월(6)', '화(6)', '수(6)', '목(6)', '금(6)', '월(7)', '화(7)', '수(7)', '목(7)', '금(7)', '월(8)', '화(8)', '수(8)', '목(8)', '금(8)', '월(9)', '화(9)', '수(9)', '목(9)', '금(9)', '월(10)', '화(10)', '수(10)', '목(10)', '금(10)', '월(11)', '화(11)', '수(11)', '목(11)', '금(11)', '월(12)', '화(12)', '수(12)', '목(12)', '금(12)', '월(13)', '화(13)', '수(13)', '목(13)', '금(13)', '월(14)', '화(14)', '수(14)', '목(14)', '금(14)', '월(15)', '화(15)', '수(15)', '목(15)', '금(15)'];
+  return columnNames.indexOf(time) + 2; // 시트의 열 번호는 1이 아니라 2부터 시작하므로 +2를 해줌
+}
 
 //함수
 //요일 환산
@@ -2451,12 +2558,12 @@ app.post('/lecture_info_select', async (req, res) => {
     lecture_no = req.body.action.params.lecture_no;
   }
 
-  const similarLectures = findSimilarLectures(userInput, lectureInfo);
+  const similarLectures = findSimilarLectures(userInput, lectureList);
   
   if (similarLectures && similarLectures[lecture_no - 1]) {
     const selectedLecture = similarLectures[lecture_no - 1];
     
-    const selectedLectureInfo = lectureInfo.find(lecture => 
+    const selectedLectureInfo = lectureList.find(lecture => 
       lecture.과목명 === selectedLecture.과목명 &&
       lecture.교수명 === selectedLecture.교수명 &&
       lecture.분반 === selectedLecture.분반
@@ -2537,6 +2644,18 @@ app.post('/lecture_info_select', async (req, res) => {
             }
           ],
           "quickReplies": [
+            {
+              'action': 'block',
+              'label': `시간표에 저장`,
+              'blockId': `660981bc73a80e4a1e58d2e3`,//schedule_save
+              'extra':{
+                'type': 'save',
+                '과목명': selectedLecture.과목명,
+                '교수명': selectedLecture.교수명,
+                '시간표': selectedLecture.시간표,
+                '강의실': selectedLecture.강의실
+              }
+            },
             {
               'action': 'block',
               'label': `뒤로가기`,
@@ -3014,36 +3133,6 @@ app.post('/lecture_professor_select', async (req, res) => {
 }
 });
 
-app.post('/example', (req, res) => {
-  try{
-  let response;
-  
-  res.json(response);
-} catch (error) {
-  console.log(error)
-  response = {
-    "version": "2.0",
-    "template": {
-      "outputs": [
-        {
-          "simpleText": {
-            "text": `예기치 않은 응답입니다.`
-          }
-        }
-      ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
-    }
-  }
-  res.json(response);
-}
-});
-
 app.post('/lecture_professor_info_find', async (req, res) => {
   try {
   const extra = req.body.action.clientExtra;
@@ -3189,12 +3278,12 @@ app.post('/lecture_professor_info_select', async (req, res) => {
     professor_name = extra.professor_name;
   }
 
-  const similarLectures = findSimilarProfessorsNofilter(professor_name, lectureInfo);
+  const similarLectures = findSimilarProfessorsNofilter(professor_name, lectureList);
   
   if (similarLectures && similarLectures[professor_no2 - 1]) {
     const selectedLecture = similarLectures[professor_no2 - 1];
     
-    const selectedLectureInfo = lectureInfo.find(lecture => 
+    const selectedLectureInfo = lectureList.find(lecture => 
       lecture.과목명 === selectedLecture.과목명 &&
       lecture.교수명 === selectedLecture.교수명 &&
       lecture.분반 === selectedLecture.분반
@@ -3283,6 +3372,18 @@ app.post('/lecture_professor_info_select', async (req, res) => {
             }
           ],
           "quickReplies": [
+            {
+              'action': 'block',
+              'label': `시간표에 저장`,
+              'blockId': `660981bc73a80e4a1e58d2e3`,//schedule_save
+              'extra':{
+                'type': 'save',
+                '과목명': selectedLecture.과목명,
+                '교수명': selectedLecture.교수명,
+                '시간표': selectedLecture.시간표,
+                '강의실': selectedLecture.강의실
+              }
+            },
             {
               'action': 'block',
               'label': `뒤로가기`,
@@ -3514,6 +3615,101 @@ res.json(response);
 }
 });
 
+app.post('/lecture_schedule_save', async (req, res) => {
+  try{
+  const extra = req.body.action.clientExtra;
+  const userId = req.body.userRequest.user.id;
+  const lecture = extra.과목명;
+  const professor = extra.교수명;
+  const time = extra.시간표;
+  const place = extra.강의실;
+  const auth = await authorize();
+  let response;
+  
+  const userRow = await findUserRow(userId);
+    if (userRow) {
+      const userRowIndex = userRow.rowIndex;
+      const timeIndex = getTimeIndex(time); // 시간표의 열 인덱스 계산
+      if (timeIndex !== -1) {
+        const updateData = [Array(timeIndex).fill(''), lecture, professor, place];
+        await writeToGoogleSheets(auth, SPREADSHEET_ID, `시간표!${userRowIndex}:${userRowIndex}`, updateData);
+        response = {
+          "version": "2.0",
+          "template": {
+            "outputs": [
+              {
+                "simpleText": {
+                  "text": `해당 강의를 시간표에 저장했습니다.`
+                }
+              }
+            ],
+            "quickReplies": [
+              {
+                'action': 'message',
+                'label': `처음으로`,
+                'messageText': `처음으로`
+              }
+            ]
+          }
+        }
+      }
+    }
+  res.json(response);
+} catch (error) {
+  console.log(error)
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
+});
+
 app.listen(port, () => {
   console.log(`서버가 http://localhost:${port} 에서 실행 중입니다.`);
+});
+
+app.post('/example', async (req, res) => {
+  try{
+  let response;
+  
+  res.json(response);
+} catch (error) {
+  console.log(error)
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
