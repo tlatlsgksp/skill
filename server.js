@@ -741,6 +741,7 @@ app.post('/today', (req, res) => {
 
   res.json(response);
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -849,6 +850,7 @@ app.post('/tomorrow', (req, res) => {
 
   res.json(response);
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -936,6 +938,7 @@ app.post('/today_origin', (req, res) => {
   }
   res.json(response);
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -1023,6 +1026,7 @@ app.post('/today_origin_dorm', (req, res) => {
   }
   res.json(response);
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -1110,6 +1114,7 @@ app.post('/tomorrow_origin', (req, res) => {
   }
   res.json(response);
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -1197,6 +1202,7 @@ app.post('/tomorrow_origin_dorm', (req, res) => {
   }
   res.json(response);
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -1256,6 +1262,7 @@ try{
     };
   res.json(response);
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -1339,6 +1346,7 @@ app.post('/week_met', async (req, res) => {
 
   res.json(response);
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -1421,6 +1429,7 @@ app.post('/week_met_dorm', async (req, res) => {
 
   res.json(response);
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -1484,6 +1493,7 @@ app.post('/week_met_origin', async (req, res) => {
   res.json(response);
   }
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -1547,6 +1557,7 @@ app.post('/week_met_dorm_origin', async (req, res) => {
   res.json(response);
   }
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -1671,6 +1682,7 @@ app.post('/lecture_find', async (req, res) => {
   }
   res.json(response);
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -1775,6 +1787,7 @@ app.post('/empty_lecture_now_1', async (req, res) => {
   }
   res.json(response);
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -1879,6 +1892,7 @@ app.post('/empty_lecture_now_2', async (req, res) => {
 }
   res.json(response);
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -1983,6 +1997,7 @@ app.post('/empty_lecture_now_3', async (req, res) => {
   }
   res.json(response);
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -2087,6 +2102,7 @@ app.post('/empty_lecture_next_1', async (req, res) => {
   }
   res.json(response);
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -2191,6 +2207,7 @@ app.post('/empty_lecture_next_2', async (req, res) => {
   }
   res.json(response);
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -2295,6 +2312,7 @@ app.post('/empty_lecture_next_3', async (req, res) => {
 }
   res.json(response);
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -2394,6 +2412,7 @@ app.post('/lecture_info_find', async (req, res) => {
   }
   res.json(response);
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -2569,6 +2588,7 @@ app.post('/lecture_info_select', async (req, res) => {
   }
   res.json(response);
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -2711,6 +2731,7 @@ app.post('/lecture_info_search', async (req, res) => {
   }
 res.json(response);
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -2810,6 +2831,7 @@ app.post('/lecture_professor_find', async (req, res) => {
   }
   res.json(response);
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -2835,7 +2857,7 @@ app.post('/lecture_professor_find', async (req, res) => {
 
 //교수
 app.post('/lecture_professor_select', async (req, res) => {
-  //try {
+  try {
   const extra = req.body.action.clientExtra;
   let userInput;
   let professor_no;
@@ -2965,7 +2987,8 @@ app.post('/lecture_professor_select', async (req, res) => {
     }
   }
   res.json(response);
-/*} catch (error) {
+} catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -2986,7 +3009,7 @@ app.post('/lecture_professor_select', async (req, res) => {
     }
   }
   res.json(response);
-}*/
+}
 });
 
 app.post('/example', (req, res) => {
@@ -2995,6 +3018,7 @@ app.post('/example', (req, res) => {
   
   res.json(response);
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -3105,6 +3129,7 @@ app.post('/lecture_professor_info_find', async (req, res) => {
   }
   res.json(response);
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -3281,6 +3306,7 @@ app.post('/lecture_professor_info_select', async (req, res) => {
   }
   res.json(response);
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
@@ -3423,6 +3449,7 @@ app.post('/lecture_professor_info_search', async (req, res) => {
   }
 res.json(response);
 } catch (error) {
+  console.log(error)
   response = {
     "version": "2.0",
     "template": {
