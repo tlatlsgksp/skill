@@ -2348,7 +2348,10 @@ app.post('/lecture_info_find', async (req, res) => {
           {
             'action': 'block',
             'label': `번호 입력`,
-            'blockId': `65fff8a7a64303558478534d`//select
+            'blockId': `65fff8a7a64303558478534d`,//select
+            'extra':{
+              'userInput': userInput,
+            }
           },
           {
             'action': 'block',
@@ -2425,7 +2428,7 @@ app.post('/lecture_info_select', async (req, res) => {
     userInput = extra.userInput;
     lecture_no = extra.lecture;
   }else{
-    userInput = req.body.action.params.lecture_name_out_find;
+    userInput = extra.userInput;
     lecture_no = req.body.action.params.lecture_no;
   }
 
@@ -2485,6 +2488,9 @@ app.post('/lecture_info_select', async (req, res) => {
                     "blockId": "66004580d7cbb10c92fb7c3f",//search
                     "extra": {
                       "menu": "basicInfo",
+                      'userInput': userInput,
+                      'lecture_no': lecture_no
+                      
                     }
                   },
                   {
@@ -2493,6 +2499,8 @@ app.post('/lecture_info_select', async (req, res) => {
                     "blockId": "66004580d7cbb10c92fb7c3f",//search
                     "extra": {
                       "menu": "courseOverview",
+                      'userInput': userInput,
+                      'lecture_no': lecture_no
                     }
                   },
                   {
@@ -2501,6 +2509,8 @@ app.post('/lecture_info_select', async (req, res) => {
                     "blockId": "66004580d7cbb10c92fb7c3f",//search
                     "extra": {
                       "menu": "evaluationMethods",
+                      'userInput': userInput,
+                      'lecture_no': lecture_no
                     }
                   }
                 ]
@@ -2515,6 +2525,7 @@ app.post('/lecture_info_select', async (req, res) => {
               'extra':{
                 'type': 'back_select',
                 'userInput': userInput,
+                'lecture_no': lecture_no
               }
             },
             {
@@ -2584,8 +2595,8 @@ app.post('/lecture_info_select', async (req, res) => {
 app.post('/lecture_info_search', async (req, res) => {
   try {
   const extra = req.body.action.clientExtra;
-  const userInput = req.body.action.params.lecture_name_out_select;
-  const lecture_no = req.body.action.params.lecture_no_out_select;
+  const userInput = extra.userInput;
+  const lecture_no = extra.lecture_no;
   const similarLectures = findSimilarLectures(userInput, lectureInfo);
   const similarLectures2 = findSimilarLectures(userInput, lectureList);
   const selectedLecture = similarLectures[lecture_no - 1];
