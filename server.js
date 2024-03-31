@@ -2685,10 +2685,9 @@ app.post('/lecture_info_select', async (req, res) => {
               'blockId': `660981bc73a80e4a1e58d2e3`,//schedule_save
               'extra':{
                 'save': {
-                  'lectures': selectedLecture.과목명,
-                  'professor': selectedLecture.교수명,
-                  'time': selectedLecture.시간표,
-                  'place': selectedLecture.강의실
+                  'lectures': selectedLectureInfo.과목명,
+                  'professor': selectedLectureInfo.교수명,
+                  'classes': selectedLectureInfo.분반
                 }
               }
             },
@@ -3428,10 +3427,9 @@ app.post('/lecture_professor_info_select', async (req, res) => {
               'blockId': `660981bc73a80e4a1e58d2e3`,//schedule_save
               'extra':{
                 'save': {
-                  'lectures': selectedLecture.과목명,
-                  'professor': selectedLecture.교수명,
-                  'time': selectedLecture.시간표,
-                  'place': selectedLecture.강의실
+                  'lectures': selectedLectureInfo.과목명,
+                  'professor': selectedLectureInfo.교수명,
+                  'classes': selectedLectureInfo.분반
                 }
               }
             },
@@ -3671,9 +3669,15 @@ app.post('/lecture_schedule_save', async (req, res) => {
     const userId = req.body.userRequest.user.id;
     const lectures = extra.save.lectures;
     const professor = extra.save.professor;
-    const time = extra.save.time;
-    const place = extra.save.place;
+    const classes = extra.save.classes;
     const auth = await authorize();
+    const selectedLectureInfo = lectureList.find(lecture => 
+      lecture.과목명 === lectures &&
+      lecture.교수명 === professor &&
+      lecture.분반 === classes
+    );
+    const time = selectedLectureInfo.시간표;
+    const place = selectedLectureInfo.강의실;
     let response;
 
     const userRow = await findUserRow(userId, auth, SPREADSHEET_ID);
