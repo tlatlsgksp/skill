@@ -2823,7 +2823,7 @@ app.post('/lecture_professor_select', async (req, res) => {
     const selectedProfessors2 = similarProfessors2[professor_no - 1];
     
     const selectedProfessorInfo = lectureList.find(lecture => 
-      lecture.교수명 === selectedProfessors.교수명 &&
+      lecture.교수명 === selectedProfessors.교수명
     );
     const selectedProfessorInfo2 = lectureInfo.find(lecture => 
       lecture.교수명 === selectedProfessors2.교수명
