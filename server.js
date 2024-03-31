@@ -490,7 +490,7 @@ function findSimilarLectures(userInput, lectureInfo) {
 function findSimilarProfessors(userInput, lectureInfo) {
   if (userInput){
     const userInputProcessed = userInput.replace(/\s+/g, '').toUpperCase();
-    const similarProfessors = lectureInfo.filter(item => {
+    let similarProfessors = lectureInfo.filter(item => {
       const subjectWithoutSpaces = item.교수명.replace(/\s+/g, '').toUpperCase();
       return subjectWithoutSpaces.includes(userInputProcessed);
     });
