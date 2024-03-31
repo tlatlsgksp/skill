@@ -3724,6 +3724,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
         const updateData = Array.from({ length: 15 }).fill(''); // 열 개수에 맞는 빈 배열 생성
         const combinedData = `${lectures}, ${professor}, ${place}`; // 강의, 교수, 장소를 합친 문자열 생성
         updateData[columnIndex] = combinedData; // 각 요일과 시간에 해당하는 열에 합친 데이터 저장
+        updateData[0] = userId;
         await writeToGoogleSheets(auth, SPREADSHEET_ID, range, [updateData]); // 구글 시트에 데이터 쓰기
       }
 
