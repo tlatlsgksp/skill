@@ -3051,7 +3051,7 @@ app.post('/lecture_professor_info_find', async (req, res) => {
     userInput = extra.userInput;
     professor_no = extra.professor_no;
   } else{
-    userInput = extra.professor_name;
+    userInput = extra.userInput;
     professor_no = extra.professor_no;
   }
   
