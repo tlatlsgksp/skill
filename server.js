@@ -2711,7 +2711,7 @@ res.json(response);
 });
 
 app.post('/lecture_professor_find', async (req, res) => {
-  try {
+  //try {
   const extra = req.body.action.clientExtra;
   let userInput;
   let response = {};
@@ -2722,8 +2722,7 @@ app.post('/lecture_professor_find', async (req, res) => {
     userInput = req.body.action.params.professor_name;
   }
 
-  let similarProfessors = findSimilarProfessors(userInput, lectureList);
-  similarProfessors = removeDuplicates(similarProfessors);
+  const similarProfessors = findSimilarProfessors(userInput, lectureList);
   
   if (similarProfessors && similarProfessors.length > 0) {
     response = {
@@ -2782,7 +2781,7 @@ app.post('/lecture_professor_find', async (req, res) => {
     }
   }
   res.json(response);
-} catch (error) {
+/*} catch (error) {
   response = {
     "version": "2.0",
     "template": {
@@ -2801,13 +2800,13 @@ app.post('/lecture_professor_find', async (req, res) => {
         }
       ]
     }
-  }
+  }*/
   res.json(response);
-}
+//}
 });
 
 app.post('/lecture_professor_select', async (req, res) => {
-  //try {
+  try {
   let userInput;
   let professor_no;
   let response = {};
@@ -2930,7 +2929,7 @@ app.post('/lecture_professor_select', async (req, res) => {
     }
   }
   res.json(response);
-/*} catch (error) {
+} catch (error) {
   response = {
     "version": "2.0",
     "template": {
@@ -2951,7 +2950,7 @@ app.post('/lecture_professor_select', async (req, res) => {
     }
   }
   res.json(response);
-}*/
+}
 });
 
 app.post('/example', (req, res) => {
