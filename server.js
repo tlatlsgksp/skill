@@ -17,7 +17,7 @@ app.use(express.static(__dirname));
 
 
 //스케줄러
-const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 0, hour: 1, minute: 0 }, async function() {
+const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 0, hour: 10, minute: 0 }, async function() {
   try {
     console.log('크롤링 스케줄 실행 중');
     await main_met();
