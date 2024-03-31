@@ -2326,7 +2326,7 @@ app.post('/lecture_info_find', async (req, res) => {
   let response = {};
 
   if(extra && extra.type === "back_select"){
-    userInput = extra.userInput_select;
+    userInput = extra.userInput;
   } else{
     userInput = req.body.action.params.lecture_name;
   }
@@ -2422,8 +2422,8 @@ app.post('/lecture_info_select', async (req, res) => {
   let response = {};
 
   if(extra && extra.type === "back_search"){
-    userInput = extra.userInput_search;
-    lecture_no = extra.lecture_no_search;
+    userInput = extra.userInput;
+    lecture_no = extra.lecture;
   }else{
     userInput = req.body.action.params.lecture_name_out_find;
     lecture_no = req.body.action.params.lecture_no;
@@ -2458,7 +2458,7 @@ app.post('/lecture_info_select', async (req, res) => {
               'blockId': `66014e049cc5814a007f0ff9`,//find2
               'extra':{
                 'type': 'back_select',
-                'userInput_select': userInput,
+                'userInput': userInput,
               }
             },
             {
@@ -2514,7 +2514,7 @@ app.post('/lecture_info_select', async (req, res) => {
               'blockId': `66014e049cc5814a007f0ff9`,//find2
               'extra':{
                 'type': 'back_select',
-                'userInput_select': userInput,
+                'userInput': userInput,
               }
             },
             {
@@ -2544,7 +2544,7 @@ app.post('/lecture_info_select', async (req, res) => {
             'blockId': `66014e049cc5814a007f0ff9`,//find2
             'extra':{
               'type': 'back_select',
-                'userInput_select': userInput,
+                'userInput': userInput,
             }
           },
           {
@@ -2621,8 +2621,8 @@ app.post('/lecture_info_search', async (req, res) => {
             'blockId': `66014fc63190593813f158f6`,//select2
               'extra':{
                 'type': 'back_search',
-                'userInput_search': userInput,
-                'lecture_no_search': lecture_no
+                'userInput': userInput,
+                'lecture_no': lecture_no
               }
           },
           {
@@ -2653,8 +2653,8 @@ app.post('/lecture_info_search', async (req, res) => {
             'blockId': `66014fc63190593813f158f6`,//select2
             'extra':{
               'type': 'back_search',
-              'userInput_search': userInput,
-              'lecture_no_search': lecture_no
+              'userInput': userInput,
+              'lecture_no': lecture_no
             }
           },
           {
@@ -2685,8 +2685,8 @@ app.post('/lecture_info_search', async (req, res) => {
             'blockId': `66014fc63190593813f158f6`,//select2
             'extra':{
               'type': 'back_search',
-              'userInput_search': userInput,
-              'lecture_no_search': lecture_no
+              'userInput': userInput,
+              'lecture_no': lecture_no
             }
           },
           {
@@ -2731,7 +2731,7 @@ app.post('/lecture_professor_find', async (req, res) => {
   let response = {};
 
   if(extra && extra.type === "back_select" && extra.userInput_select){
-    userInput = extra.userInput_select;
+    userInput = extra.userInput;
   } else{
     userInput = req.body.action.params.professor_name;
   }
@@ -2821,7 +2821,7 @@ app.post('/lecture_professor_find', async (req, res) => {
 
 //교수
 app.post('/lecture_professor_select', async (req, res) => {
-  //try {
+  try {
   const extra = req.body.action.clientExtra;
   let userInput;
   let professor_no;
@@ -2829,9 +2829,9 @@ app.post('/lecture_professor_select', async (req, res) => {
   let similarProfessors = {};
   let similarProfessors2 = {};
 
-  if(extra && extra.type === "back_find" && extra.userInput_find){ // pro_info_find로부터 받아온 extra값
-    userInput = extra.userInput_find;
-    professor_no = extra.professor_no_find;
+  if(extra && extra.type === "back_info_find"){ // pro_info_find로부터 받아온 extra값
+    userInput = extra.userInput;
+    professor_no = extra.professor_no;
   } else{
     userInput = req.body.action.params.professor_name_out_find;
     professor_no = req.body.action.params.professor_no;
@@ -2869,7 +2869,7 @@ app.post('/lecture_professor_select', async (req, res) => {
               'blockId': `660187634311bb7fed54a7ce`,//pro_find2
               'extra':{
                 'type': 'back_select',
-                'userInput_select': userInput,
+                'userInput': userInput,
               }
             },
             {
@@ -2895,7 +2895,6 @@ app.post('/lecture_professor_select', async (req, res) => {
                     'label': `개설강좌 리스트`,
                     'blockId': `66093382eb6af05590a00433`, //pro_info_find2
                     'extra': {
-                      'type': 'pro_name',
                       'professor_name': selectedProfessorInfo.교수명,
                       'professor_no': professor_no
                     }
@@ -2911,7 +2910,7 @@ app.post('/lecture_professor_select', async (req, res) => {
               'blockId': `660187634311bb7fed54a7ce`,//pro_find2
               'extra':{
                 'type': 'back_select',
-                'userInput_select': userInput,
+                'userInput': userInput,
               }
             },
             {
@@ -2941,7 +2940,7 @@ app.post('/lecture_professor_select', async (req, res) => {
             'blockId': `660187634311bb7fed54a7ce`,//pro_find2
             'extra':{
               'type': 'back_select',
-                'userInput_select': userInput,
+                'userInput': userInput,
             }
           },
           {
@@ -2954,7 +2953,7 @@ app.post('/lecture_professor_select', async (req, res) => {
     }
   }
   res.json(response);
-/*} catch (error) {
+} catch (error) {
   response = {
     "version": "2.0",
     "template": {
@@ -2975,7 +2974,7 @@ app.post('/lecture_professor_select', async (req, res) => {
     }
   }
   res.json(response);
-}*/
+}
 });
 
 app.post('/example', (req, res) => {
@@ -3013,9 +3012,9 @@ app.post('/lecture_professor_info_find', async (req, res) => {
   let userInput;
   let professor_no;
   let response = {};
-  if(extra && extra.type === "back_select" && extra.userInput_select){ // pro_info_find로부터 받아온 extra값
-    userInput = extra.userInput_select;
-    professor_no = extra.professor_no_select;
+  if(extra && extra.type === "back_select"){ // pro_info_find로부터 받아온 extra값
+    userInput = extra.userInput;
+    professor_no = extra.professor_no;
   } else{
     userInput = extra.professor_name;
     professor_no = extra.professor_no;
@@ -3050,9 +3049,9 @@ app.post('/lecture_professor_info_find', async (req, res) => {
             'label': `뒤로가기`,
             'blockId': `6609341bcdd882158c75c80c`,//pro_select2
             'extra':{
-              'type': 'back_find',
-                'userInput_find': userInput,
-                'professor_no_find': professor_no
+              'type': 'back_info_find',
+                'userInput': userInput,
+                'professor_no': professor_no
             }
           },
           {
@@ -3080,9 +3079,9 @@ app.post('/lecture_professor_info_find', async (req, res) => {
             'label': `뒤로가기`,
             'blockId': `6609341bcdd882158c75c80c`,//pro_select2
             'extra':{
-              'type': 'back_find',
-                'userInput_find': userInput,
-                'professor_no_find': professor_no
+              'type': 'back_info_find',
+                'userInput': userInput,
+                'professor_no': professor_no
             }
           },
           {
@@ -3127,8 +3126,8 @@ app.post('/lecture_professor_info_select', async (req, res) => {
   let response = {};
 
   if(extra && extra.type === "back_search"){
-    userInput = extra.userInput_search;
-    professor_no = extra.professor_no_search;
+    userInput = extra.userInput;
+    professor_no = extra.professor_no;
   }else{
     userInput = extra.userInput;
     professor_no = req.body.action.params.professor_no;
@@ -3163,8 +3162,8 @@ app.post('/lecture_professor_info_select', async (req, res) => {
               'blockId': `66093382eb6af05590a00433`,//find2
               'extra':{
                 'type': 'back_select',
-                'userInput_select': userInput,
-                'professor_no_select': professor_no
+                'userInput': userInput,
+                'professor_no': professor_no
               }
             },
             {
@@ -3226,8 +3225,8 @@ app.post('/lecture_professor_info_select', async (req, res) => {
               'blockId': `66093382eb6af05590a00433`,//pro_info_find2
               'extra':{
                 'type': 'back_select',
-                'userInput_select': userInput,
-                "professor_no_select": professor_no
+                'userInput': userInput,
+                "professor_no": professor_no
               }
             },
             {
@@ -3257,8 +3256,8 @@ app.post('/lecture_professor_info_select', async (req, res) => {
             'blockId': `66093382eb6af05590a00433`,//find2
             'extra':{
               'type': 'back_select',
-                'userInput_select': userInput,
-                "professor_no_select": professor_no
+                'userInput': userInput,
+                "professor_no": professor_no
             }
           },
           {
@@ -3335,8 +3334,8 @@ app.post('/lecture_professor_info_search', async (req, res) => {
             'blockId': `6609338ecdd882158c75c801`,//select2
               'extra':{
                 'type': 'back_search',
-                'userInput_search': userInput,
-                'professor_no_search': professor_no
+                'userInput': userInput,
+                'professor_no': professor_no
               }
           },
           {
@@ -3367,8 +3366,8 @@ app.post('/lecture_professor_info_search', async (req, res) => {
             'blockId': `6609338ecdd882158c75c801`,//select2
             'extra':{
               'type': 'back_search',
-              'userInput_search': userInput,
-              'professor_no_search': professor_no
+              'userInput': userInput,
+              'professor_no': professor_no
             }
           },
           {
@@ -3399,8 +3398,8 @@ app.post('/lecture_professor_info_search', async (req, res) => {
             'blockId': `6609338ecdd882158c75c801`,//select2
             'extra':{
               'type': 'back_search',
-              'userInput_search': userInput,
-              'professor_no_search': professor_no
+              'userInput': userInput,
+              'professor_no': professor_no
             }
           },
           {
