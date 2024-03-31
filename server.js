@@ -2919,7 +2919,7 @@ app.post('/lecture_professor_select', async (req, res) => {
             {
               "textCard": {
                 "title": `${selectedProfessorInfo.교수명} 교수 정보`,
-                "description": `교수명: ${selectedProfessorInfo.교수명}\n핸드폰: ${selectedProfessorInfo.핸드폰}\n이메일: ${selectedProfessorInfo2.이메일}`,
+                "description": `교수명: ${selectedProfessorInfo.교수명}\n핸드폰: ${selectedProfessorInfo.핸드폰}\n이메일: ${selectedProfessorInfo.이메일}`,
                 "buttons": [
                   {
                     'action': 'block',
