@@ -48,7 +48,7 @@ async function authorize() {
   const auth = new google.auth.JWT({
     email: client_email,
     key: private_key,
-    scopes: SCOPES,
+    scopes: SCOPES, 
   });
 
   return auth;
@@ -2606,7 +2606,7 @@ app.post('/lecture_info_select', async (req, res) => {
             {
               "textCard": {
                 "title": "선택한 강의",
-                "description": `강의명: ${selectedLecture.과목명}\n교수명: ${selectedLecture.교수명}\n분반: ${selectedLecture.분반}`,
+                "description": `강의명: ${selectedLectureInfo.과목명}\n교수명: ${selectedLectureInfo.교수명}\n분반: ${selectedLectureInfo.분반}`,
                 "buttons": [
                   {
                     "action": "block",
@@ -3329,7 +3329,7 @@ app.post('/lecture_professor_info_select', async (req, res) => {
             {
               "textCard": {
                 "title": "선택한 강의",
-                "description": `강의명: ${selectedLecture.과목명}\n교수명: ${selectedLecture.교수명}\n분반: ${selectedLecture.분반}`,
+                "description": `강의명: ${selectedLectureInfo.과목명}\n교수명: ${selectedLectureInfo.교수명}\n분반: ${selectedLectureInfo.분반}`,
                 "buttons": [
                   {
                     "action": "block",
