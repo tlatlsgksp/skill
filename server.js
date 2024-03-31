@@ -2711,7 +2711,7 @@ res.json(response);
 });
 
 app.post('/lecture_professor_find', async (req, res) => {
-  //try {
+  try {
   const extra = req.body.action.clientExtra;
   let userInput;
   let response = {};
@@ -2781,7 +2781,7 @@ app.post('/lecture_professor_find', async (req, res) => {
     }
   }
   res.json(response);
-/*} catch (error) {
+} catch (error) {
   response = {
     "version": "2.0",
     "template": {
@@ -2800,9 +2800,9 @@ app.post('/lecture_professor_find', async (req, res) => {
         }
       ]
     }
-  }*/
+  }
   res.json(response);
-//}
+}
 });
 
 app.post('/lecture_professor_select', async (req, res) => {
