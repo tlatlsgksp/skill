@@ -2835,7 +2835,7 @@ app.post('/lecture_professor_find', async (req, res) => {
 
 //교수
 app.post('/lecture_professor_select', async (req, res) => {
-  try {
+  //try {
   const extra = req.body.action.clientExtra;
   let userInput;
   let professor_no;
@@ -2852,7 +2852,7 @@ app.post('/lecture_professor_select', async (req, res) => {
   const similarProfessors = findSimilarProfessors(userInput, lectureList);
   const similarProfessors2 = findSimilarProfessors(userInput, lectureInfo);
   
-  if (similarProfessors && similarProfessors2) {
+  if (similarProfessors && similarProfessors2 && similarProfessors[professor_no - 1] && similarProfessors2[professor_no - 1]) {
     const selectedProfessors = similarProfessors[professor_no - 1];
     const selectedProfessors2 = similarProfessors2[professor_no - 1];
     
@@ -2965,7 +2965,7 @@ app.post('/lecture_professor_select', async (req, res) => {
     }
   }
   res.json(response);
-} catch (error) {
+/*} catch (error) {
   response = {
     "version": "2.0",
     "template": {
@@ -2986,7 +2986,7 @@ app.post('/lecture_professor_select', async (req, res) => {
     }
   }
   res.json(response);
-}
+}*/
 });
 
 app.post('/example', (req, res) => {
