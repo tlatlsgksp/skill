@@ -42,7 +42,7 @@ const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 0, hour: 10, minute: 0 
 
 // Google Sheets API 인증 정보 가져오기
 async function authorize() {
-  const credentials = JSON.parse(await fs.readFile(CREDENTIALS_PATH));
+  const credentials = JSON.parse(await fs.promises.readFile(CREDENTIALS_PATH));
   const { client_email, private_key } = credentials;
 
   const auth = new google.auth.JWT({
