@@ -135,12 +135,19 @@ async function findUserRow(userId, auth, spreadsheetId) {
 
 // 시간표의 시간 문자열을 이용하여 열 인덱스를 계산하는 함수
 function getTimeIndex(time) {
-  // 시간표의 열 이름과 일치하는지 확인하여 인덱스 반환
-  // 예: '월(1)' -> 2, '화(1)' -> 3, '금(15)' -> 77
-  // 시간표의 열 이름에 따라 적절히 수정해야 함
-  // 적절한 시간표의 열이 없는 경우 -1을 반환
-  const columnNames = ['월(1)', '화(1)', '수(1)', '목(1)', '금(1)', '월(2)', '화(2)', '수(2)', '목(2)', '금(2)', '월(3)', '화(3)', '수(3)', '목(3)', '금(3)', '월(4)', '화(4)', '수(4)', '목(4)', '금(4)', '월(5)', '화(5)', '수(5)', '목(5)', '금(5)', '월(6)', '화(6)', '수(6)', '목(6)', '금(6)', '월(7)', '화(7)', '수(7)', '목(7)', '금(7)', '월(8)', '화(8)', '수(8)', '목(8)', '금(8)', '월(9)', '화(9)', '수(9)', '목(9)', '금(9)', '월(10)', '화(10)', '수(10)', '목(10)', '금(10)', '월(11)', '화(11)', '수(11)', '목(11)', '금(11)', '월(12)', '화(12)', '수(12)', '목(12)', '금(12)', '월(13)', '화(13)', '수(13)', '목(13)', '금(13)', '월(14)', '화(14)', '수(14)', '목(14)', '금(14)', '월(15)', '화(15)', '수(15)', '목(15)', '금(15)'];
-  return columnNames.indexOf(time) + 2; // 시트의 열 번호는 1이 아니라 2부터 시작하므로 +2를 해줌
+  const indices = [];
+  const periods = time.split('),');
+
+  periods.forEach(period => {
+    const [day, hourString] = period.split('(');
+    const hours = hourString.replace(')', '').split(',');
+
+    hours.forEach(hour => {
+      const formattedDay = day + '(' + hour + ')';
+      indices.push(formattedDay);
+    });
+  });
+  return indices;
 }
 
 //함수
@@ -3643,68 +3650,70 @@ res.json(response);
 });
 
 app.post('/lecture_schedule_save', async (req, res) => {
-  try{
-  const extra = req.body.action.clientExtra;
-  const userId = req.body.userRequest.user.id;
-  const lectures = extra.lectures;
-  const professor = extra.professor;
-  const time = extra.time;
-  const place = extra.place;
-  const auth = await authorize();
-  let response;
-  
-  const userRow = await findUserRow(userId, auth, SPREADSHEET_ID);
+  try {
+    const extra = req.body.action.clientExtra;
+    const userId = req.body.userRequest.user.id;
+    const lectures = extra.lectures;
+    const professor = extra.professor;
+    const time = extra.time;
+    const place = extra.place;
+    const auth = await authorize();
+    let response;
+
+    const userRow = await findUserRow(userId, auth, SPREADSHEET_ID);
     if (userRow) {
       const userRowIndex = userRow.rowIndex;
-      const timeIndex = getTimeIndex(time); // 시간표의 열 인덱스 계산
-      if (timeIndex !== -1) {
+      const timeIndices = getTimeIndices(time);
+
+      timeIndices.forEach(async (timeIndex) => {
         const updateData = [Array(timeIndex).fill(''), lectures, professor, place];
         await writeToGoogleSheets(auth, SPREADSHEET_ID, `시간표!${userRowIndex}:${userRowIndex}`, updateData);
-        response = {
-          "version": "2.0",
-          "template": {
-            "outputs": [
-              {
-                "simpleText": {
-                  "text": `해당 강의를 시간표에 저장했습니다.`
-                }
+      });
+
+      response = {
+        "version": "2.0",
+        "template": {
+          "outputs": [
+            {
+              "simpleText": {
+                "text": `해당 강의를 시간표에 저장했습니다.`
               }
-            ],
-            "quickReplies": [
-              {
-                'action': 'message',
-                'label': `처음으로`,
-                'messageText': `처음으로`
-              }
-            ]
-          }
+            }
+          ],
+          "quickReplies": [
+            {
+              'action': 'message',
+              'label': `처음으로`,
+              'messageText': `처음으로`
+            }
+          ]
         }
       }
     }
-  res.json(response);
-} catch (error) {
-  console.log(error)
-  response = {
-    "version": "2.0",
-    "template": {
-      "outputs": [
-        {
-          "simpleText": {
-            "text": `예기치 않은 응답입니다.`
+    res.json(response);
+  } catch (error) {
+    console.log(error)
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": `예기치 않은 응답입니다.`
+            }
           }
-        }
-      ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+      }
     }
+    res.json(response);
   }
-  res.json(response);
-}
 });
 
 app.listen(port, () => {
