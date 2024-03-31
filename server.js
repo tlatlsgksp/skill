@@ -3070,7 +3070,7 @@ app.post('/lecture_professor_info_find', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": `일치하거나 유사한 강의가 없습니다.`
+              "text": `개설된 강의가 없습니다.`
             }
           }
         ],
@@ -3082,6 +3082,7 @@ app.post('/lecture_professor_info_find', async (req, res) => {
             'extra':{
               'type': 'back_find',
                 'userInput_find': userInput,
+                'professor_no_find': professor_no
             }
           },
           {
@@ -3257,6 +3258,7 @@ app.post('/lecture_professor_info_select', async (req, res) => {
             'extra':{
               'type': 'back_select',
                 'userInput_select': userInput,
+                "professor_no_select": professor_no
             }
           },
           {
@@ -3297,7 +3299,7 @@ app.post('/lecture_professor_info_search', async (req, res) => {
   try {
   const extra = req.body.action.clientExtra;
   const userInput = extra.userInput;
-  const professor_no = extra.userInput;
+  const professor_no = extra.professor_no;
   const similarLectures = findSimilarLectures(userInput, lectureInfo);
   const similarLectures2 = findSimilarLectures(userInput, lectureList);
   const selectedLecture = similarLectures[professor_no - 1];
