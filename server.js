@@ -2826,6 +2826,8 @@ app.post('/lecture_professor_select', async (req, res) => {
   let userInput;
   let professor_no;
   let response = {};
+  let similarProfessors = {};
+  let similarProfessors2 = {};
 
   if(extra && extra.type === "back_find" && extra.userInput_find){ // pro_info_find로부터 받아온 extra값
     userInput = extra.userInput_find;
@@ -2835,8 +2837,8 @@ app.post('/lecture_professor_select', async (req, res) => {
     professor_no = req.body.action.params.professor_no;
   }
   
-  let similarProfessors = findSimilarProfessors(userInput, lectureList);
-  let similarProfessors2 = findSimilarProfessors(userInput, lectureInfo);
+  similarProfessors = findSimilarProfessors(userInput, lectureList);
+  similarProfessors2 = findSimilarProfessors(userInput, lectureInfo);
   
   if (similarProfessors && similarProfessors2 && similarProfessors[professor_no - 1] && similarProfessors2[professor_no - 1]) {
     const selectedProfessors = similarProfessors[professor_no - 1];
