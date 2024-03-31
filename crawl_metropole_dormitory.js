@@ -65,7 +65,10 @@ async function writeToGoogleSheets(auth, spreadsheetId, range, dates, breakfasts
 
 // 크롤링 함수
 async function scrapeWebsite() {
-  const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+  const browser = await puppeteer.launch({ 
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    timeout: 60000 
+  });
   const page = await browser.newPage();
 
   await page.goto('https://www.kduniv.ac.kr/kor/CMS/DietMenuMgr/list.do?mCode=MN183&searchDietCategory=5');
