@@ -2861,16 +2861,19 @@ app.post('/lecture_professor_select', async (req, res) => {
   const extra = req.body.action.clientExtra;
   let userInput;
   let professor_no;
+  let.professor_no2;
   let professor_name;
   let response = {};
 
   if(extra && extra.type === "back_info_find"){ // pro_info_find로부터 받아온 extra값
     userInput = extra.userInput;
     professor_no = extra.professor_no;
+    professor_no2 = extra.professor_no2;
     professor_name = extra.professor_name;
   } else{
     userInput = extra.userInput;
     professor_no = req.body.action.params.professor_no;
+    professor_no2 = extra.professor_no2;
     professor_name = extra.professor_name;
   }
   
@@ -2928,6 +2931,7 @@ app.post('/lecture_professor_select', async (req, res) => {
                     'extra': {
                       'userInput': userInput,
                       'professor_no': professor_no,
+                      'professor_no2': professor_no2,
                       'professor_name': selectedProfessorInfo.교수명
                     }
                   },
@@ -3045,15 +3049,18 @@ app.post('/lecture_professor_info_find', async (req, res) => {
   const extra = req.body.action.clientExtra;
   let userInput;
   let professor_no;
+  let professor_no2;
   let professor_name;
   let response = {};
   if(extra && extra.type === "back_select"){ // pro_info_find로부터 받아온 extra값
     userInput = extra.userInput;
     professor_no = extra.professor_no;
+    professor_no2 = extra.professor_no2;
     professor_name = extra.professor_name;
   } else{
     userInput = extra.userInput;
     professor_no = extra.professor_no;
+    professor_no2 = extra.professor_no2;
     professor_name = extra.professor_name;
   }
   
@@ -3078,6 +3085,7 @@ app.post('/lecture_professor_info_find', async (req, res) => {
             'extra':{
               'userInput': userInput,
               'professor_no': professor_no,
+              'professor_no2': professor_no2,
               'professor_name': professor_name
             }
           },
@@ -3087,9 +3095,10 @@ app.post('/lecture_professor_info_find', async (req, res) => {
             'blockId': `6609341bcdd882158c75c80c`,//pro_select2
             'extra':{
               'type': 'back_info_find',
-                'userInput': userInput,
-                'professor_no': professor_no,
-                'professor_name': professor_name
+              'userInput': userInput,
+              'professor_no': professor_no,
+              'professor_no2': professor_no2,
+              'professor_name': professor_name
             }
           },
           {
@@ -3118,9 +3127,10 @@ app.post('/lecture_professor_info_find', async (req, res) => {
             'blockId': `6609341bcdd882158c75c80c`,//pro_select2
             'extra':{
               'type': 'back_info_find',
-                'userInput': userInput,
-                'professor_no': professor_no,
-                'professor_name': professor_name
+              'userInput': userInput,
+              'professor_no': professor_no,
+              'professor_no2': professor_no2,
+              'professor_name': professor_name
             }
           },
           {
@@ -3163,23 +3173,26 @@ app.post('/lecture_professor_info_select', async (req, res) => {
   const extra = req.body.action.clientExtra;
   let userInput;
   let professor_no;
+  let professor_no2;
   let professor_name;
   let response = {};
 
   if(extra && extra.type === "back_search"){
     userInput = extra.userInput;
     professor_no = extra.professor_no;
+    professor_no2 = extra.professor_no2;
     professor_name = extra.professor_name;
   }else{
     userInput = extra.userInput;
-    professor_no = req.body.action.params.professor_no;
+    professor_no = extra.professor_no;
+    professor_no2 = req.body.action.params.professor_no;
     professor_name = extra.professor_name;
   }
 
   const similarLectures = findSimilarProfessorsNofilter(professor_name, lectureInfo);
   
-  if (similarLectures && similarLectures[professor_no - 1]) {
-    const selectedLecture = similarLectures[professor_no - 1];
+  if (similarLectures && similarLectures[professor_no2 - 1]) {
+    const selectedLecture = similarLectures[professor_no2 - 1];
     
     const selectedLectureInfo = lectureInfo.find(lecture => 
       lecture.과목명 === selectedLecture.과목명 &&
@@ -3207,6 +3220,7 @@ app.post('/lecture_professor_info_select', async (req, res) => {
                 'type': 'back_select',
                 'userInput': userInput,
                 'professor_no': professor_no,
+                'professor_no2': professor_no2,
                 'professor_name': professor_name
               }
             },
@@ -3234,8 +3248,9 @@ app.post('/lecture_professor_info_select', async (req, res) => {
                     "blockId": "6609339eeb6af05590a00437",//pro_info_search
                     "extra": {
                       "menu": "basicInfo",
-                      "userInput": userInput,
-                      "professor_no": professor_no,
+                      'userInput': userInput,
+                      'professor_no': professor_no,
+                      'professor_no2': professor_no2,
                       'professor_name': professor_name
                     }
                   },
@@ -3245,8 +3260,9 @@ app.post('/lecture_professor_info_select', async (req, res) => {
                     "blockId": "6609339eeb6af05590a00437",//pro_info_search
                     "extra": {
                       "menu": "courseOverview",
-                      "userInput": userInput,
-                      "professor_no": professor_no,
+                      'userInput': userInput,
+                      'professor_no': professor_no,
+                      'professor_no2': professor_no2,
                       'professor_name': professor_name
                     }
                   },
@@ -3256,8 +3272,9 @@ app.post('/lecture_professor_info_select', async (req, res) => {
                     "blockId": "6609339eeb6af05590a00437",//pro_info_search
                     "extra": {
                       "menu": "evaluationMethods",
-                      "userInput": userInput,
-                      "professor_no": professor_no,
+                      'userInput': userInput,
+                      'professor_no': professor_no,
+                      'professor_no2': professor_no2,
                       'professor_name': professor_name
                     }
                   }
@@ -3273,7 +3290,8 @@ app.post('/lecture_professor_info_select', async (req, res) => {
               'extra':{
                 'type': 'back_select',
                 'userInput': userInput,
-                "professor_no": professor_no,
+                'professor_no': professor_no,
+                'professor_no2': professor_no2,
                 'professor_name': professor_name
               }
             },
@@ -3304,9 +3322,10 @@ app.post('/lecture_professor_info_select', async (req, res) => {
             'blockId': `66093382eb6af05590a00433`,//find2
             'extra':{
               'type': 'back_select',
-                'userInput': userInput,
-                "professor_no": professor_no,
-                'professor_name': professor_name
+              'userInput': userInput,
+              'professor_no': professor_no,
+              'professor_no2': professor_no2,
+              'professor_name': professor_name
             }
           },
           {
@@ -3349,11 +3368,12 @@ app.post('/lecture_professor_info_search', async (req, res) => {
   const extra = req.body.action.clientExtra;
   const userInput = extra.userInput;
   const professor_no = extra.professor_no;
+  const professor_no2 = extra.professor_no2;
   const professor_name = extra.professor_name;
   const similarLectures = findSimilarProfessorsNofilter(professor_name, lectureInfo);
   const similarLectures2 = findSimilarProfessorsNofilter(professor_name, lectureList);
-  const selectedLecture = similarLectures[professor_no - 1];
-  const selectedLecture2 = similarLectures2[professor_no - 1];
+  const selectedLecture = similarLectures[professor_no2 - 1];
+  const selectedLecture2 = similarLectures2[professor_no2 - 1];
   const selectedLectureInfo = lectureInfo.find(lecture => 
     lecture.과목명 === selectedLecture.과목명 &&
     lecture.교수명 === selectedLecture.교수명 &&
@@ -3387,6 +3407,7 @@ app.post('/lecture_professor_info_search', async (req, res) => {
                 'type': 'back_search',
                 'userInput': userInput,
                 'professor_no': professor_no,
+                'professor_no2': professor_no2,
                 'professor_name': professor_name
               }
           },
@@ -3420,6 +3441,7 @@ app.post('/lecture_professor_info_search', async (req, res) => {
               'type': 'back_search',
               'userInput': userInput,
               'professor_no': professor_no,
+              'professor_no2': professor_no2,
               'professor_name': professor_name
             }
           },
@@ -3453,6 +3475,7 @@ app.post('/lecture_professor_info_search', async (req, res) => {
               'type': 'back_search',
               'userInput': userInput,
               'professor_no': professor_no,
+              'professor_no2': professor_no2,
               'professor_name': professor_name
             }
           },
