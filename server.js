@@ -2730,7 +2730,7 @@ app.post('/lecture_professor_find', async (req, res) => {
   let userInput;
   let response = {};
 
-  if(extra && extra.type === "back_select" && extra.userInput_select){
+  if(extra && extra.type === "back_select"){
     userInput = extra.userInput;
   } else{
     userInput = req.body.action.params.professor_name;
