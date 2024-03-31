@@ -494,6 +494,11 @@ function findSimilarProfessors(userInput, lectureInfo) {
       const subjectWithoutSpaces = item.교수명.replace(/\s+/g, '').toUpperCase();
       return subjectWithoutSpaces.includes(userInputProcessed);
     });
+
+    similarProfessors = similarProfessors.filter((prof, index, self) =>
+    index === self.findIndex(p => p.교수명 === prof.교수명)
+    );
+  
     return similarProfessors;
   }
 }
@@ -2812,8 +2817,6 @@ app.post('/lecture_professor_select', async (req, res) => {
 
   let similarProfessors = findSimilarProfessors(userInput, lectureList);
   let similarProfessors2 = findSimilarProfessors(userInput, lectureInfo);
-  similarProfessors = removeDuplicates(similarProfessors);
-  similarProfessors2 = removeDuplicates(similarProfessors2);
   
   if (similarProfessors && similarProfessors[professor_no - 1]) {
     const selectedProfessors = similarProfessors[professor_no - 1];
@@ -2821,7 +2824,6 @@ app.post('/lecture_professor_select', async (req, res) => {
     
     const selectedProfessorInfo = lectureList.find(lecture => 
       lecture.교수명 === selectedProfessors.교수명 &&
-      lecture.소속 === selectedProfessors.소속
     );
     const selectedProfessorInfo2 = lectureInfo.find(lecture => 
       lecture.교수명 === selectedProfessors2.교수명
@@ -2865,6 +2867,16 @@ app.post('/lecture_professor_select', async (req, res) => {
               "textCard": {
                 "title": `${selectedProfessorInfo.교수명}[${selectedProfessorInfo.소속}] 정보`,
                 "description": `교수명: ${selectedProfessorInfo.교수명}\n소속: ${selectedProfessorInfo.소속}\n핸드폰: ${selectedProfessorInfo2.핸드폰}\n이메일: ${selectedProfessorInfo2.이메일}`,
+                "buttons": [
+                  {
+                    'action': 'block',
+                    'label': `개설강좌 리스트`,
+                    'blockId': `65ee6281e88704127f3d8446`,
+                    'extra': {
+                      'met_day' : `${dayOfWeek}`
+                    }
+                  },
+                ]
               }
             }
           ],
@@ -2942,6 +2954,31 @@ app.post('/lecture_professor_select', async (req, res) => {
 }
 });
 
-app.listen(port, () => {
-  console.log(`서버가 http://localhost:${port} 에서 실행 중입니다.`);
+app.post('/example', (req, res) => {
+  try{
+  let response;
+  
+  res.json(response);
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
