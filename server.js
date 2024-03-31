@@ -2849,10 +2849,10 @@ app.post('/lecture_professor_select', async (req, res) => {
     professor_no = req.body.action.params.professor_no;
   }
   
-  let similarProfessors = findSimilarProfessors(userInput, lectureList);
-  let similarProfessors2 = findSimilarProfessors(userInput, lectureInfo);
+  const similarProfessors = findSimilarProfessors(userInput, lectureList);
+  const similarProfessors2 = findSimilarProfessors(userInput, lectureInfo);
   
-  if (similarProfessors && similarProfessors2 && similarProfessors[professor_no - 1] && similarProfessors2[professor_no - 1]) {
+  if (similarProfessors && similarProfessors2) {
     const selectedProfessors = similarProfessors[professor_no - 1];
     const selectedProfessors2 = similarProfessors2[professor_no - 1];
     
@@ -3032,8 +3032,6 @@ app.post('/lecture_professor_info_find', async (req, res) => {
     professor_no = extra.professor_no;
   }
   
-  
-
   const similarLectures = findSimilarProfessorsNofilter(userInput, lectureInfo);
   
   if (similarLectures && similarLectures.length > 0) {
