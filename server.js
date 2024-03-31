@@ -2861,7 +2861,7 @@ app.post('/lecture_professor_select', async (req, res) => {
   const extra = req.body.action.clientExtra;
   let userInput;
   let professor_no;
-  let.professor_no2;
+  let professor_no2;
   let professor_name;
   let response = {};
 
