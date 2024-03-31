@@ -2874,14 +2874,12 @@ app.post('/lecture_professor_select', async (req, res) => {
     professor_name = extra.professor_name;
   }
   
-  const similarProfessors = findSimilarProfessors(userInput, lectureList);
-  const similarProfessors2 = findSimilarProfessors(userInput, lectureInfo);
+  const similarProfessors = findSimilarProfessors(userInput, lectureInfo);
   
-  if (similarProfessors && similarProfessors2) {
+  if (similarProfessors) {
     const selectedProfessors = similarProfessors[professor_no - 1];
-    const selectedProfessors2 = similarProfessors2[professor_no - 1];
     
-    if (!selectedProfessors && !selectedProfessors2) {
+    if (!selectedProfessors) {
       response = {
         "version": "2.0",
         "template": {
@@ -2911,11 +2909,8 @@ app.post('/lecture_professor_select', async (req, res) => {
         }
       }
     } else {
-      const selectedProfessorInfo = lectureList.find(lecture => 
+      const selectedProfessorInfo = lectureInfo.find(lecture => 
         lecture.교수명 === selectedProfessors.교수명
-      );
-      const selectedProfessorInfo2 = lectureInfo.find(lecture => 
-        lecture.교수명 === selectedProfessors2.교수명
       );
       response = {
         "version": "2.0",
@@ -2923,8 +2918,8 @@ app.post('/lecture_professor_select', async (req, res) => {
           "outputs": [
             {
               "textCard": {
-                "title": `${selectedProfessorInfo.교수명}[${selectedProfessorInfo.소속}] 정보`,
-                "description": `교수명: ${selectedProfessorInfo.교수명}\n소속: ${selectedProfessorInfo.소속}\n핸드폰: ${selectedProfessorInfo2.핸드폰}\n이메일: ${selectedProfessorInfo2.이메일}`,
+                "title": `${selectedProfessorInfo.교수명} 교수 정보`,
+                "description": `교수명: ${selectedProfessorInfo.교수명}\n핸드폰: ${selectedProfessorInfo.핸드폰}\n이메일: ${selectedProfessorInfo2.이메일}`,
                 "buttons": [
                   {
                     'action': 'block',
