@@ -2749,7 +2749,7 @@ app.post('/lecture_info_search', async (req, res) => {
     lecture.과목명 === selectedLecture2.과목명 &&
     lecture.교수명 === selectedLecture2.교수명 &&
     lecture.분반 === selectedLecture2.분반 &&
-    lecture.캠퍼스 === "메트로폴"
+    "메트로폴" === selectedLecture2.캠퍼스
   );
   let response = {};
 
@@ -3485,7 +3485,7 @@ app.post('/lecture_professor_info_search', async (req, res) => {
     lecture.과목명 === selectedLecture2.과목명 &&
     lecture.교수명 === selectedLecture2.교수명 &&
     lecture.분반 === selectedLecture2.분반 &&
-    lecture.캠퍼스 === "메트로폴"
+    "메트로폴" === selectedLecture2.캠퍼스
   );
   let response = {};
 
