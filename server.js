@@ -2878,7 +2878,7 @@ app.post('/lecture_professor_select', async (req, res) => {
     const selectedProfessors = similarProfessors[professor_no - 1];
     const selectedProfessors2 = similarProfessors2[professor_no - 1];
     
-    if (!selectedProfessorInfo && !selectedProfessorInfo2) {
+    if (!selectedProfessors && !selectedProfessors2) {
       response = {
         "version": "2.0",
         "template": {
