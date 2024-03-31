@@ -2456,7 +2456,7 @@ app.post('/lecture_info_find', async (req, res) => {
     userInput = req.body.action.params.lecture_name;
   }
 
-  const similarLectures = findSimilarLectures(userInput, lectureList);
+  const similarLectures = findSimilarLectures(userInput, lectureInfo);
   
   if (similarLectures && similarLectures.length > 0) {
     response = {
@@ -2558,12 +2558,12 @@ app.post('/lecture_info_select', async (req, res) => {
     lecture_no = req.body.action.params.lecture_no;
   }
 
-  const similarLectures = findSimilarLectures(userInput, lectureList);
+  const similarLectures = findSimilarLectures(userInput, lectureInfo);
   
   if (similarLectures && similarLectures[lecture_no - 1]) {
     const selectedLecture = similarLectures[lecture_no - 1];
     
-    const selectedLectureInfo = lectureList.find(lecture => 
+    const selectedLectureInfo = lectureInfo.find(lecture => 
       lecture.과목명 === selectedLecture.과목명 &&
       lecture.교수명 === selectedLecture.교수명 &&
       lecture.분반 === selectedLecture.분반
@@ -2664,10 +2664,10 @@ app.post('/lecture_info_select', async (req, res) => {
               'blockId': `660981bc73a80e4a1e58d2e3`,//schedule_save
               'extra':{
                 'type': 'save',
-                '과목명': selectedLecture.과목명,
-                '교수명': selectedLecture.교수명,
-                '시간표': selectedLecture.시간표,
-                '강의실': selectedLecture.강의실
+                'lectures': selectedLecture.과목명,
+                'professor': selectedLecture.교수명,
+                'time': selectedLecture.시간표,
+                'place': selectedLecture.강의실
               }
             },
             {
@@ -2753,10 +2753,6 @@ app.post('/lecture_info_search', async (req, res) => {
   const lectures = extra.select.lectures;
   const professor = extra.select.professor;
   const classes = extra.select.classes;
-  const similarLectures = findSimilarLectures(userInput, lectureInfo);
-  const similarLectures2 = findSimilarLectures(userInput, lectureList);
-  const selectedLecture = similarLectures[lecture_no - 1];
-  const selectedLecture2 = similarLectures2[lecture_no - 1];
   const selectedLectureInfo = lectureInfo.find(lecture => 
     lecture.과목명 === lectures &&
     lecture.교수명 === professor &&
@@ -3636,10 +3632,10 @@ app.post('/lecture_schedule_save', async (req, res) => {
   try{
   const extra = req.body.action.clientExtra;
   const userId = req.body.userRequest.user.id;
-  const lecture = extra.과목명;
-  const professor = extra.교수명;
-  const time = extra.시간표;
-  const place = extra.강의실;
+  const lectures = extra.lectures;
+  const professor = extra.professor;
+  const time = extra.time;
+  const place = extra.place;
   const auth = await authorize();
   let response;
   
@@ -3648,7 +3644,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
       const userRowIndex = userRow.rowIndex;
       const timeIndex = getTimeIndex(time); // 시간표의 열 인덱스 계산
       if (timeIndex !== -1) {
-        const updateData = [Array(timeIndex).fill(''), lecture, professor, place];
+        const updateData = [Array(timeIndex).fill(''), lectures, professor, place];
         await writeToGoogleSheets(auth, SPREADSHEET_ID, `시간표!${userRowIndex}:${userRowIndex}`, updateData);
         response = {
           "version": "2.0",
