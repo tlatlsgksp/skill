@@ -3663,7 +3663,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
     const userRow = await findUserRow(userId, auth, SPREADSHEET_ID);
     if (userRow) {
       const userRowIndex = userRow.rowIndex;
-      const timeIndices = getTimeIndices(time);
+      const timeIndices = getTimeIndex(time);
 
       timeIndices.forEach(async (timeIndex) => {
         const updateData = [Array(timeIndex).fill(''), lectures, professor, place];
