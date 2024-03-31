@@ -3010,9 +3010,18 @@ app.post('/example', (req, res) => {
 app.post('/lecture_professor_info_find', async (req, res) => {
   try {
   const extra = req.body.action.clientExtra;
-  const userInput = extra.professor_name; //lecture_professor_select으로부터 받은 extra값
-  const professor_no = extra.professor_no;
+  let userInput;
+  let professor_no;
   let response = {};
+  if(extra && extra.type === "back_select" && extra.userInput_select){ // pro_info_find로부터 받아온 extra값
+    userInput = extra.userInput_select;
+    professor_no = extra.professor_no_select;
+  } else{
+    userInput = extra.professor_name;
+    professor_no = extra.professor_no;
+  }
+  
+  
 
   const similarLectures = findSimilarProfessorsNofilter(userInput, lectureInfo);
   
@@ -3178,7 +3187,7 @@ app.post('/lecture_professor_info_select', async (req, res) => {
                   {
                     "action": "block",
                     "label": "강좌 기본정보",
-                    "blockId": "6609339eeb6af05590a00437",//search
+                    "blockId": "6609339eeb6af05590a00437",//pro_info_search
                     "extra": {
                       "menu": "basicInfo",
                       "userInput": userInput,
@@ -3188,7 +3197,7 @@ app.post('/lecture_professor_info_select', async (req, res) => {
                   {
                     "action": "block",
                     "label": "교과개요",
-                    "blockId": "6609339eeb6af05590a00437",//search
+                    "blockId": "6609339eeb6af05590a00437",//pro_info_search
                     "extra": {
                       "menu": "courseOverview",
                       "userInput": userInput,
@@ -3198,7 +3207,7 @@ app.post('/lecture_professor_info_select', async (req, res) => {
                   {
                     "action": "block",
                     "label": "평가항목 및 방법",
-                    "blockId": "6609339eeb6af05590a00437",//search
+                    "blockId": "6609339eeb6af05590a00437",//pro_info_search
                     "extra": {
                       "menu": "evaluationMethods",
                       "userInput": userInput,
@@ -3213,10 +3222,11 @@ app.post('/lecture_professor_info_select', async (req, res) => {
             {
               'action': 'block',
               'label': `뒤로가기`,
-              'blockId': `66093382eb6af05590a00433`,//find2
+              'blockId': `66093382eb6af05590a00433`,//pro_info_find2
               'extra':{
                 'type': 'back_select',
                 'userInput_select': userInput,
+                "professor_no_select": professor_no
               }
             },
             {
@@ -3287,7 +3297,7 @@ app.post('/lecture_professor_info_search', async (req, res) => {
   try {
   const extra = req.body.action.clientExtra;
   const userInput = extra.userInput;
-  const professor_no = req.extra.professor_no;
+  const professor_no = extra.userInput;
   const similarLectures = findSimilarLectures(userInput, lectureInfo);
   const similarLectures2 = findSimilarLectures(userInput, lectureList);
   const selectedLecture = similarLectures[professor_no - 1];
