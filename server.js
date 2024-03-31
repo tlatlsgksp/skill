@@ -2456,7 +2456,7 @@ app.post('/lecture_info_find', async (req, res) => {
     userInput = req.body.action.params.lecture_name;
   }
 
-  const similarLectures = findSimilarLectures(userInput, lectureInfo);
+  const similarLectures = findSimilarLectures(userInput, lectureList);
   
   if (similarLectures && similarLectures.length > 0) {
     response = {
