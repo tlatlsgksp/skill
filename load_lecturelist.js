@@ -57,7 +57,7 @@ async function saveToJsonFile(data, filePath, header) {
       rowData["과목명"] = row[2].replace(/\s+/g, '').toUpperCase();
       rowData["교수명"] = row[8].replace(/\s+/g, '');
       return rowData;
-    });
+    }).filter(row => row["캠퍼스"] === "메트로폴"); // 캠퍼스가 "메트로폴"인 데이터만 필터링
 
     await fs.writeFile(filePath, JSON.stringify(jsonData, null, 2));
     console.log('Data saved to JSON file:', filePath);
