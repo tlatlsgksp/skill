@@ -3179,6 +3179,8 @@ app.post('/lecture_professor_info_select', async (req, res) => {
                     "blockId": "6609339eeb6af05590a00437",//search
                     "extra": {
                       "menu": "basicInfo",
+                      "userInput": userInput,
+                      "professor_no": professor_no
                     }
                   },
                   {
@@ -3187,6 +3189,8 @@ app.post('/lecture_professor_info_select', async (req, res) => {
                     "blockId": "6609339eeb6af05590a00437",//search
                     "extra": {
                       "menu": "courseOverview",
+                      "userInput": userInput,
+                      "professor_no": professor_no
                     }
                   },
                   {
@@ -3195,6 +3199,8 @@ app.post('/lecture_professor_info_select', async (req, res) => {
                     "blockId": "6609339eeb6af05590a00437",//search
                     "extra": {
                       "menu": "evaluationMethods",
+                      "userInput": userInput,
+                      "professor_no": professor_no
                     }
                   }
                 ]
@@ -3278,12 +3284,12 @@ app.post('/lecture_professor_info_select', async (req, res) => {
 app.post('/lecture_professor_info_search', async (req, res) => {
   try {
   const extra = req.body.action.clientExtra;
-  const userInput = req.body.action.params.lecture_name_out_select;
-  const lecture_no = req.body.action.params.lecture_no_out_select;
+  const userInput = extra.userInput;
+  const professor_no = req.extra.professor_no;
   const similarLectures = findSimilarLectures(userInput, lectureInfo);
   const similarLectures2 = findSimilarLectures(userInput, lectureList);
-  const selectedLecture = similarLectures[lecture_no - 1];
-  const selectedLecture2 = similarLectures2[lecture_no - 1];
+  const selectedLecture = similarLectures[professor_no - 1];
+  const selectedLecture2 = similarLectures2[professor_no - 1];
   const selectedLectureInfo = lectureInfo.find(lecture => 
     lecture.과목명 === selectedLecture.과목명 &&
     lecture.교수명 === selectedLecture.교수명 &&
@@ -3316,7 +3322,7 @@ app.post('/lecture_professor_info_search', async (req, res) => {
               'extra':{
                 'type': 'back_search',
                 'userInput_search': userInput,
-                'lecture_no_search': lecture_no
+                'professor_no_search': professor_no
               }
           },
           {
@@ -3348,7 +3354,7 @@ app.post('/lecture_professor_info_search', async (req, res) => {
             'extra':{
               'type': 'back_search',
               'userInput_search': userInput,
-              'lecture_no_search': lecture_no
+              'professor_no_search': professor_no
             }
           },
           {
@@ -3380,7 +3386,7 @@ app.post('/lecture_professor_info_search', async (req, res) => {
             'extra':{
               'type': 'back_search',
               'userInput_search': userInput,
-              'lecture_no_search': lecture_no
+              'professor_no_search': professor_no
             }
           },
           {
