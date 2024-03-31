@@ -2332,11 +2332,8 @@ app.post('/lecture_info_find', async (req, res) => {
     userInput = req.body.action.params.lecture_name;
   }
 
-  if (extra.set === "lecture"){
-    similarLectures = findSimilarLectures(userInput, lectureInfo);
-  } else {
-    similarLectures = findSimilarProfessorsNofilter(userInput, lectureInfo);
-  }
+  similarLectures = findSimilarLectures(userInput, lectureInfo);
+
   
   
   if (similarLectures && similarLectures.length > 0) {
@@ -2346,7 +2343,7 @@ app.post('/lecture_info_find', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": `※번호 확인 후 번호 입력 클릭※\n\n과목 - 교수 - 분반 순\n\n${similarLectures.map((lecture, index) => `${index + 1}.${lecture.과목명} ${lecture.교수명} ${lecture.분반}`).join('\n')}\n`
+              "text": `※강의명 검색결과※\n\n과목 - 교수 - 분반 순\n\n${similarLectures.map((lecture, index) => `${index + 1}.${lecture.과목명} ${lecture.교수명} ${lecture.분반}`).join('\n')}\n`
             }
           }
         ],
@@ -2357,12 +2354,18 @@ app.post('/lecture_info_find', async (req, res) => {
             'blockId': `65fff8a7a64303558478534d`,//select
             'extra':{
               'userInput': userInput,
+              'set': 'lecture'
             }
           },
           {
             'action': 'block',
             'label': `다시 입력`,
             'blockId': `65ffd578dad261262541fc58`//find
+          },
+          {
+            'action': 'block',
+            'label': `뒤로가기`,
+            'blockId': `66095f864311bb7fed55cb0e`//info
           },
           {
             'action': 'message',
@@ -2388,6 +2391,121 @@ app.post('/lecture_info_find', async (req, res) => {
             'action': 'block',
             'label': `다시 입력`,
             'blockId': `65ffd578dad261262541fc58`//find
+          },
+          {
+            'action': 'block',
+            'label': `뒤로가기`,
+            'blockId': `66095f864311bb7fed55cb0e`//info
+          },
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+      }
+    }
+  }
+  res.json(response);
+} catch (error) {
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
+});
+
+app.post('/lecture_info_find1', async (req, res) => {
+  try {
+  const extra = req.body.action.clientExtra;
+  let userInput;
+  let similarLectures
+  let response = {};
+
+  if(extra && extra.type === "back_select"){
+    userInput = extra.userInput;
+  } else{
+    userInput = req.body.action.params.professor_name;
+  }
+
+  similarLectures = findSimilarProfessorsNofilter(userInput, lectureInfo);
+
+  if (similarLectures && similarLectures.length > 0) {
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": `※교수명 검색결과※\n\n과목 - 교수 - 분반 순\n\n${similarLectures.map((lecture, index) => `${index + 1}.${lecture.과목명} ${lecture.교수명} ${lecture.분반}`).join('\n')}\n`
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'block',
+            'label': `번호 입력`,
+            'blockId': `65fff8a7a64303558478534d`,//select
+            'extra':{
+              'userInput': userInput,
+              'set': 'professor'
+            }
+          },
+          {
+            'action': 'block',
+            'label': `다시 입력`,
+            'blockId': `65ffd578dad261262541fc58`//find
+          },
+          {
+            'action': 'block',
+            'label': `뒤로가기`,
+            'blockId': `66095f864311bb7fed55cb0e`//info
+          },
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+      }
+    }
+  } else {
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": `일치하거나 유사한 강의가 없습니다.`
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'block',
+            'label': `다시 입력`,
+            'blockId': `65ffd578dad261262541fc58`//find
+          },
+          {
+            'action': 'block',
+            'label': `뒤로가기`,
+            'blockId': `66095f864311bb7fed55cb0e`//info
           },
           {
             'action': 'message',
@@ -2426,8 +2544,10 @@ app.post('/lecture_info_find', async (req, res) => {
 app.post('/lecture_info_select', async (req, res) => {
   try {
   const extra = req.body.action.clientExtra;
+  const set = extra.set;
   let userInput;
   let lecture_no;
+  let similarLectures;
   let response = {};
 
   if(extra && extra.type === "back_search"){
@@ -2438,7 +2558,11 @@ app.post('/lecture_info_select', async (req, res) => {
     lecture_no = req.body.action.params.lecture_no;
   }
 
-  const similarLectures = findSimilarLectures(userInput, lectureInfo);
+  if(set === "lecture"){
+    similarLectures = findSimilarLectures(userInput, lectureInfo);
+  } else{
+    similarLectures = findSimilarProfessorsNofilter(userInput, lectureInfo);
+  }
   
   if (similarLectures && similarLectures[lecture_no - 1]) {
     const selectedLecture = similarLectures[lecture_no - 1];
@@ -2468,6 +2592,7 @@ app.post('/lecture_info_select', async (req, res) => {
               'extra':{
                 'type': 'back_select',
                 'userInput': userInput,
+                'set': set
               }
             },
             {
@@ -2495,8 +2620,8 @@ app.post('/lecture_info_select', async (req, res) => {
                     "extra": {
                       "menu": "basicInfo",
                       'userInput': userInput,
-                      'lecture_no': lecture_no
-                      
+                      'lecture_no': lecture_no,
+                      'set': set
                     }
                   },
                   {
@@ -2506,7 +2631,8 @@ app.post('/lecture_info_select', async (req, res) => {
                     "extra": {
                       "menu": "courseOverview",
                       'userInput': userInput,
-                      'lecture_no': lecture_no
+                      'lecture_no': lecture_no,
+                      'set': set
                     }
                   },
                   {
@@ -2516,7 +2642,8 @@ app.post('/lecture_info_select', async (req, res) => {
                     "extra": {
                       "menu": "evaluationMethods",
                       'userInput': userInput,
-                      'lecture_no': lecture_no
+                      'lecture_no': lecture_no,
+                      'set': set
                     }
                   }
                 ]
@@ -2531,7 +2658,8 @@ app.post('/lecture_info_select', async (req, res) => {
               'extra':{
                 'type': 'back_select',
                 'userInput': userInput,
-                'lecture_no': lecture_no
+                'lecture_no': lecture_no,
+                'set': set
               }
             },
             {
@@ -2562,6 +2690,7 @@ app.post('/lecture_info_select', async (req, res) => {
             'extra':{
               'type': 'back_select',
                 'userInput': userInput,
+                'set': set
             }
           },
           {
@@ -2603,8 +2732,16 @@ app.post('/lecture_info_search', async (req, res) => {
   const extra = req.body.action.clientExtra;
   const userInput = extra.userInput;
   const lecture_no = extra.lecture_no;
-  const similarLectures = findSimilarLectures(userInput, lectureInfo);
-  const similarLectures2 = findSimilarLectures(userInput, lectureList);
+  const set = extra.set;
+  let similarLectures;
+  let similarLectures2;
+  if (set === lecture){
+    similarLectures = findSimilarLectures(userInput, lectureInfo);
+    similarLectures2 = findSimilarLectures(userInput, lectureList);
+  }else{
+    similarLectures = findSimilarProfessorsNofilter(userInput, lectureInfo);
+    similarLectures2 = findSimilarProfessorsNofilter(userInput, lectureList);
+  }
   const selectedLecture = similarLectures[lecture_no - 1];
   const selectedLecture2 = similarLectures2[lecture_no - 1];
   const selectedLectureInfo = lectureInfo.find(lecture => 
@@ -2639,7 +2776,8 @@ app.post('/lecture_info_search', async (req, res) => {
               'extra':{
                 'type': 'back_search',
                 'userInput': userInput,
-                'lecture_no': lecture_no
+                'lecture_no': lecture_no,
+                'set': set
               }
           },
           {
@@ -2671,7 +2809,8 @@ app.post('/lecture_info_search', async (req, res) => {
             'extra':{
               'type': 'back_search',
               'userInput': userInput,
-              'lecture_no': lecture_no
+              'lecture_no': lecture_no,
+              'set': set
             }
           },
           {
@@ -2703,7 +2842,8 @@ app.post('/lecture_info_search', async (req, res) => {
             'extra':{
               'type': 'back_search',
               'userInput': userInput,
-              'lecture_no': lecture_no
+              'lecture_no': lecture_no,
+              'set': set
             }
           },
           {
