@@ -2838,7 +2838,7 @@ app.post('/lecture_professor_select', async (req, res) => {
   let similarProfessors = findSimilarProfessors(userInput, lectureList);
   let similarProfessors2 = findSimilarProfessors(userInput, lectureInfo);
   
-  if (similarProfessors && similarProfessors[professor_no - 1]) {
+  if (similarProfessors && similarProfessors2 && similarProfessors[professor_no - 1] && similarProfessors2[professor_no - 1]) {
     const selectedProfessors = similarProfessors[professor_no - 1];
     const selectedProfessors2 = similarProfessors2[professor_no - 1];
     
