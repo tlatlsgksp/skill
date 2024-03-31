@@ -2322,7 +2322,6 @@ app.post('/empty_lecture_next_3', async (req, res) => {
 app.post('/lecture_info_find', async (req, res) => {
   try {
   const extra = req.body.action.clientExtra;
-  const { type } = req.body;
   let userInput;
   let similarLectures
   let response = {};
@@ -2333,7 +2332,7 @@ app.post('/lecture_info_find', async (req, res) => {
     userInput = req.body.action.params.lecture_name;
   }
 
-  if (type === "lecture"){
+  if (extra.set === "lecture"){
     similarLectures = findSimilarLectures(userInput, lectureInfo);
   } else {
     similarLectures = findSimilarProfessorsNofilter(userInput, lectureInfo);
