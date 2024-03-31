@@ -507,8 +507,8 @@ function findSimilarProfessors(userInput, lectureInfo) {
 async function initialize() {
   try {
     console.log('서버 초기화 중');
-    await main_met();
-    await main_met_dorm();
+    //await main_met();
+    //await main_met_dorm();
     await main_lecturelist();
     await main_lectureinfo();
     fs.readFile('./crawl_met.json', 'utf8', (err, data) => {
