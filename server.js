@@ -3299,8 +3299,8 @@ app.post('/lecture_professor_info_search', async (req, res) => {
   const extra = req.body.action.clientExtra;
   const userInput = extra.userInput;
   const professor_no = extra.professor_no;
-  const similarLectures = findSimilarLectures(userInput, lectureInfo);
-  const similarLectures2 = findSimilarLectures(userInput, lectureList);
+  const similarLectures = findSimilarProfessorsNofilter(userInput, lectureInfo);
+  const similarLectures2 = findSimilarProfessorsNofilter(userInput, lectureList);
   const selectedLecture = similarLectures[professor_no - 1];
   const selectedLecture2 = similarLectures2[professor_no - 1];
   const selectedLectureInfo = lectureInfo.find(lecture => 
