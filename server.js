@@ -2837,17 +2837,17 @@ app.post('/lecture_professor_select', async (req, res) => {
     professor_no = req.body.action.params.professor_no;
   }
   
-  similarProfessors = findSimilarProfessors(userInput, lectureList);
-  similarProfessors2 = findSimilarProfessors(userInput, lectureInfo);
+  similarProfessors = findSimilarProfessors(userInput, lectureInfo);
+  similarProfessors2 = findSimilarProfessors(userInput, lectureList);
   
   if (similarProfessors && similarProfessors2 && similarProfessors[professor_no - 1] && similarProfessors2[professor_no - 1]) {
     const selectedProfessors = similarProfessors[professor_no - 1];
     const selectedProfessors2 = similarProfessors2[professor_no - 1];
     
-    const selectedProfessorInfo = lectureList.find(lecture => 
+    const selectedProfessorInfo = lectureInfo.find(lecture => 
       lecture.교수명 === selectedProfessors.교수명
     );
-    const selectedProfessorInfo2 = lectureInfo.find(lecture => 
+    const selectedProfessorInfo2 = lectureList.find(lecture => 
       lecture.교수명 === selectedProfessors2.교수명
     );
 
