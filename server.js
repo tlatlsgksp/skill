@@ -2878,13 +2878,6 @@ app.post('/lecture_professor_select', async (req, res) => {
     const selectedProfessors = similarProfessors[professor_no - 1];
     const selectedProfessors2 = similarProfessors2[professor_no - 1];
     
-    const selectedProfessorInfo = lectureList.find(lecture => 
-      lecture.교수명 === selectedProfessors.교수명
-    );
-    const selectedProfessorInfo2 = lectureInfo.find(lecture => 
-      lecture.교수명 === selectedProfessors2.교수명
-    );
-
     if (!selectedProfessorInfo && !selectedProfessorInfo2) {
       response = {
         "version": "2.0",
@@ -2915,6 +2908,12 @@ app.post('/lecture_professor_select', async (req, res) => {
         }
       }
     } else {
+      const selectedProfessorInfo = lectureList.find(lecture => 
+        lecture.교수명 === selectedProfessors.교수명
+      );
+      const selectedProfessorInfo2 = lectureInfo.find(lecture => 
+        lecture.교수명 === selectedProfessors2.교수명
+      );
       response = {
         "version": "2.0",
         "template": {
