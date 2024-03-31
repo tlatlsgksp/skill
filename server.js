@@ -2822,6 +2822,7 @@ app.post('/lecture_professor_find', async (req, res) => {
 //교수
 app.post('/lecture_professor_select', async (req, res) => {
   //try {
+  const extra = req.body.action.clientExtra;
   let userInput;
   let professor_no;
   let response = {};
