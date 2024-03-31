@@ -2753,7 +2753,10 @@ app.post('/lecture_professor_find', async (req, res) => {
           {
             'action': 'block',
             'label': `번호 입력`,
-            'blockId': `660181fd4311bb7fed54a75f`//pro_select
+            'blockId': `660181fd4311bb7fed54a75f`,//pro_select
+            'extra':{
+              'userInput': userInput,
+            }
           },
           {
             'action': 'block',
@@ -2826,19 +2829,17 @@ app.post('/lecture_professor_select', async (req, res) => {
   let userInput;
   let professor_no;
   let response = {};
-  let similarProfessors = {};
-  let similarProfessors2 = {};
 
   if(extra && extra.type === "back_info_find"){ // pro_info_find로부터 받아온 extra값
     userInput = extra.userInput;
     professor_no = extra.professor_no;
   } else{
-    userInput = req.body.action.params.professor_name_out_find;
+    userInput = extra.userInput;
     professor_no = req.body.action.params.professor_no;
   }
   
-  similarProfessors = findSimilarProfessors(userInput, lectureList);
-  similarProfessors2 = findSimilarProfessors(userInput, lectureInfo);
+  let similarProfessors = findSimilarProfessors(userInput, lectureList);
+  let similarProfessors2 = findSimilarProfessors(userInput, lectureInfo);
   
   if (similarProfessors && similarProfessors2 && similarProfessors[professor_no - 1] && similarProfessors2[professor_no - 1]) {
     const selectedProfessors = similarProfessors[professor_no - 1];
