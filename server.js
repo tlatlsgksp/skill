@@ -97,7 +97,7 @@ async function writeToGoogleSheets(auth, spreadsheetId, range, values) {
 }
 
 // 사용자 ID로 시트에서 해당 행을 찾는 함수
-async function findUserRow(userId) {
+async function findUserRow(userId, auth) {
   const sheets = google.sheets({ version: 'v4', auth });
   
   try {
@@ -3653,7 +3653,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
   const auth = await authorize();
   let response;
   
-  const userRow = await findUserRow(userId);
+  const userRow = await findUserRow(userId, auth);
     if (userRow) {
       const userRowIndex = userRow.rowIndex;
       const timeIndex = getTimeIndex(time); // 시간표의 열 인덱스 계산
