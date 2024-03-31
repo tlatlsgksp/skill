@@ -136,17 +136,31 @@ async function findUserRow(userId, auth, spreadsheetId) {
 // 시간표의 시간 문자열을 이용하여 열 인덱스를 계산하는 함수
 function getTimeIndex(time) {
   const indices = [];
-  const periods = time.split('),');
 
-  periods.forEach(period => {
-    const [day, hourString] = period.split('(');
+  if (time.includes('),')) {
+    const periods = time.split('),');
+
+    periods.forEach(period => {
+      const [day, hourString] = period.split('(');
+      const hours = hourString.replace(')', '').split(',');
+
+      hours.forEach(hour => {
+        const formattedDay = day + '(' + hour + ')';
+        indices.push(formattedDay);
+      });
+    });
+  } else if (time.length > 4) {
+    const [day, hourString] = time.split('(');
     const hours = hourString.replace(')', '').split(',');
-
+    
     hours.forEach(hour => {
       const formattedDay = day + '(' + hour + ')';
       indices.push(formattedDay);
     });
-  });
+  } else {
+    indices.push(time);
+  }
+
   return indices;
 }
 
