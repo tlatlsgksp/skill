@@ -3021,7 +3021,7 @@ app.post('/lecture_professor_info_find', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": `※번호 확인 후 번호 입력 클릭※\n\n과목 - 분반 순\n\n${similarLectures.map((lecture, index) => `${index + 1}.${lecture.과목명} ${lecture.분반}`).join('\n')}\n`
+              "text": `※번호 확인 후 번호 입력 클릭※\n\n과목 - 교수 - 분반 순\n\n${similarLectures.map((lecture, index) => `${index + 1}.${lecture.과목명} ${lecture.교수명} ${lecture.분반}`).join('\n')}\n`
             }
           }
         ],
@@ -3029,7 +3029,10 @@ app.post('/lecture_professor_info_find', async (req, res) => {
           {
             'action': 'block',
             'label': `번호 입력`,
-            'blockId': `6609338b4311bb7fed55c7ee`//pro_info_select
+            'blockId': `6609338b4311bb7fed55c7ee`,//pro_info_select
+            'extra':{
+              'userInput': userInput,
+            }
           },
           {
             'action': 'block',
@@ -3108,21 +3111,21 @@ app.post('/lecture_professor_info_select', async (req, res) => {
   try {
   const extra = req.body.action.clientExtra;
   let userInput;
-  let lecture_no;
+  let professor_no;
   let response = {};
 
   if(extra && extra.type === "back_search"){
     userInput = extra.userInput_search;
-    lecture_no = extra.lecture_no_search;
+    professor_no = extra.professor_no_search;
   }else{
-    userInput = req.body.action.params.lecture_name_out_find;
-    lecture_no = req.body.action.params.lecture_no;
+    userInput = extra.userInput;
+    professor_no = req.body.action.params.professor_no;
   }
 
   const similarLectures = findSimilarProfessorsNofilter(userInput, lectureInfo);
   
-  if (similarLectures && similarLectures[lecture_no - 1]) {
-    const selectedLecture = similarLectures[lecture_no - 1];
+  if (similarLectures && similarLectures[professor_no - 1]) {
+    const selectedLecture = similarLectures[professor_no - 1];
     
     const selectedLectureInfo = lectureInfo.find(lecture => 
       lecture.과목명 === selectedLecture.과목명 &&
@@ -3149,6 +3152,7 @@ app.post('/lecture_professor_info_select', async (req, res) => {
               'extra':{
                 'type': 'back_select',
                 'userInput_select': userInput,
+                'professor_no_select': professor_no
               }
             },
             {
