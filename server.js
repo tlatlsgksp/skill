@@ -3291,12 +3291,12 @@ app.post('/lecture_professor_info_select', async (req, res) => {
     professor_name = extra.professor_name;
   }
 
-  const similarLectures = findSimilarProfessorsNofilter(professor_name, lectureList);
+  const similarLectures = findSimilarProfessorsNofilter(professor_name, lectureInfo);
   
   if (similarLectures && similarLectures[professor_no2 - 1]) {
     const selectedLecture = similarLectures[professor_no2 - 1];
     
-    const selectedLectureInfo = lectureList.find(lecture => 
+    const selectedLectureInfo = lectureInfo.find(lecture => 
       lecture.과목명 === selectedLecture.과목명 &&
       lecture.교수명 === selectedLecture.교수명 &&
       lecture.분반 === selectedLecture.분반
@@ -3353,7 +3353,12 @@ app.post('/lecture_professor_info_select', async (req, res) => {
                       'userInput': userInput,
                       'professor_no': professor_no,
                       'professor_no2': professor_no2,
-                      'professor_name': professor_name
+                      'professor_name': professor_name,
+                      'select':{
+                        'lectures': selectedLectureInfo.과목명,
+                        'professor': selectedLectureInfo.교수명,
+                        'classes': selectedLectureInfo.분반
+                      }
                     }
                   },
                   {
@@ -3365,7 +3370,12 @@ app.post('/lecture_professor_info_select', async (req, res) => {
                       'userInput': userInput,
                       'professor_no': professor_no,
                       'professor_no2': professor_no2,
-                      'professor_name': professor_name
+                      'professor_name': professor_name,
+                      'select':{
+                        'lectures': selectedLectureInfo.과목명,
+                        'professor': selectedLectureInfo.교수명,
+                        'classes': selectedLectureInfo.분반
+                      }
                     }
                   },
                   {
@@ -3377,7 +3387,12 @@ app.post('/lecture_professor_info_select', async (req, res) => {
                       'userInput': userInput,
                       'professor_no': professor_no,
                       'professor_no2': professor_no2,
-                      'professor_name': professor_name
+                      'professor_name': professor_name,
+                      'select':{
+                        'lectures': selectedLectureInfo.과목명,
+                        'professor': selectedLectureInfo.교수명,
+                        'classes': selectedLectureInfo.분반
+                      }
                     }
                   }
                 ]
@@ -3391,10 +3406,10 @@ app.post('/lecture_professor_info_select', async (req, res) => {
               'blockId': `660981bc73a80e4a1e58d2e3`,//schedule_save
               'extra':{
                 'type': 'save',
-                '과목명': selectedLecture.과목명,
-                '교수명': selectedLecture.교수명,
-                '시간표': selectedLecture.시간표,
-                '강의실': selectedLecture.강의실
+                'lectures': selectedLecture.과목명,
+                'professor': selectedLecture.교수명,
+                'time': selectedLecture.시간표,
+                'place': selectedLecture.강의실
               }
             },
             {
@@ -3484,19 +3499,18 @@ app.post('/lecture_professor_info_search', async (req, res) => {
   const professor_no = extra.professor_no;
   const professor_no2 = extra.professor_no2;
   const professor_name = extra.professor_name;
-  const similarLectures = findSimilarProfessorsNofilter(professor_name, lectureInfo);
-  const similarLectures2 = findSimilarProfessorsNofilter(professor_name, lectureList);
-  const selectedLecture = similarLectures[professor_no2 - 1];
-  const selectedLecture2 = similarLectures2[professor_no2 - 1];
+  const lectures = extra.select.lectures;
+  const professor = extra.select.professor;
+  const classes = extra.select.classes;
   const selectedLectureInfo = lectureInfo.find(lecture => 
-    lecture.과목명 === selectedLecture.과목명 &&
-    lecture.교수명 === selectedLecture.교수명 &&
-    lecture.분반 === selectedLecture.분반
+    lecture.과목명 === lectures &&
+    lecture.교수명 === professor &&
+    lecture.분반 === classes
   );
   const selectedLectureInfo2 = lectureList.find(lecture => 
-    lecture.과목명 === selectedLecture2.과목명 &&
-    lecture.교수명 === selectedLecture2.교수명 &&
-    lecture.분반 === selectedLecture2.분반
+    lecture.과목명 === lectures &&
+    lecture.교수명 === professor &&
+    lecture.분반 === classes
   );
   let response = {};
 
