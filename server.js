@@ -2807,7 +2807,7 @@ app.post('/lecture_professor_find', async (req, res) => {
 });
 
 app.post('/lecture_professor_select', async (req, res) => {
-  //try {
+  try {
   let userInput;
   let professor_no;
   let response = {};
@@ -2930,7 +2930,7 @@ app.post('/lecture_professor_select', async (req, res) => {
     }
   }
   res.json(response);
-//} catch (error) {
+} catch (error) {
   response = {
     "version": "2.0",
     "template": {
@@ -2952,8 +2952,7 @@ app.post('/lecture_professor_select', async (req, res) => {
   }
   res.json(response);
 }
-//}
-);
+});
 
 app.post('/example', (req, res) => {
   try{
