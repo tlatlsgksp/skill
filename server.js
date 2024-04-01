@@ -3742,7 +3742,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
     } else {
       // 겹치는 열이 없으면 시간표에 저장
       const ranges = timeIndex.map(index => `시간표!${index.toString()}${userRow}`);
-      await batchWriteToGoogleSheets(auth_global, SPREADSHEET_ID, ranges, rowData);
+      await writeToGoogleSheets(auth_global, SPREADSHEET_ID, ranges, rowData);
 
       response = {
         "version": "2.0",
