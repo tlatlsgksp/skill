@@ -3930,7 +3930,7 @@ app.post('/lecture_schedule_edit', async (req, res) => {
                 'label': `번호 입력`,
                 'blockId': `660ab9587ad61051639e131d`,
                 'extra':{
-                  
+
                 }
               },
               {
@@ -3968,6 +3968,36 @@ app.post('/lecture_schedule_edit', async (req, res) => {
     }
   }
   }
+  res.json(response);
+} catch (error) {
+  console.log(error)
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
+});
+
+app.post('/lecture_schedule_delete', async (req, res) => {
+  try{
+  let response;
+  
   res.json(response);
 } catch (error) {
   console.log(error)
