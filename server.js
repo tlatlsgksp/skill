@@ -3685,19 +3685,18 @@ app.post('/lecture_schedule_save', async (req, res) => {
     const place = selectedLectureInfo.강의실;
     let response;
 
-    const userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID);
-    if (userRow) {
-      const timeIndices = getTimeIndex(time);
+    let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID);
 
-      for (const timeIndex of timeIndices) {
-        const columnIndex = getColumnIndex(timeIndex);
-        const range = `시간표!${userRowIndex}:${userRowIndex}`;
-        const updateData = Array.from({ length: 15 }).fill('');
-        const combinedData = `${lectures}\n${professor}\n${place}`;
-        updateData[0] = userId;
-        updateData[columnIndex] = combinedData;
-        await writeToGoogleSheets(auth_global, SPREADSHEET_ID, range, [updateData]);
-      }
+    if (!userRow) {
+      userRow = await addUserRow(userId, auth_global, SPREADSHEET_ID);
+    }
+
+    const timeIndices = getTimeIndex(time);
+
+    // 데이터 작성
+    const rowData = [lectures, professor, place];
+    const range = `시간표!${timeIndices[0]}${userRow}:${timeIndices[timeIndices.length - 1]}${userRow}`;
+    await writeToSpreadsheet(auth_global, SPREADSHEET_ID, range, rowData);
 
       response = {
         "version": "2.0",
@@ -3718,7 +3717,6 @@ app.post('/lecture_schedule_save', async (req, res) => {
           ]
         }
       }
-    }
     res.json(response);
   } catch (error) {
     console.log(error)
