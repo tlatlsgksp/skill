@@ -3874,6 +3874,111 @@ app.post('/lecture_schedule_save', async (req, res) => {
   }
 });
 
+app.post('/lecture_schedule_edit', async (req, res) => {
+  try{
+    const userId = req.body.userRequest.user.id;
+    let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID)
+    let response;
+
+    if (userRow){
+      const rowData = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, `B${userRow}:BX${userRow}`);
+
+      if (rowData && rowData.length > 0) {
+        // 중복 제거
+        const uniqueRowData = Array.from(new Set(rowData));
+
+        // " "를 기준으로 각 요소를 분리하여 배열로 저장
+        const separatedData = uniqueRowData.map(row => row.split(" "));
+
+        // lectures, professor, classes, place로 나누어 저장
+        const lectures = separatedData.map(data => data[0]);
+        const professors = separatedData.map(data => data[1]);
+        const classes = separatedData.map(data => data[2]);
+        const places = separatedData.map(data => data[3]);
+
+        const selectedLectureInfo = lectures.map((lecture, index) => {
+          if (
+            lecture.과목명 === lectures[index] &&
+            lecture.교수명 === professors[index] &&
+            lecture.분반 === classes[index] &&
+            lecture.강의실 === places[index]
+          ) {
+            return {
+              과목명: lecture.과목명,
+              교수명: lecture.교수명,
+              분반: lecture.분반,
+              강의실: lecture.강의실,
+              시간표: lecture.시간표
+            };
+          }
+        });
+        response = {
+          "version": "2.0",
+          "template": {
+            "outputs": [
+              {
+                "simpleText": {
+                  "text": "시간표에 저장된 강의 목록\n\n" + selectedLectureInfo.map(info => `${info.과목명} - ${info.교수명} - ${info.분반} - ${info.강의실} - ${info.시간표}`).join("\n")
+                }
+              }
+            ],
+            "quickReplies": [
+              {
+                'action': 'message',
+                'label': `처음으로`,
+                'messageText': `처음으로`
+              }
+            ]
+          }
+        };
+      } else{
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": `시간표에 저장된 강의가 없습니다.`
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+      }
+    }
+  }
+  }
+  res.json(response);
+} catch (error) {
+  console.log(error)
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
+});
+
 app.listen(port, () => {
   console.log(`서버가 http://localhost:${port} 에서 실행 중입니다.`);
 });
