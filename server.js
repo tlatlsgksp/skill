@@ -3722,7 +3722,9 @@ app.post('/lecture_schedule_save', async (req, res) => {
         overlappingColumnsData.push({ index: columnHeader, data: modifiedData });
       }
     }
-
+    if (overlappingColumnsData.length > 0){
+      allColumnsEmpty = false;
+    }
     if (!allColumnsEmpty) {
       let text = "수업시간이 겹치는 강의가 있습니다.\n\n";
       
