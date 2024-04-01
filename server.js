@@ -3905,12 +3905,10 @@ app.post('/lecture_schedule_edit', async (req, res) => {
             const professorName = professors[i];
             const classNumber = classes[i];
             const place = places[i];
-            console.log(lectureName + professorName, classNumber, place);
             const lecture = lectureList.find(lecture => 
               lecture.과목명 === lectureName &&
               lecture.교수명 === professorName &&
-              lecture.분반 === classNumber &&
-              lecture.강의실 === place
+              lecture.분반 === classNumber
             );
             console.log(lecture);
             if (lecture) {
