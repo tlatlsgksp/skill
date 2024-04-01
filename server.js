@@ -2977,7 +2977,7 @@ app.post('/lecture_professor_find', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": `※번호 확인 후 번호 입력 클릭※\n\n${similarProfessors.map((lecture, index) => `${index + 1}.${lecture.교수명} ${similarProfessors2.map((lecture, index) => ` ${lecture.소속}`).join('')}`).join('\n')}\n`
+              "text": `※번호 확인 후 번호 입력 클릭※\n\n${similarProfessors.map((lecture, index) => `${index + 1}.${lecture.교수명} ${similarProfessors2.map(lecture => ` ${lecture.소속[index]}`).join('')}`).join('\n')}\n`
             }
           }
         ],
