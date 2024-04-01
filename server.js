@@ -92,11 +92,11 @@ async function batchWriteToGoogleSheets(auth, spreadsheetId, ranges, values) {
 
   try {
     const resource = {
-      valueInputOption: 'USER_ENTERED',
+      valueInputOption: 'RAW',
       data: ranges.map((range, index) => ({
         range: range,
         majorDimension: 'ROWS',
-        values: [values[index]]
+        values: [[String(values[index])]]
       }))
     };
 
