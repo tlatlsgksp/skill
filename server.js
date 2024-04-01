@@ -3594,7 +3594,6 @@ app.post('/lecture_professor_info_search', async (req, res) => {
     lecture.과목명 === lectures &&
     lecture.분반 === classes
   );
-  console.log(selectedLectureInfo2);
   let response = {};
 
   if (extra && extra.menu === "basicInfo") {
@@ -3905,7 +3904,8 @@ app.post('/lecture_schedule_edit', async (req, res) => {
             const classNumber = classes[i];
             const place = places[i];
             const lecture = lectureList.find(lecture => 
-              lecture.과목명 === lectureName
+              lecture.과목명 === lectureName &&
+              lecture.분반 === classNumber
             );
             if (lecture) {
                 selectedLectureInfo.push(lecture);
