@@ -3696,7 +3696,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
     // 데이터 작성
     const rowData = [lectures, professor, place];
     const range = `시간표!${timeIndices[0]}${userRow}:${timeIndices[timeIndices.length - 1]}${userRow}`;
-    await writeToSpreadsheet(auth_global, SPREADSHEET_ID, range, rowData);
+    await writeToGoogleSheets(auth_global, SPREADSHEET_ID, range, rowData);
 
       response = {
         "version": "2.0",
