@@ -3891,16 +3891,14 @@ app.post('/lecture_schedule_edit', async (req, res) => {
 
       if (rowData && rowData.length > 0) {
         const uniqueRowData = removeDuplicatesAndEmpty(rowData);
-        console.log(uniqueRowData);
 
-        // " "를 기준으로 각 요소를 분리하여 배열로 저장
         const separatedData = uniqueRowData.map(row => row.split(" "));
 
         const lectures = separatedData.map(data => data[0].replace(/\s+/g, '').toUpperCase());
         const professors = separatedData.map(data => data[1].replace(/\s+/g, '').toUpperCase());
         const classes = separatedData.map(data => data[2]);
         const places = separatedData.map(data => data[3]);
-
+        console.log(lectures);
         const selectedLectureInfo = lectureList.find((lecture, index) => {
             lecture.과목명 === lectures[index] &&
             lecture.교수명 === professors[index] &&
