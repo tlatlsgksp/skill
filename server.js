@@ -3896,21 +3896,11 @@ app.post('/lecture_schedule_edit', async (req, res) => {
         const classes = separatedData.map(data => data[2]);
         const places = separatedData.map(data => data[3]);
 
-        const selectedLectureInfo = lectures.map((lecture, index) => {
-          if (
+        const selectedLectureInfo = lectureList.map((lecture, index) => {
             lecture.과목명 === lectures[index] &&
             lecture.교수명 === professors[index] &&
             lecture.분반 === classes[index] &&
             lecture.강의실 === places[index]
-          ) {
-            return {
-              과목명: lecture.과목명,
-              교수명: lecture.교수명,
-              분반: lecture.분반,
-              강의실: lecture.강의실,
-              시간표: lecture.시간표
-            };
-          }
         });
         response = {
           "version": "2.0",
