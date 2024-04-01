@@ -3685,7 +3685,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
     const place = selectedLectureInfo.강의실;
     let response;
 
-    const userRow = await findUserRow(userId, auth, SPREADSHEET_ID);
+    const userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID);
     if (userRow) {
       const timeIndices = getTimeIndex(time);
 
