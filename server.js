@@ -3707,34 +3707,46 @@ app.post('/lecture_schedule_save', async (req, res) => {
 
     // 각 열을 읽어서 모든 열이 비어 있는지 확인
     let allColumnsEmpty = true;
+    let overlappingColumnsData = [];
+
+    // 모든 열을 검사
     for (const index of timeIndex) {
       const range = `시간표!${index.toString()}${userRow}`;
       const columnData = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, range);
       if (columnData && columnData.length > 0) {
         allColumnsEmpty = false;
-        // 이미 데이터가 있는 경우 해당 데이터를 response에 추가
-        response = {
-          "version": "2.0",
-          "template": {
-            "outputs": [
-              {
-                "simpleText": {
-                  "text": `수업시간이 겹치는 강의가 있습니다.\n${columnData.join('\n')}`
-                }
-              }
-            ],
-            "quickReplies": [
-              {
-                'action': 'message',
-                'label': `처음으로`,
-                'messageText': `처음으로`
-              }
-            ]
-          }
-        };
-        break;
+        // 겹치는 열의 데이터를 추가
+        overlappingColumnsData.push({ index, data: columnData });
       }
     }
+
+    // 모든 열을 검사한 후에 겹치는 열이 있으면 해당 데이터를 사용자에게 보여줌
+    if (!allColumnsEmpty && overlappingColumnsData.length > 0) {
+      response = {
+        "version": "2.0",
+        "template": {
+          "outputs": [
+            {
+              "simpleText": {
+                "text": `수업시간이 겹치는 강의가 있습니다.\n\n`
+              }
+            }
+          ],
+          "quickReplies": [
+            {
+              'action': 'message',
+              'label': `처음으로`,
+              'messageText': `처음으로`
+            }
+          ]
+        }
+      };
+
+  // 겹치는 열의 데이터를 추가
+  overlappingColumnsData.forEach(({ index, data }) => {
+    response.template.outputs[0].simpleText.text += `열: ${index}, 데이터: ${data.join(', ')}\n`;
+  });
+}
 
     // 모든 열이 비어있을 때만 데이터 저장
     if (allColumnsEmpty) {
