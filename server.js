@@ -2967,8 +2967,7 @@ app.post('/lecture_professor_find', async (req, res) => {
     userInput = req.body.action.params.professor_name;
   }
 
-  const similarProfessors = findSimilarProfessors(userInput, lectureInfo);
-  const similarProfessors2 = findSimilarProfessors(userInput, lectureList);
+  const similarProfessors = findSimilarProfessors(userInput, lectureList);
   
   if (similarProfessors && similarProfessors.length > 0) {
     response = {
@@ -2977,7 +2976,7 @@ app.post('/lecture_professor_find', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": `※번호 확인 후 번호 입력 클릭※\n\n${similarProfessors.map((lecture, index) => `${index + 1}.${lecture.교수명} ${similarProfessors2.map(lecture => ` ${lecture.소속[index]}`).join('')}`).join('\n')}\n`
+              "text": `※번호 확인 후 번호 입력 클릭※\n\n${similarProfessors.map((lecture, index) => `${index + 1}.${lecture.교수명} ${lecture.소속}`).join('\n')}\n`
             }
           }
         ],
