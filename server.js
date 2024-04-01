@@ -2724,7 +2724,7 @@ app.post('/lecture_info_select', async (req, res) => {
               'extra':{
                 'save': {
                   'type': "professor",
-                  'userInpit': userInput,
+                  'userInput': userInput,
                   'lecture_no': lecture_no,
                   'lectures': selectedLectureInfo.과목명,
                   'professor': selectedLectureInfo.교수명,
