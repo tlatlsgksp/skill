@@ -3902,7 +3902,7 @@ app.post('/lecture_schedule_edit', async (req, res) => {
         const classes = separatedData.map(data => data[2]);
         const places = separatedData.map(data => data[3]);
 
-        const selectedLectureInfo = lectureList.map((lecture, index) => {
+        const selectedLectureInfo = lectureList.find((lecture, index) => {
             lecture.과목명 === lectures[index] &&
             lecture.교수명 === professors[index] &&
             lecture.분반 === classes[index] &&
