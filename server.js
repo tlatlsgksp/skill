@@ -190,18 +190,6 @@ function getColumnIndex(timeIndices) {
   return result;
 }
 
-async function areAllColumnsEmpty(auth, spreadsheetId, ranges) {
-  const batchGetResponse = await auth.spreadsheets.values.batchGet({
-    spreadsheetId,
-    ranges,
-  });
-
-  const values = batchGetResponse.data.valueRanges.map(range => range.values);
-
-  // 모든 열이 비어 있는지 확인
-  return values.every(column => !column || column.length === 0 || column.every(cell => !cell));
-}
-
 //함수
 //요일 환산
 function gettoDay() {
@@ -3717,16 +3705,23 @@ app.post('/lecture_schedule_save', async (req, res) => {
     const timeIndex = getColumnIndex(timeIndices);
     const rowData = [lectures+'\n'+professor+'\n'+place];
 
-    const ranges = timeIndex.map(index => `시간표!${index.toString()}${userRow}`);
-    const areAllEmpty = await areAllColumnsEmpty(auth_global, SPREADSHEET_ID, ranges);
+    // 각 열을 읽어서 모든 열이 비어있는지 확인
+    let allColumnsEmpty = true;
+    for (const index of timeIndex) {
+      const range = `시간표!${index.toString()}${userRow}`;
+      const columnData = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, range);
+      if (columnData && columnData.length > 0) {
+        allColumnsEmpty = false;
+        break;
+      }
+    }
 
-    // 모든 열이 비어 있는 경우에만 데이터를 저장
-    if (areAllEmpty) {
+    // 모든 열이 비어있을 때만 데이터 저장
+    if (allColumnsEmpty) {
       for (const index of timeIndex) {
         const range = `시간표!${index.toString()}${userRow}`;
         await writeToGoogleSheets(auth_global, SPREADSHEET_ID, range, rowData);
       }
-
       response = {
         "version": "2.0",
         "template": {
@@ -3745,7 +3740,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
             }
           ]
         }
-      }
+      };
     } else {
       response = {
         "version": "2.0",
@@ -3753,7 +3748,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
           "outputs": [
             {
               "simpleText": {
-                "text": `이미 해당 시간표에 데이터가 존재합니다.`
+                "text": `시간표가 겹치는 강의가 있습니다.`
               }
             }
           ],
@@ -3765,11 +3760,11 @@ app.post('/lecture_schedule_save', async (req, res) => {
             }
           ]
         }
-      }
+      };
     }
     res.json(response);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     response = {
       "version": "2.0",
       "template": {
@@ -3788,7 +3783,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
           }
         ]
       }
-    }
+    };
     res.json(response);
   }
 });
