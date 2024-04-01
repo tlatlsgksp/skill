@@ -3906,12 +3906,12 @@ app.post('/lecture_schedule_edit', async (req, res) => {
             const classNumber = classes[i];
             const place = places[i];
 
-            const lecture = lectureList.find(lecture => {
-                return lecture.과목명 === lectureName &&
-                       lecture.교수명 === professorName &&
-                       lecture.분반 === classNumber &&
-                       lecture.강의실 === place;
-            });
+            const lecture = lectureList.find(lecture => 
+              lecture.과목명 === lectureName &&
+              lecture.교수명 === professorName &&
+              lecture.분반 === classNumber &&
+              lecture.강의실 === place
+            );
 
             if (lecture) {
                 selectedLectureInfo.push(lecture);
