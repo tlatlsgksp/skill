@@ -185,8 +185,6 @@ function getColumnIndex(timeIndices) {
     }
 
     result.push(letter);
-    console.log(letter);
-
   }
 
   return result;
@@ -3708,7 +3706,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
     const rowData = [lectures, professor, place];
 
     for (const index of timeIndex) {
-      const range = `시간표!${timeIndex[index]}${userRow}`;
+      const range = `시간표!${index}${userRow}`;
       await writeToGoogleSheets(auth_global, SPREADSHEET_ID, range, rowData);
     }
 
