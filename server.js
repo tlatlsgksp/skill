@@ -147,6 +147,21 @@ function getTimeIndex(time) {
   return indices;
 }
 
+function getColumnLetter(index) {
+  let column = '';
+  while (index > 0) {
+    let remainder = index % 26;
+    if (remainder === 0) {
+      column = 'Z' + column;
+      index = Math.floor(index / 26) - 1;
+    } else {
+      column = String.fromCharCode(64 + remainder) + column;
+      index = Math.floor(index / 26);
+    }
+  }
+  return column;
+}
+
 function getColumnIndex(timeIndex) {
   // 요일과 교시 정보를 파싱하여 열 인덱스를 계산
   const [day, hour] = timeIndex.split('(');
@@ -3692,10 +3707,11 @@ app.post('/lecture_schedule_save', async (req, res) => {
     }
 
     const timeIndices = getTimeIndex(time);
+    timeIndices = getColumnLetter(timeIndices);
     const rowData = [lectures, professor, place];
 
     for (const index of timeIndices) {
-      const range = `시간표!${String.fromCharCode(65 + (index - 1))}${userRow}`;
+      const range = `시간표!${timeIndices[index]}${userRow}`;
       await writeToGoogleSheets(auth_global, SPREADSHEET_ID, range, rowData);
     }
 
