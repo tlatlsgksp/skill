@@ -147,52 +147,47 @@ function getTimeIndex(time) {
   return indices;
 }
 
-function getColumnLetter(index) {
-  let column = '';
-  while (index > 0) {
-    let remainder = index % 26;
-    if (remainder === 0) {
-      column = 'Z' + column;
-      index = Math.floor(index / 26) - 1;
-    } else {
-      column = String.fromCharCode(64 + remainder) + column;
-      index = Math.floor(index / 26);
-    }
-  }
-  return column;
-}
+function getColumnIndex(timeIndices) {
+  const result = [];
+  const Array1 = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'];
+  const Array2 = ['Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD', 'AE'];
+  const Array3 = ['AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM', 'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT'];
+  const Array4 = ['AU', 'AV', 'AW', 'AX', 'AY', 'AZ', 'BA', 'BB', 'BC', 'BD', 'BE', 'BF', 'BG', 'BH', 'BI'];
+  const Array5 = ['BJ', 'BK', 'BL', 'BM', 'BN', 'BO', 'BP', 'BQ', 'BR', 'BS', 'BT', 'BU', 'BV', 'BW', 'BX'];
 
-function getColumnIndex(timeIndex) {
-  // 요일과 교시 정보를 파싱하여 열 인덱스를 계산
-  const [day, hour] = timeIndex.split('(');
-  let columnIndex = 0;
-  
-  // 요일에 따른 열 인덱스 계산
-  switch (day) {
-    case '월':
-      columnIndex = 1;
-      break;
-    case '화':
-      columnIndex = 16;
-      break;
-    case '수':
-      columnIndex = 31;
-      break;
-    case '목':
-      columnIndex = 46;
-      break;
-    case '금':
-      columnIndex = 61;
-      break;
-    default:
-      break;
+  for (const index of timeIndices) {
+    let letter;
+    const day = index.split('(')[0];
+    const num = parseInt(index.split('(')[1]);
+
+    if (num < 1 || num > 15) {
+      throw new Error('Invalid month index');
+    }
+
+    switch (day) {
+      case '월':
+        letter = Array1[num - 1];
+        break;
+      case '화':
+        letter = Array2[num - 1];
+        break;
+      case '수':
+        letter = Array3[num - 1];
+        break;
+      case '목':
+        letter = Array4[num - 1];
+        break;
+      case '금':
+        letter = Array5[num - 1];
+        break;
+      default:
+        throw new Error('Invalid day');
+    }
+
+    result.push(letter);
   }
-  
-  // 교시에 따른 열 인덱스 계산
-  const hourIndex = parseInt(hour, 10);
-  columnIndex += hourIndex;
-  
-  return columnIndex;
+
+  return result;
 }
 
 //함수
@@ -3707,11 +3702,11 @@ app.post('/lecture_schedule_save', async (req, res) => {
     }
 
     const timeIndices = getTimeIndex(time);
-    timeIndices = getColumnLetter(timeIndices);
+    const timeIndex = getColumnIndex(timeIndices);
     const rowData = [lectures, professor, place];
 
-    for (const index of timeIndices) {
-      const range = `시간표!${timeIndices[index]}${userRow}`;
+    for (const index of timeIndex) {
+      const range = `시간표!${timeIndex[index]}${userRow}`;
       await writeToGoogleSheets(auth_global, SPREADSHEET_ID, range, rowData);
     }
 
