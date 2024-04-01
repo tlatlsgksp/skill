@@ -3882,6 +3882,7 @@ app.post('/lecture_schedule_edit', async (req, res) => {
 
     if (userRow){
       const rowData = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, `B${userRow}:BX${userRow}`);
+      console.log(rowData);
 
       if (rowData && rowData.length > 0) {
         // 중복 제거
