@@ -3705,13 +3705,33 @@ app.post('/lecture_schedule_save', async (req, res) => {
     const timeIndex = getColumnIndex(timeIndices);
     const rowData = [lectures+'\n'+professor+'\n'+place];
 
-    // 각 열을 읽어서 모든 열이 비어있는지 확인
+    // 각 열을 읽어서 모든 열이 비어 있는지 확인
     let allColumnsEmpty = true;
     for (const index of timeIndex) {
       const range = `시간표!${index.toString()}${userRow}`;
       const columnData = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, range);
       if (columnData && columnData.length > 0) {
         allColumnsEmpty = false;
+        // 이미 데이터가 있는 경우 해당 데이터를 response에 추가
+        response = {
+          "version": "2.0",
+          "template": {
+            "outputs": [
+              {
+                "simpleText": {
+                  "text": `수업시간이 겹치는 강의가 있습니다.\n${columnData.join('\n')}`
+                }
+              }
+            ],
+            "quickReplies": [
+              {
+                'action': 'message',
+                'label': `처음으로`,
+                'messageText': `처음으로`
+              }
+            ]
+          }
+        };
         break;
       }
     }
@@ -3741,27 +3761,8 @@ app.post('/lecture_schedule_save', async (req, res) => {
           ]
         }
       };
-    } else {
-      response = {
-        "version": "2.0",
-        "template": {
-          "outputs": [
-            {
-              "simpleText": {
-                "text": `시간표가 겹치는 강의가 있습니다.`
-              }
-            }
-          ],
-          "quickReplies": [
-            {
-              'action': 'message',
-              'label': `처음으로`,
-              'messageText': `처음으로`
-            }
-          ]
-        }
-      };
     }
+    
     res.json(response);
   } catch (error) {
     console.log(error);
