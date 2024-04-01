@@ -3592,7 +3592,8 @@ app.post('/lecture_professor_info_search', async (req, res) => {
     lecture.분반 === classes
   );
   const selectedLectureInfo2 = lectureList.find(lecture => 
-    lecture.과목명 === lectures
+    lecture.과목명 === lectures &&
+    lecture.분반 === classes
   );
   console.log(selectedLectureInfo2);
   let response = {};
