@@ -154,11 +154,13 @@ function getColumnIndex(timeIndices) {
   const Array3 = ['AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM', 'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT'];
   const Array4 = ['AU', 'AV', 'AW', 'AX', 'AY', 'AZ', 'BA', 'BB', 'BC', 'BD', 'BE', 'BF', 'BG', 'BH', 'BI'];
   const Array5 = ['BJ', 'BK', 'BL', 'BM', 'BN', 'BO', 'BP', 'BQ', 'BR', 'BS', 'BT', 'BU', 'BV', 'BW', 'BX'];
+  console.log(timeIndices);
 
   for (const index of timeIndices) {
     let letter;
     const day = index.split('(')[0];
     const num = parseInt(index.split('(')[1]);
+    console.log(day + num);
 
     if (num < 1 || num > 15) {
       throw new Error('Invalid index');
@@ -3702,7 +3704,6 @@ app.post('/lecture_schedule_save', async (req, res) => {
     }
 
     const timeIndices = getTimeIndex(time);
-    console.log(timeIndices);
     const timeIndex = getColumnIndex(timeIndices);
     const rowData = [lectures, professor, place];
 
