@@ -3902,7 +3902,6 @@ app.post('/lecture_schedule_edit', async (req, res) => {
             const professorName = professors[i];
             const classNumber = classes[i];
             const place = places[i];
-            console.log(classNumber);
             const lecture = lectureList.find(lecture => 
               lecture.과목명 === lectureName &&
               lecture.분반 === classNumber
