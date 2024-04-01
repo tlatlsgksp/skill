@@ -87,7 +87,7 @@ async function writeToGoogleSheets(auth, spreadsheetId, range, data) {
   });
 }
 
-async function batchWriteToGoogleSheets(auth, spreadsheetId, ranges, values) {
+async function batchWriteToGoogleSheets(auth, spreadsheetId, ranges, rowDataArray) {
   const sheets = google.sheets({ version: 'v4', auth });
 
   try {
@@ -96,7 +96,7 @@ async function batchWriteToGoogleSheets(auth, spreadsheetId, ranges, values) {
       data: ranges.map((range, index) => ({
         range: range,
         majorDimension: 'ROWS',
-        values: values
+        values: [rowDataArray[index]]
       }))
     };
 
@@ -3764,7 +3764,8 @@ app.post('/lecture_schedule_save', async (req, res) => {
     } else {
       // 겹치는 열이 없으면 시간표에 저장
       const ranges = timeIndex.map(index => `시간표!${index.toString()}${userRow}`);
-      await batchWriteToGoogleSheets(auth_global, SPREADSHEET_ID, ranges, rowData);
+      const rowDataArray = Array(timeIndex.length).fill(rowData);
+      await batchWriteToGoogleSheets(auth_global, SPREADSHEET_ID, ranges, rowDataArray);
 
       response = {
         "version": "2.0",
