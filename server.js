@@ -2670,7 +2670,7 @@ app.post('/lecture_info_select', async (req, res) => {
           "outputs": [
             {
               "textCard": {
-                "title": "선택한 강의",
+                "title": "선택한 강의정보",
                 "description": `강의명: ${selectedLectureInfo.과목명}\n교수명: ${selectedLectureInfo.교수명}\n분반: ${selectedLectureInfo.분반}`,
                 "buttons": [
                   {
@@ -2968,6 +2968,7 @@ app.post('/lecture_professor_find', async (req, res) => {
   }
 
   const similarProfessors = findSimilarProfessors(userInput, lectureInfo);
+  const similarProfessors2 = findSimilarProfessors(userInput, lectureList);
   
   if (similarProfessors && similarProfessors.length > 0) {
     response = {
@@ -2976,7 +2977,7 @@ app.post('/lecture_professor_find', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": `※번호 확인 후 번호 입력 클릭※\n\n${similarProfessors.map((lecture, index) => `${index + 1}.${lecture.교수명}`).join('\n')}\n`
+              "text": `※번호 확인 후 번호 입력 클릭※\n\n${similarProfessors.map((lecture, index) => `${index + 1}.${lecture.교수명} ${similarProfessors2.map((lecture, index) => ` ${lecture.소속}`).join('')}`).join('\n')}\n`
             }
           }
         ],
@@ -3124,7 +3125,7 @@ app.post('/lecture_professor_select', async (req, res) => {
           "outputs": [
             {
               "textCard": {
-                "title": `${selectedProfessorInfo.교수명} 교수 정보`,
+                "title": `선택한 교수정보`,
                 "description": `교수명: ${selectedProfessorInfo.교수명}\n소속: ${selectedProfessorInfo2.소속}\n핸드폰: ${selectedProfessorInfo.핸드폰}\n이메일: ${selectedProfessorInfo.이메일}`,
                 "buttons": [
                   {
@@ -3412,7 +3413,7 @@ app.post('/lecture_professor_info_select', async (req, res) => {
           "outputs": [
             {
               "textCard": {
-                "title": "선택한 강의",
+                "title": "선택한 강의정보",
                 "description": `강의명: ${selectedLectureInfo.과목명}\n교수명: ${selectedLectureInfo.교수명}\n분반: ${selectedLectureInfo.분반}`,
                 "buttons": [
                   {
