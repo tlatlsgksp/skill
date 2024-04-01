@@ -3747,28 +3747,18 @@ app.post('/lecture_schedule_save', async (req, res) => {
     if (type === "lecture"){
       blockId = "66014fc63190593813f158f6"
       extraSet = {
-        'action': 'block',
-              'label': '뒤로가기',
-              'blockId': blockId,
-              'extra':{
-                'type': 'back_search',
-                'userInput': userInput,
-                'lecture_no': lecture_no
-              }
+        'type': 'back_search',
+        'userInput': userInput,
+        'lecture_no': lecture_no
       }
     } else{
       blockId = "6609338ecdd882158c75c801"
       extraSet = {
-        'action': 'block',
-              'label': '뒤로가기',
-              'blockId': blockId,
-              'extra':{
-                'type': 'back_search',
-                'userInput': userInput,
-                'professor_no': professor_no,
-                'professor_no2': professor_no2,
-                'professor_name': professor_name
-              }
+        'type': 'back_search',
+        'userInput': userInput,
+        'professor_no': professor_no,
+        'professor_no2': professor_no2,
+        'professor_name': professor_name
       }
     }
 
