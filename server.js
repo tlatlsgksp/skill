@@ -3879,15 +3879,14 @@ app.post('/lecture_schedule_edit', async (req, res) => {
     const userId = req.body.userRequest.user.id;
     let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID)
     let response;
-    let rowData = [];
 
     if (userRow){
-      rowData = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!B${userRow}:BX${userRow}`);
-      console.log(rowData);
+      const rowData = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!B${userRow}:BX${userRow}`);
 
       if (rowData && rowData.length > 0) {
         // 중복 제거
         const uniqueRowData = Array.from(new Set(rowData));
+        console.log(uniqueRowData);
 
         // " "를 기준으로 각 요소를 분리하여 배열로 저장
         const separatedData = uniqueRowData.map(row => row.split(" "));
