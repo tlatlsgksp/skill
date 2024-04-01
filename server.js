@@ -2723,7 +2723,7 @@ app.post('/lecture_info_select', async (req, res) => {
               'blockId': `660981bc73a80e4a1e58d2e3`,//schedule_save
               'extra':{
                 'save': {
-                  'type': "professor",
+                  'type': "lecture",
                   'userInput': userInput,
                   'lecture_no': lecture_no,
                   'lectures': selectedLectureInfo.과목명,
@@ -3060,11 +3060,6 @@ app.post('/lecture_professor_select', async (req, res) => {
   let response = {};
 
   if(extra && extra.type === "back_info_find"){
-    userInput = extra.userInput;
-    professor_no = extra.professor_no;
-    professor_no2 = extra.professor_no2;
-    professor_name = extra.professor_name;
-  } else if(extra && extra.type === "back_search"){
     userInput = extra.userInput;
     professor_no = extra.professor_no;
     professor_no2 = extra.professor_no2;
