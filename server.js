@@ -3699,7 +3699,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
 
     const timeIndices = getTimeIndex(time);
     const timeIndex = getColumnIndex(timeIndices);
-    const rowData = [lectures+'\n'+professor+'\n'+place];
+    const rowData = [lectures+' '+professor+' '+place];
 
     // 각 열에 대한 읽기 작업을 병렬로 수행
     const columnReadPromises = timeIndex.map(index => readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!${index.toString()}${userRow}`));
@@ -3715,10 +3715,10 @@ app.post('/lecture_schedule_save', async (req, res) => {
     // 겹치는 열이 하나라도 있으면 해당 데이터 보여주기
     if (overlappingColumnsData.length > 0) {
       let text = "수업시간이 겹치는 강의가 있습니다.\n\n";
-      overlappingColumnsData.forEach(({ index, data }) => {
-        const formattedData = data.map(item => item.replace(/\n/g, ' ')).join(' ');
-        text += `${formattedData} - ${index}\n`;
-      });
+      for (const overlappingColumn of overlappingColumnsData) {
+        const { index, data } = await overlappingColumn;
+        text += `${data.join('')} - ${index}\n`;
+      }
 
       response = {
         "version": "2.0",
