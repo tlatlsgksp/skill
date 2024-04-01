@@ -161,7 +161,7 @@ function getColumnIndex(timeIndices) {
     const num = parseInt(index.split('(')[1]);
 
     if (num < 1 || num > 15) {
-      throw new Error('Invalid month index');
+      throw new Error('Invalid index');
     }
 
     switch (day) {
@@ -3686,6 +3686,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
     const lectures = extra.save.lectures;
     const professor = extra.save.professor;
     const classes = extra.save.classes;
+    const timeIndices = getTimeIndex(time);
     const selectedLectureInfo = lectureList.find(lecture => 
       lecture.과목명 === lectures &&
       lecture.교수명 === professor &&
@@ -3700,8 +3701,6 @@ app.post('/lecture_schedule_save', async (req, res) => {
     if (!userRow) {
       userRow = await addUserRow(userId, auth_global, SPREADSHEET_ID);
     }
-
-    const timeIndices = getTimeIndex(time);
     const timeIndex = getColumnIndex(timeIndices);
     const rowData = [lectures, professor, place];
 
