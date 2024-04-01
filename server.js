@@ -190,6 +190,18 @@ function getColumnIndex(timeIndices) {
   return result;
 }
 
+async function areAllColumnsEmpty(auth, spreadsheetId, ranges) {
+  const batchGetResponse = await auth.spreadsheets.values.batchGet({
+    spreadsheetId,
+    ranges,
+  });
+
+  const values = batchGetResponse.data.valueRanges.map(range => range.values);
+
+  // 모든 열이 비어 있는지 확인
+  return values.every(column => !column || column.length === 0 || column.every(cell => !cell));
+}
+
 //함수
 //요일 환산
 function gettoDay() {
@@ -3705,10 +3717,15 @@ app.post('/lecture_schedule_save', async (req, res) => {
     const timeIndex = getColumnIndex(timeIndices);
     const rowData = [lectures+'\n'+professor+'\n'+place];
 
-    for (const index of timeIndex) {
-      const range = `시간표!${index.toString()}${userRow}`;
-      await writeToGoogleSheets(auth_global, SPREADSHEET_ID, range, rowData);
-    }
+    const ranges = timeIndex.map(index => `시간표!${index.toString()}${userRow}`);
+    const areAllEmpty = await areAllColumnsEmpty(auth_global, SPREADSHEET_ID, ranges);
+
+    // 모든 열이 비어 있는 경우에만 데이터를 저장
+    if (areAllEmpty) {
+      for (const index of timeIndex) {
+        const range = `시간표!${index.toString()}${userRow}`;
+        await writeToGoogleSheets(auth_global, SPREADSHEET_ID, range, rowData);
+      }
 
       response = {
         "version": "2.0",
@@ -3729,6 +3746,27 @@ app.post('/lecture_schedule_save', async (req, res) => {
           ]
         }
       }
+    } else {
+      response = {
+        "version": "2.0",
+        "template": {
+          "outputs": [
+            {
+              "simpleText": {
+                "text": `이미 해당 시간표에 데이터가 존재합니다.`
+              }
+            }
+          ],
+          "quickReplies": [
+            {
+              'action': 'message',
+              'label': `처음으로`,
+              'messageText': `처음으로`
+            }
+          ]
+        }
+      }
+    }
     res.json(response);
   } catch (error) {
     console.log(error)
