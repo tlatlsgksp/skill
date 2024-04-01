@@ -87,6 +87,28 @@ async function writeToGoogleSheets(auth, spreadsheetId, range, data) {
   });
 }
 
+async function batchWriteToGoogleSheets(auth, spreadsheetId, ranges, values) {
+  const sheets = google.sheets({ version: 'v4', auth });
+
+  try {
+    const resource = {
+      valueInputOption: 'USER_ENTERED',
+      data: ranges.map((range, index) => ({
+        range: range,
+        majorDimension: 'ROWS',
+        values: [values[index]]
+      }))
+    };
+
+    await sheets.spreadsheets.values.batchUpdate({
+      spreadsheetId: spreadsheetId,
+      resource: resource
+    });
+  } catch (error) {
+    console.error('Error writing data to Google Sheets:', error.message);
+  }
+}
+
 // 사용자 ID로 시트에서 해당 행을 찾는 함수
 async function findUserRow(userId, auth, spreadsheetId) {
   const sheets = google.sheets({ version: 'v4', auth });
@@ -3742,7 +3764,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
     } else {
       // 겹치는 열이 없으면 시간표에 저장
       const ranges = timeIndex.map(index => `시간표!${index.toString()}${userRow}`);
-      await writeToGoogleSheets(auth_global, SPREADSHEET_ID, ranges, rowData);
+      await batchWriteToGoogleSheets(auth_global, SPREADSHEET_ID, ranges, rowData);
 
       response = {
         "version": "2.0",
