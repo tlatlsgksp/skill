@@ -3930,10 +3930,7 @@ app.post('/lecture_schedule_edit', async (req, res) => {
                 'label': `번호 입력`,
                 'blockId': `660ab9587ad61051639e131d`,
                 'extra':{
-                  'userInput': userInput,
-                  'professor_no': professor_no,
-                  'professor_no2': professor_no2,
-                  'professor_name': professor_name
+                  
                 }
               },
               {
