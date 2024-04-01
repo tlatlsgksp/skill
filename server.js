@@ -87,33 +87,6 @@ async function writeToGoogleSheets(auth, spreadsheetId, range, data) {
   });
 }
 
-async function batchWriteToGoogleSheets(auth, spreadsheetId, ranges, data) {
-  const sheets = google.sheets({ version: 'v4', auth });
-  
-  const valueRanges = ranges.map((range, i) => ({
-    range: range,
-    values: [
-      data[i]
-    ]
-  }));
-  
-  try {
-    const response = await sheets.spreadsheets.values.batchUpdate({
-      spreadsheetId: spreadsheetId,
-      resource: {
-        valueInputOption: 'RAW',
-        data: valueRanges
-      }
-    });
-
-    console.log('Batch write operation successful');
-    return response;
-  } catch (error) {
-    console.error('Error performing batch write operation:', error.message);
-    throw error;
-  }
-}
-
 // 사용자 ID로 시트에서 해당 행을 찾는 함수
 async function findUserRow(userId, auth, spreadsheetId) {
   const sheets = google.sheets({ version: 'v4', auth });
@@ -3728,8 +3701,11 @@ app.post('/lecture_schedule_save', async (req, res) => {
     const timeIndex = getColumnIndex(timeIndices);
     const rowData = [lectures+'\n'+professor+'\n'+place];
 
+    // 각 열을 읽어서 모든 열이 비어 있는지 확인
+    let allColumnsEmpty = true;
     let overlappingColumnsData = [];
 
+    // 모든 열을 검사
     for (const index of timeIndex) {
       const range = `시간표!${index.toString()}${userRow}`;
       const columnData = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, range);
@@ -3739,8 +3715,10 @@ app.post('/lecture_schedule_save', async (req, res) => {
         overlappingColumnsData.push({ index: columnHeader, data: modifiedData });
       }
     }
-
-    if (overlappingColumnsData.length > 0) {
+    if (overlappingColumnsData.length > 0){
+      allColumnsEmpty = false;
+    }
+    if (!allColumnsEmpty) {
       let text = "수업시간이 겹치는 강의가 있습니다.\n\n";
       overlappingColumnsData.forEach(({ index, data }) => {
         text += `${data.join(', ')} - ${index}\n`;
@@ -3765,9 +3743,11 @@ app.post('/lecture_schedule_save', async (req, res) => {
           ]
         }
       };
-    } else {
-      const ranges = timeIndex.map(index => `시간표!${index.toString()}${userRow}`);
-      await batchWriteToGoogleSheets(auth_global, SPREADSHEET_ID, ranges, rowData);
+    }else {
+      for (const index of timeIndex) {
+        const range = `시간표!${index.toString()}${userRow}`;
+        await writeToGoogleSheets(auth_global, SPREADSHEET_ID, range, rowData);
+      }
       response = {
         "version": "2.0",
         "template": {
