@@ -3059,7 +3059,12 @@ app.post('/lecture_professor_select', async (req, res) => {
   let professor_name;
   let response = {};
 
-  if(extra && extra.type === "back_info_find"){ // pro_info_find로부터 받아온 extra값
+  if(extra && extra.type === "back_info_find"){
+    userInput = extra.userInput;
+    professor_no = extra.professor_no;
+    professor_no2 = extra.professor_no2;
+    professor_name = extra.professor_name;
+  } else if(extra && extra.type === "back_search"){
     userInput = extra.userInput;
     professor_no = extra.professor_no;
     professor_no2 = extra.professor_no2;
@@ -3562,10 +3567,21 @@ app.post('/lecture_professor_info_select', async (req, res) => {
 app.post('/lecture_professor_info_search', async (req, res) => {
   try {
   const extra = req.body.action.clientExtra;
-  const userInput = extra.userInput;
-  const professor_no = extra.professor_no;
-  const professor_no2 = extra.professor_no2;
-  const professor_name = extra.professor_name;
+  let userInput = extra.userInput;
+  let professor_no = extra.professor_no;
+  let professor_no2 = extra.professor_no2;
+  let professor_name = extra.professor_name;
+  if(extra && extra.type === "back_search"){
+    userInput = extra.userInput;
+    professor_no = extra.professor_no;
+    professor_no2 = extra.professor_no2;
+    professor_name = extra.professor_name;
+  } else {
+    userInput = extra.userInput;
+    professor_no = extra.professor_no;
+    professor_no2 = extra.professor_no2;
+    professor_name = extra.professor_name;
+  }
   const lectures = extra.select.lectures;
   const professor = extra.select.professor;
   const classes = extra.select.classes;
