@@ -2723,6 +2723,9 @@ app.post('/lecture_info_select', async (req, res) => {
               'blockId': `660981bc73a80e4a1e58d2e3`,//schedule_save
               'extra':{
                 'save': {
+                  'type': "professor",
+                  'userInpit': userInput,
+                  'lecture_no': lecture_no,
                   'lectures': selectedLectureInfo.과목명,
                   'professor': selectedLectureInfo.교수명,
                   'classes': selectedLectureInfo.분반
@@ -3465,6 +3468,11 @@ app.post('/lecture_professor_info_select', async (req, res) => {
               'blockId': `660981bc73a80e4a1e58d2e3`,//schedule_save
               'extra':{
                 'save': {
+                  'type': "professor",
+                  'userInput': userInput,
+                  'professor_no': professor_no,
+                  'professor_no2': professor_no2,
+                  'professor_name': professor_name,
                   'lectures': selectedLectureInfo.과목명,
                   'professor': selectedLectureInfo.교수명,
                   'classes': selectedLectureInfo.분반
@@ -3705,6 +3713,12 @@ app.post('/lecture_schedule_save', async (req, res) => {
   try {
     const extra = req.body.action.clientExtra;
     const userId = req.body.userRequest.user.id;
+    const type = extra.save.type;
+    const userInput = extra.save.userInput;
+    const lecture_no = extra.save.lecture_no;
+    const professor_no = extra.save.professor_no;
+    const professor_no2 = extra.save.professor_no2;
+    const professor_name = extra.save.professor_name;
     const lectures = extra.save.lectures;
     const professor = extra.save.professor;
     const classes = extra.save.classes;
@@ -3716,8 +3730,36 @@ app.post('/lecture_schedule_save', async (req, res) => {
     const time = selectedLectureInfo.시간표;
     const place = selectedLectureInfo.강의실;
     let response;
-
+    let extraSet;
+    let blockId;
     let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID) || await addUserRow(userId, auth_global, SPREADSHEET_ID);
+    if (type === "lecture"){
+      blockId = "66014fc63190593813f158f6"
+      extraSet = {
+        'action': 'block',
+              'label': '뒤로가기',
+              'blockId': blockId,
+              'extra':{
+                'type': 'back_search',
+                'userInput': userInput,
+                'lecture_no': lecture_no
+              }
+      }
+    } else{
+      blockId = "6609338ecdd882158c75c801"
+      extraSet = {
+        'action': 'block',
+              'label': '뒤로가기',
+              'blockId': blockId,
+              'extra':{
+                'type': 'back_search',
+                'userInput': userInput,
+                'professor_no': professor_no,
+                'professor_no2': professor_no2,
+                'professor_name': professor_name
+              }
+      }
+    }
 
     const timeIndices = getTimeIndex(time);
     const timeIndex = getColumnIndex(timeIndices);
@@ -3754,9 +3796,16 @@ app.post('/lecture_schedule_save', async (req, res) => {
           ],
           "quickReplies": [
             {
+              'action': 'block',
+              'label': '뒤로가기',
+              'blockId': blockId,
+              'extra':{extraSet}
+            },
+            {
               'action': 'message',
               'label': `처음으로`,
               'messageText': `처음으로`
+              
             }
           ]
         }
@@ -3778,6 +3827,16 @@ app.post('/lecture_schedule_save', async (req, res) => {
             }
           ],
           "quickReplies": [
+            {
+              'action': 'block',
+              'label': '뒤로가기',
+              'blockId': blockId,
+              'extra':{
+                'type': 'back_search',
+                'userInput': userInput,
+                'lecture_no': lecture_no
+              }
+            },
             {
               'action': 'message',
               'label': `처음으로`,
