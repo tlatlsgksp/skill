@@ -652,6 +652,12 @@ function removeDuplicates(arr) {
   return [...new Set(arr)];
 }
 
+function removeDuplicatesAndEmpty(data) {
+  const uniqueData = Array.from(new Set(data));
+  const filteredData = uniqueData.filter(row => row.trim() !== "");
+  return filteredData;
+}
+
 function findSimilarLectures(userInput, lectureInfo) {
   if (userInput){
     const userInputProcessed = userInput.replace(/\s+/g, '').toUpperCase();
@@ -3884,8 +3890,7 @@ app.post('/lecture_schedule_edit', async (req, res) => {
       const rowData = (await readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!B${userRow}:BX${userRow}`))[0];
 
       if (rowData && rowData.length > 0) {
-        // 중복 제거
-        const uniqueRowData = removeDuplicates(rowData);
+        const uniqueRowData = removeDuplicatesAndEmpty(rowData);
         console.log(uniqueRowData);
 
         // " "를 기준으로 각 요소를 분리하여 배열로 저장
