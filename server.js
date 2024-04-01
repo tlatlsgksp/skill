@@ -117,7 +117,7 @@ async function addUserRow(userId, auth, spreadsheetId) {
 }
 
 // 시간표의 시간 문자열을 이용하여 열 인덱스를 계산하는 함수
-function getTimeIndex(time) {
+async function getTimeIndex(time) {
   const indices = [];
 
   if (time.includes('),')) {
@@ -147,7 +147,7 @@ function getTimeIndex(time) {
   return indices;
 }
 
-function getColumnIndex(timeIndices) {
+async function getColumnIndex(timeIndices) {
   const result = [];
   const Array1 = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'];
   const Array2 = ['Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD', 'AE'];
@@ -3686,7 +3686,6 @@ app.post('/lecture_schedule_save', async (req, res) => {
     const lectures = extra.save.lectures;
     const professor = extra.save.professor;
     const classes = extra.save.classes;
-    const timeIndices = getTimeIndex(time);
     const selectedLectureInfo = lectureList.find(lecture => 
       lecture.과목명 === lectures &&
       lecture.교수명 === professor &&
@@ -3701,7 +3700,9 @@ app.post('/lecture_schedule_save', async (req, res) => {
     if (!userRow) {
       userRow = await addUserRow(userId, auth_global, SPREADSHEET_ID);
     }
-    const timeIndex = getColumnIndex(timeIndices);
+
+    const timeIndices = await getTimeIndex(time);
+    const timeIndex = await getColumnIndex(timeIndices);
     const rowData = [lectures, professor, place];
 
     for (const index of timeIndex) {
