@@ -3717,7 +3717,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
         // 데이터가 문자열인 경우에만 처리
         const modifiedData = columnData.map(item => typeof item === 'string' ? item.replace(/\n/g, ' ') : item);
         // 겹치는 열의 헤더값 가져오기
-        const columnHeader = await getColumnHeader(auth_global, SPREADSHEET_ID, `시간표!${index.toString()}1`);
+        const columnHeader = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!${index.toString()}1`);
         // 겹치는 열의 데이터와 헤더값 추가
         overlappingColumnsData.push({ index: columnHeader, data: modifiedData });
       }
