@@ -3881,7 +3881,7 @@ app.post('/lecture_schedule_edit', async (req, res) => {
     let response;
 
     if (userRow){
-      const rowData = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, `B${userRow}:BX${userRow}`);
+      const rowData = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!B${userRow}:BX${userRow}`);
       console.log(rowData);
 
       if (rowData && rowData.length > 0) {
