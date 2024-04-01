@@ -3764,7 +3764,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
 
     const timeIndices = getTimeIndex(time);
     const timeIndex = getColumnIndex(timeIndices);
-    const rowData = [lectures+' '+professor+' '+classes+' '+place];
+    const rowData = [lectures+' '+classes+' '+professor+' '+place];
 
     // 각 열에 대한 읽기 작업을 병렬로 수행
     const columnReadPromises = timeIndex.map(index => readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!${index.toString()}${userRow}`));
