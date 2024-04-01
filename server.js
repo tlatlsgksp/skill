@@ -3692,11 +3692,12 @@ app.post('/lecture_schedule_save', async (req, res) => {
     }
 
     const timeIndices = getTimeIndex(time);
-
-    // 데이터 작성
     const rowData = [lectures, professor, place];
-    const range = `시간표!${timeIndices[0]}${userRow}:${timeIndices[timeIndices.length - 1]}${userRow}`;
-    await writeToGoogleSheets(auth_global, SPREADSHEET_ID, range, rowData);
+
+    for (const index of timeIndices) {
+      const range = `시간표!${String.fromCharCode(65 + (index - 1))}${userRow}`;
+      await writeToGoogleSheets(auth_global, SPREADSHEET_ID, range, rowData);
+    }
 
       response = {
         "version": "2.0",
