@@ -3912,8 +3912,7 @@ app.post('/lecture_schedule_edit', async (req, res) => {
                 selectedLectureInfo.push(lecture);
             }
         }
-        
-        const lectureListText = selectedLectureInfo.map(info => `${info.과목명}[${info.분반}] ${info.교수명} ${info.강의실} ${info.시간표}`).join("\n");
+        const lectureListText = selectedLectureInfo.map(info, index => `${index + 1}.${info.과목명}[${info.분반}] ${info.교수명} ${info.강의실} ${info.시간표}`).join("\n");
         const text = `시간표에 저장된 강의 목록\n\n${lectureListText}`;
         response = {
           "version": "2.0",
@@ -3926,6 +3925,22 @@ app.post('/lecture_schedule_edit', async (req, res) => {
               }
             ],
             "quickReplies": [
+              {
+                'action': 'block',
+                'label': `번호 입력`,
+                'blockId': `660ab9587ad61051639e131d`,
+                'extra':{
+                  'userInput': userInput,
+                  'professor_no': professor_no,
+                  'professor_no2': professor_no2,
+                  'professor_name': professor_name
+                }
+              },
+              {
+                'action': 'block',
+                'label': '뒤로가기',
+                'blockId': "66097a32a5c8987d3ca8e8bd",
+              },
               {
                 'action': 'message',
                 'label': `처음으로`,
