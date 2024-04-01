@@ -3903,7 +3903,8 @@ app.post('/lecture_schedule_edit', async (req, res) => {
               lecture.교수명 === professors[index] &&
               lecture.분반 === classes[index] &&
               lecture.강의실 === places[index];
-      });
+        });
+        console.log(selectedLectureInfo);
         const lectureListText = selectedLectureInfo.map(info => `${info.과목명} - ${info.교수명} - ${info.분반} - ${info.강의실} - ${info.시간표}`).join("\n");
         const text = `시간표에 저장된 강의 목록\n\n${lectureListText}`;
         response = {
