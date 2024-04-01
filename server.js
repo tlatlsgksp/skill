@@ -3908,13 +3908,12 @@ app.post('/lecture_schedule_edit', async (req, res) => {
             const lecture = lectureList.find(lecture => 
               lecture.과목명 === lectureName
             );
-            console.log(lecture);
             if (lecture) {
                 selectedLectureInfo.push(lecture);
             }
         }
         
-        const lectureListText = selectedLectureInfo.map(info => `${info.과목명} - ${info.교수명} - ${info.분반} - ${info.강의실} - ${info.시간표}`).join("\n");
+        const lectureListText = selectedLectureInfo.map(info => `${info.과목명}[${info.분반}] ${info.교수명} ${info.강의실} ${info.시간표}`).join("\n");
         const text = `시간표에 저장된 강의 목록\n\n${lectureListText}`;
         response = {
           "version": "2.0",
