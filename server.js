@@ -3881,7 +3881,7 @@ app.post('/lecture_schedule_edit', async (req, res) => {
     let response;
 
     if (userRow){
-      const rowData = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!B${userRow}:BX${userRow}`);
+      const rowData = (await readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!B${userRow}:BX${userRow}`))[0];
 
       if (rowData && rowData.length > 0) {
         // 중복 제거
