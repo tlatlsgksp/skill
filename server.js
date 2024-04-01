@@ -3080,7 +3080,14 @@ app.post('/lecture_professor_select', async (req, res) => {
   
   if (similarProfessors) {
     const selectedProfessors = similarProfessors[professor_no - 1];
-    
+
+    const selectedProfessorInfo = lectureInfo.find(lecture => 
+      lecture.교수명 === selectedProfessors.교수명
+    );
+    const selectedProfessorInfo2 = lectureList.find(lecture => 
+      lecture.교수명 === selectedProfessors.교수명
+    );
+
     if (!selectedProfessors) {
       response = {
         "version": "2.0",
@@ -3111,9 +3118,6 @@ app.post('/lecture_professor_select', async (req, res) => {
         }
       }
     } else {
-      const selectedProfessorInfo = lectureInfo.find(lecture => 
-        lecture.교수명 === selectedProfessors.교수명
-      );
       response = {
         "version": "2.0",
         "template": {
@@ -3121,7 +3125,7 @@ app.post('/lecture_professor_select', async (req, res) => {
             {
               "textCard": {
                 "title": `${selectedProfessorInfo.교수명} 교수 정보`,
-                "description": `교수명: ${selectedProfessorInfo.교수명}\n핸드폰: ${selectedProfessorInfo.핸드폰}\n이메일: ${selectedProfessorInfo.이메일}`,
+                "description": `교수명: ${selectedProfessorInfo.교수명}\n소속: ${selectedProfessorInfo2.소속}\n핸드폰: ${selectedProfessorInfo.핸드폰}\n이메일: ${selectedProfessorInfo.이메일}`,
                 "buttons": [
                   {
                     'action': 'block',
