@@ -3739,7 +3739,6 @@ app.post('/lecture_schedule_save', async (req, res) => {
     const classes = extra.save.classes;
     const selectedLectureInfo = lectureList.find(lecture => 
       lecture.과목명 === lectures &&
-      lecture.교수명 === professor &&
       lecture.분반 === classes
     );
     const time = selectedLectureInfo.시간표;
