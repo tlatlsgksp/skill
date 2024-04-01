@@ -87,6 +87,33 @@ async function writeToGoogleSheets(auth, spreadsheetId, range, data) {
   });
 }
 
+async function batchWriteToGoogleSheets(auth, spreadsheetId, ranges, data) {
+  const sheets = google.sheets({ version: 'v4', auth });
+  
+  const valueRanges = ranges.map((range, i) => ({
+    range: range,
+    values: [
+      data[i]
+    ]
+  }));
+  
+  try {
+    const response = await sheets.spreadsheets.values.batchUpdate({
+      spreadsheetId: spreadsheetId,
+      resource: {
+        valueInputOption: 'RAW',
+        data: valueRanges
+      }
+    });
+
+    console.log('Batch write operation successful');
+    return response;
+  } catch (error) {
+    console.error('Error performing batch write operation:', error.message);
+    throw error;
+  }
+}
+
 // 사용자 ID로 시트에서 해당 행을 찾는 함수
 async function findUserRow(userId, auth, spreadsheetId) {
   const sheets = google.sheets({ version: 'v4', auth });
