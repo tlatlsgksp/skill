@@ -2530,7 +2530,7 @@ app.post('/lecture_info_find', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": `※번호 확인 후 번호 입력 클릭※\n\n과목 - 교수 - 분반 순\n\n${similarLectures.map((lecture, index) => `${index + 1}.${lecture.과목명} ${lecture.교수명} ${lecture.분반}`).join('\n')}\n`
+              "text": `※번호 확인 후 번호 입력 클릭※\n\n번호 - 과목 - 교수 - 분반 순\n\n${similarLectures.map((lecture, index) => `${index + 1}.${lecture.과목명} ${lecture.교수명} ${lecture.분반}`).join('\n')}\n`
             }
           }
         ],
@@ -2976,7 +2976,7 @@ app.post('/lecture_professor_find', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": `※번호 확인 후 번호 입력 클릭※\n\n${similarProfessors.map((lecture, index) => `${index + 1}.${lecture.교수명} ${lecture.소속}`).join('\n')}\n`
+              "text": `※번호 확인 후 번호 입력 클릭※\n\n번호 - 교수 - 소속 순\n\n${similarProfessors.map((lecture, index) => `${index + 1}.${lecture.교수명} ${lecture.소속}`).join('\n')}\n`
             }
           }
         ],
@@ -3246,7 +3246,7 @@ app.post('/lecture_professor_info_find', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": `※번호 확인 후 번호 입력 클릭※\n\n과목 - 교수 - 분반 순\n\n${similarLectures.map((lecture, index) => `${index + 1}.${lecture.과목명} ${lecture.교수명} ${lecture.분반}`).join('\n')}\n`
+              "text": `※번호 확인 후 번호 입력 클릭※\n\n번호 - 과목 - 교수 - 분반 순\n\n${similarLectures.map((lecture, index) => `${index + 1}.${lecture.과목명} ${lecture.교수명} ${lecture.분반}`).join('\n')}\n`
             }
           }
         ],
