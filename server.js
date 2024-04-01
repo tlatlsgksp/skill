@@ -3703,10 +3703,10 @@ app.post('/lecture_schedule_save', async (req, res) => {
 
     const timeIndices = getTimeIndex(time);
     const timeIndex = getColumnIndex(timeIndices);
-    const rowData = [lectures, professor, place];
+    const rowData = [lectures+'\n'+professor+'\n'+place];
 
     for (const index of timeIndex) {
-      const range = `시간표!${index}${userRow}`;
+      const range = `시간표!${index.toString()}${userRow}`;
       await writeToGoogleSheets(auth_global, SPREADSHEET_ID, range, rowData);
     }
 
