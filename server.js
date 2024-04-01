@@ -3885,7 +3885,7 @@ app.post('/lecture_schedule_edit', async (req, res) => {
 
       if (rowData && rowData.length > 0) {
         // 중복 제거
-        const uniqueRowData = Array.from(new Set(rowData));
+        const uniqueRowData = removeDuplicates(rowData);
         console.log(uniqueRowData);
 
         // " "를 기준으로 각 요소를 분리하여 배열로 저장
