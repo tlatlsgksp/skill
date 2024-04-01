@@ -3896,9 +3896,8 @@ app.post('/lecture_schedule_edit', async (req, res) => {
         // " "를 기준으로 각 요소를 분리하여 배열로 저장
         const separatedData = uniqueRowData.map(row => row.split(" "));
 
-        // lectures, professor, classes, place로 나누어 저장
-        const lectures = separatedData.map(data => data[0]);
-        const professors = separatedData.map(data => data[1]);
+        const lectures = separatedData.map(data => data[0].replace(/\s+/g, '').toUpperCase());
+        const professors = separatedData.map(data => data[1].replace(/\s+/g, '').toUpperCase());
         const classes = separatedData.map(data => data[2]);
         const places = separatedData.map(data => data[3]);
 
