@@ -3800,7 +3800,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
               'action': 'block',
               'label': '뒤로가기',
               'blockId': blockId,
-              'extra':{extraSet}
+              'extra': extraSet
             },
             {
               'action': 'message',
