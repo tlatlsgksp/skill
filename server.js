@@ -19,6 +19,7 @@ const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 const CREDENTIALS_PATH = 'credentials.json';
 const SPREADSHEET_ID = '1F3kEbduNvPnsIbfdO9gDZzc1yua1LMs627KAwZsYg6o';
 const RANGE = '메트로폴 강의 계획서!A4:AB';
+let auth_global;
 
 //스케줄러
 const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 0, hour: 10, minute: 0 }, async function() {
@@ -75,62 +76,44 @@ async function readFromGoogleSheets(auth, spreadsheetId, range) {
 // Google Sheets에 데이터 쓰기
 async function writeToGoogleSheets(auth, spreadsheetId, range, values) {
   const sheets = google.sheets({ version: 'v4', auth });
-
   const resource = {
-    values: values,
+    values: [data],
   };
-
-  try {
-    const response = await sheets.spreadsheets.values.update({
-      spreadsheetId: spreadsheetId,
-      range: range,
-      valueInputOption: 'RAW',
-      resource: resource,
-    });
-
-    console.log(`${response.data.updatedCells} cells updated.`);
-    return true;
-  } catch (error) {
-    console.error('Error writing data to Google Sheets:', error.message);
-    return false;
-  }
+  const response = await sheets.spreadsheets.values.update({
+    spreadsheetId,
+    range,
+    valueInputOption: 'RAW',
+    resource,
+  });
 }
 
 // 사용자 ID로 시트에서 해당 행을 찾는 함수
 async function findUserRow(userId, auth, spreadsheetId) {
   const sheets = google.sheets({ version: 'v4', auth });
-  
-  try {
-    const response = await sheets.spreadsheets.values.get({
-      spreadsheetId: spreadsheetId,
-      range: '시간표!A:A',
-    });
-
-    const rows = response.data.values;
-    if (rows && rows.length > 0) {
-      // 사용자 ID가 있는 행을 찾음
-      const userRow = rows.find(row => row[0] === userId);
-      if (userRow) {
-        const rowIndex = rows.indexOf(userRow) + 1; // 행 인덱스 +1 (시트의 행 번호는 1부터 시작)
-        return { rowIndex };
+  const response = await sheets.spreadsheets.values.get({
+    spreadsheetId,
+    range: '시간표!A:A', // userId가 있는 열 범위
+  });
+  const rows = response.data.values;
+  if (rows) {
+    for (let i = 0; i < rows.length; i++) {
+      if (rows[i][0] === userId) {
+        return i + 1; // 행 인덱스는 1부터 시작하므로 +1
       }
     }
-
-    // 사용자 ID가 없는 경우, 새로운 행을 추가
-    const newRow = [[userId]];
-    const result = await sheets.spreadsheets.values.append({
-      spreadsheetId: spreadsheetId,
-      range: '시간표!A:A',
-      valueInputOption: 'RAW',
-      resource: { values: newRow },
-    });
-
-    const rowIndex = result.data.updates.updatedRows[0];
-    return { rowIndex };
-  } catch (error) {
-    console.error('Error finding or creating user row:', error);
-    return null;
   }
+  return null; // 사용자의 행을 찾지 못한 경우
+}
+
+async function addUserRow(userId, auth, spreadsheetId) {
+  const sheets = google.sheets({ version: 'v4', auth });
+  const response = await sheets.spreadsheets.values.append({
+    spreadsheetId,
+    range: '시간표!A:A', // userId가 있는 열 범위
+    valueInputOption: 'RAW',
+    resource: { values: [[userId]] },
+  });
+  return response.data.updates.updatedRange.split(':')[0].replace('시간표!', ''); // 사용자의 행 번호 반환
 }
 
 // 시간표의 시간 문자열을 이용하여 열 인덱스를 계산하는 함수
@@ -680,6 +663,7 @@ function findSimilarProfessorsNofilter(userInput, lectureInfo) {
 async function initialize() {
   try {
     console.log('서버 초기화 중');
+    auth_global = await authorize();
     //await main_met();
     //await main_met_dorm();
     await main_lecturelist();
@@ -707,17 +691,6 @@ async function initialize() {
   }
 }
 initialize();
-
-
-
-
-
-
-
-
-
-
-
 
 //엔드포인트
 app.get('/', (req, res) => {
@@ -3703,7 +3676,6 @@ app.post('/lecture_schedule_save', async (req, res) => {
     const lectures = extra.save.lectures;
     const professor = extra.save.professor;
     const classes = extra.save.classes;
-    const auth = await authorize();
     const selectedLectureInfo = lectureList.find(lecture => 
       lecture.과목명 === lectures &&
       lecture.교수명 === professor &&
@@ -3715,17 +3687,16 @@ app.post('/lecture_schedule_save', async (req, res) => {
 
     const userRow = await findUserRow(userId, auth, SPREADSHEET_ID);
     if (userRow) {
-      const userRowIndex = userRow.rowIndex;
       const timeIndices = getTimeIndex(time);
 
       for (const timeIndex of timeIndices) {
-        const columnIndex = getColumnIndex(timeIndex); // 요일과 시간에 해당하는 열 인덱스 계산
+        const columnIndex = getColumnIndex(timeIndex);
         const range = `시간표!${userRowIndex}:${userRowIndex}`;
-        const updateData = Array.from({ length: 15 }).fill(''); // 열 개수에 맞는 빈 배열 생성
-        const combinedData = `${lectures}, ${professor}, ${place}`; // 강의, 교수, 장소를 합친 문자열 생성
+        const updateData = Array.from({ length: 15 }).fill('');
+        const combinedData = `${lectures}\n${professor}\n${place}`;
         updateData[0] = userId;
-        updateData[columnIndex] = combinedData; // 각 요일과 시간에 해당하는 열에 합친 데이터 저장
-        await writeToGoogleSheets(auth, SPREADSHEET_ID, range, [updateData]); // 구글 시트에 데이터 쓰기
+        updateData[columnIndex] = combinedData;
+        await writeToGoogleSheets(auth_global, SPREADSHEET_ID, range, [updateData]);
       }
 
       response = {
