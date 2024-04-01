@@ -3695,40 +3695,26 @@ app.post('/lecture_schedule_save', async (req, res) => {
     const place = selectedLectureInfo.강의실;
     let response;
 
-    let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID);
-
-    if (!userRow) {
-      userRow = await addUserRow(userId, auth_global, SPREADSHEET_ID);
-    }
+    let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID) || await addUserRow(userId, auth_global, SPREADSHEET_ID);
 
     const timeIndices = getTimeIndex(time);
     const timeIndex = getColumnIndex(timeIndices);
     const rowData = [lectures+'\n'+professor+'\n'+place];
 
-    // 각 열을 읽어서 모든 열이 비어 있는지 확인
-    let allColumnsEmpty = true;
     let overlappingColumnsData = [];
 
-    // 모든 열을 검사
     for (const index of timeIndex) {
       const range = `시간표!${index.toString()}${userRow}`;
       const columnData = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, range);
       if (columnData && columnData.length > 0) {
-        // 데이터가 문자열인 경우에만 처리
         const modifiedData = columnData.map(item => typeof item === 'string' ? item.replace(/\n/g, ' ') : item);
-        // 겹치는 열의 헤더값 가져오기
         const columnHeader = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!${index.toString()}1`);
-        // 겹치는 열의 데이터와 헤더값 추가
         overlappingColumnsData.push({ index: columnHeader, data: modifiedData });
       }
     }
-    if (overlappingColumnsData.length > 0){
-      allColumnsEmpty = false;
-    }
-    if (!allColumnsEmpty) {
+
+    if (overlappingColumnsData.length > 0) {
       let text = "수업시간이 겹치는 강의가 있습니다.\n\n";
-      
-      // 겹치는 열의 데이터를 추가
       overlappingColumnsData.forEach(({ index, data }) => {
         text += `${data.join(', ')} - ${index}\n`;
       });
@@ -3752,11 +3738,9 @@ app.post('/lecture_schedule_save', async (req, res) => {
           ]
         }
       };
-    }else {
-      for (const index of timeIndex) {
-        const range = `시간표!${index.toString()}${userRow}`;
-        await writeToGoogleSheets(auth_global, SPREADSHEET_ID, range, rowData);
-      }
+    } else {
+      const ranges = timeIndex.map(index => `시간표!${index.toString()}${userRow}`);
+      await batchWriteToGoogleSheets(auth_global, SPREADSHEET_ID, ranges, rowData);
       response = {
         "version": "2.0",
         "template": {
