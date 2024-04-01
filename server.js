@@ -96,7 +96,7 @@ async function batchWriteToGoogleSheets(auth, spreadsheetId, ranges, values) {
       data: ranges.map((range, index) => ({
         range: range,
         majorDimension: 'ROWS',
-        values: [[String(values[index])]]
+        values: values
       }))
     };
 
