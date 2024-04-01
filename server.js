@@ -74,7 +74,7 @@ async function readFromGoogleSheets(auth, spreadsheetId, range) {
 }
 
 // Google Sheets에 데이터 쓰기
-async function writeToGoogleSheets(auth, spreadsheetId, range, values) {
+async function writeToGoogleSheets(auth, spreadsheetId, range, data) {
   const sheets = google.sheets({ version: 'v4', auth });
   const resource = {
     values: [data],
