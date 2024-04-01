@@ -3708,9 +3708,8 @@ app.post('/lecture_schedule_save', async (req, res) => {
     let overlappingColumnsData = columnDataArray
       .filter(columnData => columnData && columnData.length > 0)
       .map(async (columnData, index) => {
-        const modifiedData = columnData.map(item => typeof item === 'string' ? item.replace(/\n/g, ' ') : item);
         const columnHeader = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!${timeIndex[index].toString()}1`);
-        return { index: columnHeader, data: modifiedData };
+        return { index: columnHeader, data: columnData  };
       });
 
     // 겹치는 열이 하나라도 있으면 해당 데이터 보여주기
@@ -3718,7 +3717,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
       let text = "수업시간이 겹치는 강의가 있습니다.\n\n";
       for (const overlappingColumn of overlappingColumnsData) {
         const { index, data } = await overlappingColumn;
-        text += `${data.join(' ')} - ${index}\n`;
+        text += `${data.replace(/\n/gi,' ')} - ${index}\n`;
       }
 
       response = {
