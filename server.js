@@ -3892,8 +3892,8 @@ app.post('/lecture_schedule_edit', async (req, res) => {
         const separatedData = uniqueRowData.map(row => row.split(" "));
 
         const lectures = separatedData.map(data => data[0].replace(/\s+/g, '').toUpperCase());
-        const professors = separatedData.map(data => data[1].replace(/\s+/g, '').toUpperCase());
-        const classes = separatedData.map(data => data[2]);
+        const classes = separatedData.map(data => data[1]);
+        const professors = separatedData.map(data => data[2].replace(/\s+/g, '').toUpperCase());
         const places = separatedData.map(data => data[3]);
         const selectedLectureInfo = [];
 
