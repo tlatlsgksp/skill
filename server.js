@@ -3714,8 +3714,8 @@ app.post('/lecture_schedule_save', async (req, res) => {
       const range = `시간표!${index.toString()}${userRow}`;
       const columnData = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, range);
       if (columnData && columnData.length > 0) {
-        // 줄 바꿈을 공백으로 변환
-        const modifiedData = columnData.map(item => item.replace(/\n/g, ' '));
+        // 데이터가 문자열인 경우에만 처리
+        const modifiedData = columnData.map(item => typeof item === 'string' ? item.replace(/\n/g, ' ') : item);
         // 겹치는 열의 헤더값 가져오기
         const columnHeader = await getColumnHeader(auth_global, SPREADSHEET_ID, `시간표!${index.toString()}1`);
         // 겹치는 열의 데이터와 헤더값 추가
