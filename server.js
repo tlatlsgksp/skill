@@ -3898,20 +3898,21 @@ app.post('/lecture_schedule_edit', async (req, res) => {
         const professors = separatedData.map(data => data[1].replace(/\s+/g, '').toUpperCase());
         const classes = separatedData.map(data => data[2]);
         const places = separatedData.map(data => data[3]);
-        console.log(lectures);
-        const selectedLectureInfo = lectureList.find((lecture, index) => {
-            lecture.과목명 === lectures[index] &&
-            lecture.교수명 === professors[index] &&
-            lecture.분반 === classes[index] &&
-            lecture.강의실 === places[index]
-        });
+        const selectedLectureInfo = lectureList.filter((lecture, index) => {
+          return lecture.과목명 === lectures[index] &&
+              lecture.교수명 === professors[index] &&
+              lecture.분반 === classes[index] &&
+              lecture.강의실 === places[index];
+      });
+        const lectureListText = selectedLectureInfo.map(info => `${info.과목명} - ${info.교수명} - ${info.분반} - ${info.강의실} - ${info.시간표}`).join("\n");
+        const text = `시간표에 저장된 강의 목록\n\n${lectureListText}`;
         response = {
           "version": "2.0",
           "template": {
             "outputs": [
               {
                 "simpleText": {
-                  "text": "시간표에 저장된 강의 목록\n\n" + selectedLectureInfo.map(info => `${info.과목명} - ${info.교수명} - ${info.분반} - ${info.강의실} - ${info.시간표}`).join("\n")
+                  "text": text
                 }
               }
             ],
