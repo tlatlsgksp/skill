@@ -3915,7 +3915,7 @@ app.post('/lecture_schedule_edit', async (req, res) => {
             }
         }
         const lectureListText = selectedLectureInfo.map((info, index) => `${index + 1}.${info.과목명}[${info.분반}] ${info.교수명} ${info.강의실} ${info.시간표}`).join("\n");
-        const text = `시간표에 저장된 강의 목록\n\n${lectureListText}`;
+        const text = `※번호 확인 후 번호 입력 클릭※\n\n시간표에 저장된 강의 목록\n\n${lectureListText}`;
         response = {
           "version": "2.0",
           "template": {
