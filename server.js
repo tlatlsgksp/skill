@@ -117,7 +117,7 @@ async function addUserRow(userId, auth, spreadsheetId) {
 }
 
 // 시간표의 시간 문자열을 이용하여 열 인덱스를 계산하는 함수
-async function getTimeIndex(time) {
+function getTimeIndex(time) {
   const indices = [];
 
   if (time.includes('),')) {
@@ -147,7 +147,7 @@ async function getTimeIndex(time) {
   return indices;
 }
 
-async function getColumnIndex(timeIndices) {
+function getColumnIndex(timeIndices) {
   const result = [];
   const Array1 = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'];
   const Array2 = ['Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD', 'AE'];
@@ -3701,8 +3701,9 @@ app.post('/lecture_schedule_save', async (req, res) => {
       userRow = await addUserRow(userId, auth_global, SPREADSHEET_ID);
     }
 
-    const timeIndices = await getTimeIndex(time);
-    const timeIndex = await getColumnIndex(timeIndices);
+    const timeIndices = getTimeIndex(time);
+    console.log(timeIndices);
+    const timeIndex = getColumnIndex(timeIndices);
     const rowData = [lectures, professor, place];
 
     for (const index of timeIndex) {
