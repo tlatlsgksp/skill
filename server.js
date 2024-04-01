@@ -3714,21 +3714,30 @@ app.post('/lecture_schedule_save', async (req, res) => {
       const range = `시간표!${index.toString()}${userRow}`;
       const columnData = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, range);
       if (columnData && columnData.length > 0) {
-        allColumnsEmpty = false;
-        // 겹치는 열의 데이터를 추가
-        overlappingColumnsData.push({ index, data: columnData });
+        // 줄 바꿈을 공백으로 변환
+        const modifiedData = columnData.map(item => item.replace(/\n/g, ' '));
+        // 겹치는 열의 헤더값 가져오기
+        const columnHeader = await getColumnHeader(auth_global, SPREADSHEET_ID, `시간표!${index.toString()}1`);
+        // 겹치는 열의 데이터와 헤더값 추가
+        overlappingColumnsData.push({ index: columnHeader, data: modifiedData });
       }
     }
 
-    // 모든 열을 검사한 후에 겹치는 열이 있으면 해당 데이터를 사용자에게 보여줌
-    if (!allColumnsEmpty && overlappingColumnsData.length > 0) {
+    if (!allColumnsEmpty) {
+      let text = "수업시간이 겹치는 강의가 있습니다.\n\n";
+      
+      // 겹치는 열의 데이터를 추가
+      overlappingColumnsData.forEach(({ index, data }) => {
+        text += `${data.join(', ')} - ${index}\n`;
+      });
+
       response = {
         "version": "2.0",
         "template": {
           "outputs": [
             {
               "simpleText": {
-                "text": `수업시간이 겹치는 강의가 있습니다.\n\n`
+                "text": text
               }
             }
           ],
@@ -3741,15 +3750,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
           ]
         }
       };
-
-  // 겹치는 열의 데이터를 추가
-  overlappingColumnsData.forEach(({ index, data }) => {
-    response.template.outputs[0].simpleText.text += `열: ${index}, 데이터: ${data.join(', ')}\n`;
-  });
-}
-
-    // 모든 열이 비어있을 때만 데이터 저장
-    if (allColumnsEmpty) {
+    }else {
       for (const index of timeIndex) {
         const range = `시간표!${index.toString()}${userRow}`;
         await writeToGoogleSheets(auth_global, SPREADSHEET_ID, range, rowData);
