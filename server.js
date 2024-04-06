@@ -112,14 +112,11 @@ async function deleteToGoogleSheets(auth, spreadsheetId, range, value) {
   const sheets = google.sheets({ version: 'v4', auth });
 
   try {
-    const resource = {
-      values: [value],
-    };
     const response = sheets.spreadsheets.values.batchClear({
       spreadsheetId,
       range,
-      valueInputOption: 'RAW',
-      resource,
+      majorDimension: 'ROWS',
+      values: [value],
     });
     console.log('Cells containing value deleted:', response.value);
   } catch (err) {
