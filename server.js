@@ -3864,7 +3864,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
       let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID) || await addUserRow(userId, auth_global, SPREADSHEET_ID);
       const timeIndices = getTimeIndex(time);
       const timeIndex = getColumnIndex(timeIndices);
-      const rowData = [lectures+' '+classes+' '+professor+' '+place];
+      const rowData = [lectures+'\n'+classes+'\n'+professor+'\n'+place];
 
       // 각 열에 대한 읽기 작업을 병렬로 수행
       const columnReadPromises = timeIndex.map(index => readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!${index.toString()}${userRow}`));
@@ -3986,7 +3986,7 @@ app.post('/lecture_schedule_edit', async (req, res) => {
       if (rowData && rowData.length > 0) {
         const uniqueRowData = removeDuplicatesAndEmpty(rowData);
 
-        const separatedData = uniqueRowData.map(row => row.split(" "));
+        const separatedData = uniqueRowData.map(row => row.split("\n"));
 
         const lectures = separatedData.map(data => data[0].replace(/\s+/g, '').toUpperCase());
         const classes = separatedData.map(data => data[1]);
@@ -4097,7 +4097,7 @@ app.post('/lecture_schedule_delete', async (req, res) => {
     let schedule_no = req.body.action.params.schedule_no;
     let selectedLectureInfo = extra.selectedLectureInfo;
     let selectedLectureInfos = selectedLectureInfo[schedule_no - 1];
-    let combine = selectedLectureInfos.과목명+' '+selectedLectureInfos.분반+' '+selectedLectureInfos.교수명+' '+selectedLectureInfos.강의실
+    let combine = selectedLectureInfos.과목명+'\n'+selectedLectureInfos.분반+'\n'+selectedLectureInfos.교수명+'\n'+selectedLectureInfos.강의실
     let response;
     await deleteToGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!B${userRow}:BX${userRow}`, combine);
     response = {
@@ -4172,7 +4172,7 @@ app.post('/lecture_schedule_print', async (req, res) => {
       await page.setExtraHTTPHeaders({
         'Accept-Language': 'ko-KR'
       });
-      await page.setViewport({ width: 1920, height: 1080 });
+      await page.setViewport({ width: 1280, height: 800 });
       page.setDefaultNavigationTimeout(0);
       await page.goto(url, { waitUntil: 'networkidle0' });
       await page.evaluate(() => {
@@ -4196,6 +4196,18 @@ app.post('/lecture_schedule_print', async (req, res) => {
                         "altText": "시간표 이미지"
                     }
                 }
+            ],
+            "quickReplies": [
+              {
+                'action': 'block',
+                'label': '뒤로가기',
+                'blockId': "66097a32a5c8987d3ca8e8bd",
+              },
+              {
+                'action': 'message',
+                'label': `처음으로`,
+                'messageText': `처음으로`
+              }
             ]
         }
       }
