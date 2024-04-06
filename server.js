@@ -139,9 +139,7 @@ async function deleteToGoogleSheets(auth, spreadsheetId, range, value) {
             },
           },
           {
-            clearBasicFilter: {
-              sheetId: 518930033, // 시트의 ID
-            },
+
           },
         ],
       },
