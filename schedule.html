@@ -56,10 +56,10 @@
                         if (scheduleItem) {
                             const data = scheduleItem[key].split('\n');
                             const subject = data[0] || '';
-                            const division = data[1] ? `[${data[1]}]` : '';
+                            const division = data[1] || '';
                             const professor = data[2] || '';
                             const room = data[3] || '';
-                            cell.innerHTML = `${subject}${division}<br>${professor} ${room}`;
+                            cell.innerHTML = `${subject}<br>${professor}<br>${division} ${room}`;
                         } else {
                             cell.innerHTML = '';
                         }
