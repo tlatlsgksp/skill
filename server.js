@@ -4171,6 +4171,9 @@ app.post('/lecture_schedule_print', async (req, res) => {
 
       await page.goto(url, { waitUntil: 'networkidle0' });
       
+      await page.evaluate(() => {
+        document.body.style.fontFamily = 'Nanum Gothic, sans-serif';
+      });
 
       const imageBuffer = await page.screenshot({ fullPage: true });
       const imageName = `${userId}_schedule_image.png`;
