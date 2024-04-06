@@ -110,7 +110,7 @@ async function batchWriteToGoogleSheets(auth, spreadsheetId, ranges, data) {
 
 async function deleteToGoogleSheets(auth, spreadsheetId, range, data) {
   const sheets = google.sheets({ version: 'v4', auth });
-
+  console.log(data);
   try {
       const response = await sheets.spreadsheets.values.get({
           spreadsheetId: spreadsheetId,
