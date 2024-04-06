@@ -139,6 +139,31 @@ async function deleteToGoogleSheets(auth, spreadsheetId, range, data) {
   }
 }
 
+async function getScheduleData(auth, spreadsheetId) {
+  const sheets = google.sheets({ version: 'v4', auth });
+  const response = await sheets.spreadsheets.values.get({
+      spreadsheetId: spreadsheetId,
+      range: '시간표!A1:BX', // 시간표 시트의 전체 범위
+  });
+  const rows = response.data.values;
+
+  const headerRow = rows.shift(); // 헤더 행 추출
+  const scheduleData = [];
+  rows.forEach(row => {
+      const userId = row[0]; // 첫 번째 열은 userId
+      const timetable = {};
+      // 헤더 행의 내용을 기준으로 시간표 데이터를 세분화하여 timetable 객체에 저장
+      headerRow.forEach((header, index) => {
+          if (index > 0 && index < row.length) {
+              timetable[header] = row[index];
+          }
+      });
+      scheduleData.push({ userId, timetable });
+  });
+
+  return scheduleData;
+}
+
 // 사용자 ID로 시트에서 해당 행을 찾는 함수
 async function findUserRow(userId, auth, spreadsheetId) {
   const sheets = google.sheets({ version: 'v4', auth });
@@ -4089,29 +4114,7 @@ app.post('/lecture_schedule_delete', async (req, res) => {
 
 app.post('/schedule_load', async (req, res) => {
   try {
-      const spreadsheetId = req.body.spreadsheetId;
-
-      async function getScheduleData(auth, spreadsheetId) {
-          const sheets = google.sheets({ version: 'v4', auth });
-          const response = await sheets.spreadsheets.values.get({
-              spreadsheetId: spreadsheetId,
-              range: '시간표!A1:BX', // 시간표 시트의 전체 범위
-          });
-          const rows = response.data.values;
-
-          const headerRow = rows.shift(); // 헤더 행 추출
-          const scheduleData = [];
-          rows.forEach(row => {
-              const userId = row[0];
-              const timetable = row.slice(1);
-              scheduleData.push({ userId, timetable });
-          });
-
-          return scheduleData;
-      }
-
-      // 시간표 데이터 가져오기
-      const scheduleData = await getScheduleData(auth_global, spreadsheetId);
+      const scheduleData = await getScheduleData(auth_global, SPREADSHEET_ID);
 
       console.log(scheduleData);
       res.json({ scheduleData });
