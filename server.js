@@ -3978,16 +3978,13 @@ app.post('/lecture_schedule_edit', async (req, res) => {
   try{
     const userId = req.body.userRequest.user.id;
     let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID)
+    const rowData = (await readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!B${userRow}:BX${userRow}`))[0];
     let response;
 
-    if (userRow){
-      const rowData = (await readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!B${userRow}:BX${userRow}`))[0];
-
+    if (userRow && rowData){
       if (rowData && rowData.length > 0) {
         const uniqueRowData = removeDuplicatesAndEmpty(rowData);
-
         const separatedData = uniqueRowData.map(row => row.split("\n"));
-
         const lectures = separatedData.map(data => data[0].replace(/\s+/g, '').toUpperCase());
         const classes = separatedData.map(data => data[1]);
         const professors = separatedData.map(data => data[2].replace(/\s+/g, '').toUpperCase());
