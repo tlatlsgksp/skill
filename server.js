@@ -123,7 +123,7 @@ async function deleteToGoogleSheets(auth, spreadsheetId, range, value) {
 
     if (rows.length) {
       let requests = [];
-      rows.forEach((row, rowIndex) => {
+      rows.forEach((row) => {
         row.forEach((cell, colIndex) => {
           if (cell.includes(value)) {
             // 값이 포함된 셀을 삭제하는 요청을 추가합니다.
@@ -144,11 +144,11 @@ async function deleteToGoogleSheets(auth, spreadsheetId, range, value) {
       // 요청을 실행하여 셀을 삭제합니다.
       if (requests.length > 0) {
         const batchUpdateRequest = { requests: requests };
-        sheets.spreadsheets.batchUpdate({
+        const batchUpdateResponse = await sheets.spreadsheets.batchUpdate({
           spreadsheetId: spreadsheetId,
           resource: batchUpdateRequest
         });
-        console.log('Cells containing value deleted.');
+        console.log('Cells containing value deleted:', batchUpdateResponse.data);
       } else {
         console.log('No cells containing value found.');
       }
