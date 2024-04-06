@@ -4056,7 +4056,6 @@ app.post('/lecture_schedule_delete', async (req, res) => {
   }
   res.json(response);
 }
-}
 });
 
 app.listen(port, () => {
