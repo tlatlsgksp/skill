@@ -125,7 +125,7 @@ async function deleteToGoogleSheets(auth, spreadsheetId, range, value) {
                   0: {
                     condition: {
                       type: 'TEXT_EQ',
-                      values: value,
+                      values: [value],
                     },
                   },
                 },
@@ -4043,7 +4043,7 @@ app.post('/lecture_schedule_delete', async (req, res) => {
     let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID)
     let schedule_no = req.body.action.params.schedule_no;
     let selectedLectureInfo = extra.selectedLectureInfo;
-    let selectedLectureInfos = selectedLectureInfo[schedule_no];
+    let selectedLectureInfos = selectedLectureInfo[schedule_no - 1];
     let combine = selectedLectureInfos.과목명+' '+selectedLectureInfos.교수명+' '+selectedLectureInfos.분반+' '+selectedLectureInfos.강의실
     let response;
     await deleteToGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!B${userRow}:BX${userRow}`, combine);
