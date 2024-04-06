@@ -122,8 +122,8 @@ async function deleteToGoogleSheets(auth, spreadsheetId, range, value) {
               filter: {
                 range: {
                   sheetId: 518930033,
-                  startRowIndex: userRow - 1,
-                  endRowIndex: userRow,
+                  startRowIndex: range - 1,
+                  endRowIndex: range,
                   startColumnIndex: 1,
                   endColumnIndex: 76,
                 },
