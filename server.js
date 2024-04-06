@@ -767,10 +767,10 @@ async function initialize() {
   try {
     console.log('서버 초기화 중');
     auth_global = await authorize();
-    await main_met();
-    await main_met_dorm();
-    await main_lecturelist();
-    await main_lectureinfo();
+    //await main_met();
+    //await main_met_dorm();
+    //await main_lecturelist();
+    //await main_lectureinfo();
     fs.readFile('./crawl_met.json', 'utf8', async (err, data) => {
       if (err) throw err;
       mealMetropole = await JSON.parse(data);
