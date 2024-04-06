@@ -115,9 +115,9 @@ async function deleteToGoogleSheets(auth, spreadsheetId, range, value) {
     const request = {
       spreadsheetId: spreadsheetId,
       resource: {
-        "dataFilters": [
+        "data_filters": [
           {
-            "gridRange": {
+            "grid_range": {
               "sheet_id": 518930033,
               "start_row_index": range,
               "end_row_index": range,
