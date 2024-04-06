@@ -4170,6 +4170,7 @@ app.post('/lecture_schedule_print', async (req, res) => {
       const page = await browser.newPage();
 
       await page.goto(url, { waitUntil: 'networkidle0' });
+      
 
       const imageBuffer = await page.screenshot({ fullPage: true });
       const imageName = `${userId}_schedule_image.png`;
@@ -4191,7 +4192,7 @@ app.post('/lecture_schedule_print', async (req, res) => {
             ]
         }
       }
-    res.json(response);
+      res.json(response);
   } catch (error) {
       console.log(error)
       response = {
