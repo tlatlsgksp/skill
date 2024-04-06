@@ -40,7 +40,7 @@
             white-space: nowrap;
         }
         .info-cell {
-            font-size: 13px;
+            font-size: 14px;
             color: #ffffff;
         }
     </style>
@@ -51,7 +51,7 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const userId = urlParams.get('userId');
-        const colors = ['#FFFFFF', '#FF0000', '#FF8000', '#2A0A0A', '#BEF781', '#81F781', '#81F7BE', '#81F7F3', '#81BEF7', '#8181F7', '#BE81F7', '#F781F3', '#F781BE', '#FA8258', '#F7D358', '#D0FA58', '#82FA58', '#58FA82', '#58FAD0', '#58D3F7', '#5882FA', '#8258FA', '#D358F7', '#FA58D0', '#FA5882']; // 20가지의 연한 색상 목록
+        const colors = ['#FFFFFF', '#FA5858', '#FAAC58', '#F4FA58', '#BEF781', '#81F781', '#81F7BE', '#81F7F3', '#81BEF7', '#8181F7', '#BE81F7', '#F781F3', '#F781BE', '#FA8258', '#F7D358', '#D0FA58', '#82FA58', '#58FA82', '#58FAD0', '#58D3F7', '#5882FA', '#8258FA', '#D358F7', '#FA58D0', '#FA5882']; // 20가지의 연한 색상 목록
 
         fetch(`/schedule_load`)
         .then(response => response.json())
