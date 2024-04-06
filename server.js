@@ -123,7 +123,6 @@ async function deleteToGoogleSheets(auth, spreadsheetId, range, data) {
       } else {
           const newData = rows.map(row => row.map(cell => cell === data ? "" : cell));
           
-          console.log(newData); 
           // 데이터를 지정된 범위에 업데이트
           const updateResponse = await sheets.spreadsheets.values.update({
               spreadsheetId: spreadsheetId,
@@ -4085,6 +4084,40 @@ app.post('/lecture_schedule_delete', async (req, res) => {
       }
     }
     res.json(response);
+  }
+});
+
+app.post('/schedule_load', async (req, res) => {
+  try {
+      const spreadsheetId = req.body.spreadsheetId;
+
+      async function getScheduleData(auth, spreadsheetId) {
+          const sheets = google.sheets({ version: 'v4', auth });
+          const response = await sheets.spreadsheets.values.get({
+              spreadsheetId: spreadsheetId,
+              range: '시간표!A1:BX', // 시간표 시트의 전체 범위
+          });
+          const rows = response.data.values;
+
+          const headerRow = rows.shift(); // 헤더 행 추출
+          const scheduleData = [];
+          rows.forEach(row => {
+              const userId = row[0];
+              const timetable = row.slice(1);
+              scheduleData.push({ userId, timetable });
+          });
+
+          return scheduleData;
+      }
+
+      // 시간표 데이터 가져오기
+      const scheduleData = await getScheduleData(auth_global, spreadsheetId);
+
+      console.log(scheduleData);
+      res.json({ scheduleData });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
