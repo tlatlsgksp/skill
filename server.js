@@ -115,26 +115,26 @@ async function deleteToGoogleSheets(auth, spreadsheetId, range, value) {
     const request = {
       spreadsheetId: spreadsheetId,
       resource: {
-        data_filters: [
+        "data_filters": [
           {
-            grid_range: {
-              sheet_id: 518930033,
-              start_row_index: range,
-              end_row_index: range,
-              start_column_index: 2,
-              end_column_index: 76,
+            "grid_range": {
+              "sheet_id": 518930033,
+              "start_row_index": range,
+              "end_row_index": range,
+              "start_column_index": 2,
+              "end_column_index": 76
             },
-            criteria: {
-              0: {
-                condition: {
-                  type: 'TEXT_EQ',
-                  values: [{ userEnteredValue: value }],
-                },
-              },
-            },
-          },
-        ],
-      },
+            "criteria": {
+              "0": {
+                "condition": {
+                  "type": "TEXT_EQ",
+                  "values": [{ "userEnteredValue": value }]
+                }
+              }
+            }
+          }
+        ]
+      }
     };
 
     // 요청을 보냅니다.
