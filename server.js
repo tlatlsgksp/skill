@@ -3978,12 +3978,12 @@ app.post('/lecture_schedule_edit', async (req, res) => {
   try{
     const userId = req.body.userRequest.user.id;
     let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID)
-    const rowData = (await readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!B${userRow}:BX${userRow}`))[0];
+    const rowData = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!B${userRow}:BX${userRow}`);
     let response;
 
-    if (userRow && rowData){
-      if (rowData && rowData.length > 0) {
-        const uniqueRowData = removeDuplicatesAndEmpty(rowData);
+    if (userRow && rowData[0]){
+      if (rowData[0] && rowData[0].length > 0) {
+        const uniqueRowData = removeDuplicatesAndEmpty(rowData[0]);
         const separatedData = uniqueRowData.map(row => row.split("\n"));
         const lectures = separatedData.map(data => data[0].replace(/\s+/g, '').toUpperCase());
         const classes = separatedData.map(data => data[1]);
@@ -4169,7 +4169,7 @@ app.post('/lecture_schedule_print', async (req, res) => {
       await page.setExtraHTTPHeaders({
         'Accept-Language': 'ko-KR'
       });
-      await page.setViewport({ width: 1280, height: 800 });
+      await page.setViewport({ width: 1600, height: 900 });
       page.setDefaultNavigationTimeout(0);
       await page.goto(url, { waitUntil: 'networkidle0' });
       await page.evaluate(() => {
