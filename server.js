@@ -113,47 +113,32 @@ async function deleteToGoogleSheets(auth, spreadsheetId, range, value) {
   const sheets = google.sheets({ version: 'v4', auth });
   
   try {
-    // 데이터를 읽어옵니다.
-    const response = await sheets.spreadsheets.values.get({
-      spreadsheetId: spreadsheetId,
-      range: range,
-    });
-
-    const rows = response.data.values;
-
-    if (rows.length) {
-      let requests = [];
-      rows.forEach((row) => {
-        row.forEach((cell, colIndex) => {
-          if (cell.includes(value)) {
-            // 값이 포함된 셀을 삭제하는 요청을 추가합니다.
-            requests.push({
-              deleteDimension: {
-                range: {
-                  sheetId: 0,
-                  dimension: "COLUMNS",
-                  startIndex: colIndex,
-                  endIndex: colIndex + 1
-                }
-              }
-            });
+    let requests = [];
+    range.split(":").forEach((cell, colIndex) => {
+      if (cell.includes(value)) {
+        // 값을 포함하는 셀의 값을 수정하여 삭제합니다.
+        requests.push({
+          updateCells: {
+            rows: [{
+              values: Array(cell.length).fill({ userEnteredValue: { stringValue: '' }})
+            }],
+            fields: '*',
+            start: { sheetId: 0, rowIndex: rowIndex, columnIndex: colIndex },
           }
         });
-      });
-
-      // 요청을 실행하여 셀을 삭제합니다.
-      if (requests.length > 0) {
-        const batchUpdateRequest = { requests: requests };
-        const batchUpdateResponse = await sheets.spreadsheets.batchUpdate({
-          spreadsheetId: spreadsheetId,
-          resource: batchUpdateRequest
-        });
-        console.log('Cells containing value deleted:', batchUpdateResponse.data);
-      } else {
-        console.log('No cells containing value found.');
       }
+    });
+
+    // 요청을 실행하여 셀을 삭제합니다.
+    if (requests.length > 0) {
+      const batchUpdateRequest = { requests: requests };
+      const batchUpdateResponse = await sheets.spreadsheets.batchUpdate({
+        spreadsheetId: spreadsheetId,
+        resource: batchUpdateRequest
+      });
+      console.log('Cells containing value deleted:', batchUpdateResponse.data);
     } else {
-      console.log('No data found.');
+      console.log('No cells containing value found.');
     }
   } catch (err) {
     console.error('Error deleting cell value:', err);
