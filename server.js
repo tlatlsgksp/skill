@@ -3981,7 +3981,7 @@ app.post('/lecture_schedule_edit', async (req, res) => {
     const rowData = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!B${userRow}:BX${userRow}`);
     let response;
 
-    if (userRow && rowData[0]){
+    if (userRow && rowData){
       if (rowData[0] && rowData[0].length > 0) {
         const uniqueRowData = removeDuplicatesAndEmpty(rowData[0]);
         const separatedData = uniqueRowData.map(row => row.split("\n"));
