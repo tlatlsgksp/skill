@@ -110,7 +110,6 @@ async function batchWriteToGoogleSheets(auth, spreadsheetId, ranges, data) {
 
 async function deleteToGoogleSheets(auth, spreadsheetId, range, data) {
   const sheets = google.sheets({ version: 'v4', auth });
-  console.log(data);
   try {
       const response = await sheets.spreadsheets.values.get({
           spreadsheetId: spreadsheetId,
@@ -122,6 +121,7 @@ async function deleteToGoogleSheets(auth, spreadsheetId, range, data) {
           console.log('No data found.');
           return;
       } else {
+          console.log(rows);
           const newData = rows.map(row => row.map(cell => cell === data ? "" : cell));
           
           // 데이터를 지정된 범위에 업데이트
