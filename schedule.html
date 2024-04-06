@@ -27,7 +27,7 @@
             font-size: 14px;
         }
         th {
-            background-color: #5c6ac4;
+            background-color: #a1aae6;
             color: #ffffff;
             font-weight: bold;
         }
@@ -41,6 +41,9 @@
         }
         .info-cell {
             font-size: 12px;
+        }
+        .highlight {
+            background-color: #ffddcc; /* 원하는 색상으로 변경 가능 */
         }
     </style>
 </head>
@@ -84,6 +87,7 @@
                             const professor = data[2] || '';
                             const room = data[3] || '';
                             cell.innerHTML = `${subject}<br>${professor}<br>${division} ${room}`;
+                            cell.classList.add('highlight'); // 데이터가 있는 경우 배경색 변경
                         } else {
                             cell.innerHTML = '';
                         }
