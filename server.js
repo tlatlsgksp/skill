@@ -4176,8 +4176,8 @@ app.post('/lecture_schedule_print', async (req, res) => {
       const imageFullPath = path.join(imagePath, imageName);
       fs.writeFileSync(imageFullPath, imageBuffer);
       browser.close();
-      const imageUrl = `https://35.216.59.180:8080/images/${imageName}`;
-      //const imageUrl = `https://localhost:8080/images/${imageName}`;
+      const imageUrl = `http://35.216.59.180:8080/images/${imageName}`;
+      //const imageUrl = `http://localhost:8080/images/${imageName}`;
       response = {
         "version": "2.0",
         "template": {
