@@ -112,34 +112,16 @@ async function deleteToGoogleSheets(auth, spreadsheetId, range, value) {
   const sheets = google.sheets({ version: 'v4', auth });
 
   try {
-    const request = {
-      spreadsheetId: spreadsheetId,
-      resource: {
-        "data_filters": [
-          {
-            "grid_range": {
-              "sheet_id": 518930033,
-              "start_row_index": range,
-              "end_row_index": range,
-              "start_column_index": 2,
-              "end_column_index": 76
-            },
-            "criteria": {
-              "0": {
-                "condition": {
-                  "type": "TEXT_EQ",
-                  "values": [{ "userEnteredValue": value }]
-                }
-              }
-            }
-          }
-        ]
-      }
+    const resource = {
+      values: [value],
     };
-
-    // 요청을 보냅니다.
-    const response = await sheets.spreadsheets.values.batchClearByDataFilter(request);
-    console.log('Cells containing value deleted:', response.data);
+    const response = sheets.spreadsheets.values.batchClear({
+      spreadsheetId,
+      range,
+      valueInputOption: 'RAW',
+      resource,
+    });
+    console.log('Cells containing value deleted:', response.value);
   } catch (err) {
     console.error('Error deleting cell value:', err);
     throw err;
@@ -4043,7 +4025,7 @@ app.post('/lecture_schedule_delete', async (req, res) => {
     let selectedLectureInfos = selectedLectureInfo[schedule_no - 1];
     let combine = selectedLectureInfos.과목명+' '+selectedLectureInfos.교수명+' '+selectedLectureInfos.분반+' '+selectedLectureInfos.강의실
     let response;
-    await deleteToGoogleSheets(auth_global, SPREADSHEET_ID, userRow, combine);
+    await deleteToGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!B${userRow}:BX${userRow}`, combine);
     response = {
       "version": "2.0",
       "template": {
