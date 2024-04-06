@@ -18,7 +18,6 @@ app.use(express.static(__dirname));
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 const CREDENTIALS_PATH = 'credentials.json';
 const SPREADSHEET_ID = '1F3kEbduNvPnsIbfdO9gDZzc1yua1LMs627KAwZsYg6o';
-const RANGE = '메트로폴 강의 계획서!A4:AB';
 let auth_global;
 
 //스케줄러
@@ -116,37 +115,30 @@ async function deleteToGoogleSheets(auth, spreadsheetId, range, value) {
     const request = {
       spreadsheetId: spreadsheetId,
       resource: {
-        requests: [
+        data_filters: [
           {
-            setBasicFilter: {
-              filter: {
-                range: {
-                  sheetId: 518930033,
-                  startRowIndex: range,
-                  endRowIndex: range,
-                  startColumnIndex: 1,
-                  endColumnIndex: 76,
-                },
-                criteria: {
-                  0: {
-                    condition: {
-                      type: 'TEXT_EQ',
-                      values: [{ userEnteredValue: value }],
-                    },
-                  },
+            grid_range: {
+              sheet_id: 518930033,
+              start_row_index: range,
+              end_row_index: range,
+              start_column_index: 2,
+              end_column_index: 76,
+            },
+            criteria: {
+              0: {
+                condition: {
+                  type: 'TEXT_EQ',
+                  values: [{ userEnteredValue: value }],
                 },
               },
             },
-          },
-          {
-
           },
         ],
       },
     };
 
     // 요청을 보냅니다.
-    const response = await sheets.spreadsheets.batchUpdate(request);
+    const response = await sheets.spreadsheets.values.batchClearByDataFilter(request);
     console.log('Cells containing value deleted:', response.data);
   } catch (err) {
     console.error('Error deleting cell value:', err);
