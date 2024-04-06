@@ -4169,8 +4169,12 @@ app.post('/lecture_schedule_print', async (req, res) => {
       const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
       const page = await browser.newPage();
 
+      await page.setExtraHTTPHeaders({
+        'Accept-Language': 'ko-KR'
+      });
+      await page.setViewport({ width: 1920, height: 1080 });
+      page.setDefaultNavigationTimeout(0);
       await page.goto(url, { waitUntil: 'networkidle0' });
-      
       await page.evaluate(() => {
         document.body.style.fontFamily = 'Nanum Gothic, sans-serif';
       });
