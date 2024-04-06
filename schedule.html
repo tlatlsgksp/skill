@@ -52,8 +52,10 @@
                         const cell = document.createElement('td');
                         const day = ['월', '화', '수', '목', '금'][j - 1];
                         const key = day + '(' + i + ')';
-                        cell.innerHTML = userScheduleData.find(item => Object.keys(item)[0] === key) 
-                        ? userScheduleData.find(item => Object.keys(item)[0] === key)[key].replace(/\n/g, '<br>') : '';
+                        cell.innerHTML = userScheduleData.find(item => Object.keys(item)[0] === key) ? (() => {
+                            const data = userScheduleData.find(item => Object.keys(item)[0] === key)[key].split('\n');
+                            return `${data[0]}[${data[1]}]<br>${data[2]} ${data[3]}`;
+                            })(): '';
                         row.appendChild(cell);
                     }
                     table.appendChild(row);
