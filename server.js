@@ -3930,8 +3930,8 @@ app.post('/lecture_schedule_save', async (req, res) => {
             "quickReplies": [
               {
                 'action': 'block',
-                'label': '시간표 수정',
-                'blockId': '660a9db3a5c8987d3ca92514',
+                'label': '시간표 조회',
+                'blockId': '66097a32a5c8987d3ca8e8bd',
               },
               {
                 'action': 'block',
