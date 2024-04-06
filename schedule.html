@@ -27,7 +27,8 @@
             font-size: 14px;
         }
         th {
-            background-color: #c1cafd;
+            background-color: #bbc5ff;
+            color: #ffffff;
             font-weight: bold;
         }
         td {
@@ -37,6 +38,7 @@
         .time-cell {
             background-color: #eff1ff;
             width: 100px;
+            font-weight: bold;
             white-space: nowrap;
         }
         .info-cell {
@@ -51,7 +53,7 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const userId = urlParams.get('userId');
-        const colors = ['#FFFFFF', '#FA5858', '#FAAC58', '#2EFE2E', '#58FAD0', '#58D3F7', '#5882FA', '#8258FA', '#AC58FA', '#D358F7', '#FA58F4', '#FA58AC', '#D7DF01', '#A5DF00', '#01DF3A', '#01DFA5', '#01DFD7', '#0174DF', '#0000FF', '#3A01DF', '#7401DF', '#A901DB', '#DF01D7', '#B40486', '#B4045F']; // 20가지의 연한 색상 목록
+        const colors = ['#FFFFFF', '#FA5858', '#FAAC58', '#01DF3A', '#58FAD0', '#58D3F7', '#5882FA', '#8258FA', '#AC58FA', '#D358F7', '#FA58F4', '#FA58AC', '#D7DF01', '#A5DF00', '#04B431', '#01DFA5', '#01DFD7', '#0174DF', '#0000FF', '#3A01DF', '#7401DF', '#A901DB', '#DF01D7', '#B40486', '#B4045F']; // 20가지의 연한 색상 목록
 
         fetch(`/schedule_load`)
         .then(response => response.json())
