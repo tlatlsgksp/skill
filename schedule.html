@@ -12,11 +12,24 @@
         th, td {
             border: 1px solid #dddddd;
             text-align: center;
-            padding: 5px;
+            padding: 10px;
             width: 100px;
+            font-size: 14px;
         }
         th {
             background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        td {
+            vertical-align: middle;
+            line-height: 1.5;
+        }
+        .time-cell {
+            width: 100px;
+            white-space: nowrap;
+        }
+        .info-cell {
+            font-size: 12px;
         }
     </style>
 </head>
@@ -33,7 +46,6 @@
                 const userScheduleData = scheduleData.scheduleData[userId];
                 const table = document.querySelector('table');
 
-                // 테이블 헤더 생성
                 const headerRow = document.createElement('tr');
                 ['', '월요일', '화요일', '수요일', '목요일', '금요일'].forEach(day => {
                     const th = document.createElement('th');
@@ -42,14 +54,15 @@
                 });
                 table.appendChild(headerRow);
 
-                // 시간표 데이터를 테이블로 구성하여 표시
                 for (let i = 1; i <= 15; i++) {
                     const row = document.createElement('tr');
                     const cell1 = document.createElement('td');
+                    cell1.classList.add('time-cell');
                     cell1.innerHTML = `${i}교시<br>${(i + 8) % 24}:30 - ${(i + 9) % 24}:20`;
                     row.appendChild(cell1);
                     for (let j = 1; j <= 5; j++) {
                         const cell = document.createElement('td');
+                        cell.classList.add('info-cell');
                         const day = ['월', '화', '수', '목', '금'][j - 1];
                         const key = day + '(' + i + ')';
                         const scheduleItem = userScheduleData.find(item => Object.keys(item)[0] === key);
