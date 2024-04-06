@@ -79,7 +79,7 @@ async function writeToGoogleSheets(auth, spreadsheetId, range, data) {
   const resource = {
     values: [data],
   };
-  const response = await sheets.spreadsheets.values.update({
+  const response = sheets.spreadsheets.values.update({
     spreadsheetId,
     range,
     valueInputOption: 'RAW',
@@ -100,12 +100,64 @@ async function batchWriteToGoogleSheets(auth, spreadsheetId, ranges, rowDataArra
       }))
     };
 
-    await sheets.spreadsheets.values.batchUpdate({
+    sheets.spreadsheets.values.batchUpdate({
       spreadsheetId: spreadsheetId,
       resource: resource
     });
   } catch (error) {
     console.error('Error writing data to Google Sheets:', error.message);
+  }
+}
+
+async function deleteToGoogleSheets(auth, spreadsheetId, range, value) {
+  const sheets = google.sheets({ version: 'v4', auth });
+  
+  try {
+    // 데이터를 읽어옵니다.
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId: spreadsheetId,
+      range: range,
+    });
+
+    const rows = response.data.values;
+
+    if (rows.length) {
+      let requests = [];
+      rows.forEach((row, rowIndex) => {
+        row.forEach((cell, colIndex) => {
+          if (cell.includes(value)) {
+            // 값이 포함된 셀을 삭제하는 요청을 추가합니다.
+            requests.push({
+              deleteDimension: {
+                range: {
+                  sheetId: 0,
+                  dimension: "COLUMNS",
+                  startIndex: colIndex,
+                  endIndex: colIndex + 1
+                }
+              }
+            });
+          }
+        });
+      });
+
+      // 요청을 실행하여 셀을 삭제합니다.
+      if (requests.length > 0) {
+        const batchUpdateRequest = { requests: requests };
+        sheets.spreadsheets.batchUpdate({
+          spreadsheetId: spreadsheetId,
+          resource: batchUpdateRequest
+        });
+        console.log('Cells containing value deleted.');
+      } else {
+        console.log('No cells containing value found.');
+      }
+    } else {
+      console.log('No data found.');
+    }
+  } catch (err) {
+    console.error('Error deleting cell value:', err);
+    throw err;
   }
 }
 
@@ -129,7 +181,7 @@ async function findUserRow(userId, auth, spreadsheetId) {
 
 async function addUserRow(userId, auth, spreadsheetId) {
   const sheets = google.sheets({ version: 'v4', auth });
-  const response = await sheets.spreadsheets.values.append({
+  const response = sheets.spreadsheets.values.append({
     spreadsheetId,
     range: '시간표!A:A', // userId가 있는 열 범위
     valueInputOption: 'RAW',
@@ -4003,11 +4055,10 @@ app.post('/lecture_schedule_delete', async (req, res) => {
     let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID)
     let schedule_no = req.body.action.params.schedule_no;
     let selectedLectureInfo = extra.selectedLectureInfo;
-    let selectedLectureInfo2 = selectedLectureInfo[schedule_no];
-    let combine = selectedLectureInfo2.과목명+'\n'+selectedLectureInfo2.교수명+'\n'+selectedLectureInfo2.분반+'\n'+selectedLectureInfo2.강의실
-    console.log(combine);
+    let selectedLectureInfos = selectedLectureInfo[schedule_no];
+    let combine = selectedLectureInfos.과목명+' '+selectedLectureInfos.교수명+' '+selectedLectureInfos.분반+' '+selectedLectureInfos.강의실
     let response;
-
+    await deleteToGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!B${userRow}:BX${userRow}`, combine);
     response = {
       "version": "2.0",
       "template": {
@@ -4022,7 +4073,7 @@ app.post('/lecture_schedule_delete', async (req, res) => {
           {
             'action': 'block',
             'label': '뒤로가기',
-            'blockId': "66097a32a5c8987d3ca8e8bd",
+            'blockId': "660a9db3a5c8987d3ca92514",
           },
           {
             'action': 'message',
@@ -4033,29 +4084,29 @@ app.post('/lecture_schedule_delete', async (req, res) => {
       }
     };
   res.json(response);
-} catch (error) {
-  console.log(error)
-  response = {
-    "version": "2.0",
-    "template": {
-      "outputs": [
-        {
-          "simpleText": {
-            "text": `예기치 않은 응답입니다.`
+  } catch (error) {
+    console.log(error)
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": `예기치 않은 응답입니다.`
+            }
           }
-        }
-      ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+      }
     }
+    res.json(response);
   }
-  res.json(response);
-}
 });
 
 app.listen(port, () => {
