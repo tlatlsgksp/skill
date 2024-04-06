@@ -32,13 +32,13 @@ const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 0, hour: 10, minute: 0 
     console.log('크롤링 스케줄 실행 중');
     await main_met();
     await main_met_dorm();
-    fs.readFile('./crawl_met.json', 'utf8', (err, data) => {
+    fs.readFile('./crawl_met.json', 'utf8', async (err, data) => {
       if (err) throw err;
-      mealMetropole = JSON.parse(data);
+      mealMetropole = await JSON.parse(data);
     });
-    fs.readFile('./crawl_met_dorm.json', 'utf8', (err, data) => {
+    fs.readFile('./crawl_met_dorm.json', 'utf8', async (err, data) => {
       if (err) throw err;
-      mealMetropoleDormitory = JSON.parse(data);
+      mealMetropoleDormitory = await JSON.parse(data);
     });
     console.log('크롤링 스케줄 완료');
   } catch (error) {
