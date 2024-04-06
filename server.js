@@ -4044,7 +4044,7 @@ app.post('/lecture_schedule_delete', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": '해당 강의를 삭제했습니다.'
+              "text": '해당 강의를 삭제했습니다\n\n.'+combine
             }
           }
         ],
