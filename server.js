@@ -86,7 +86,7 @@ async function writeToGoogleSheets(auth, spreadsheetId, range, data) {
   });
 }
 
-async function batchWriteToGoogleSheets(auth, spreadsheetId, ranges, rowDataArray) {
+async function batchWriteToGoogleSheets(auth, spreadsheetId, ranges, data) {
   const sheets = google.sheets({ version: 'v4', auth });
 
   try {
@@ -95,7 +95,7 @@ async function batchWriteToGoogleSheets(auth, spreadsheetId, ranges, rowDataArra
       data: ranges.map((range, index) => ({
         range: range,
         majorDimension: 'ROWS',
-        values: [rowDataArray[index]]
+        values: [data[index]]
       }))
     };
 
@@ -108,20 +108,35 @@ async function batchWriteToGoogleSheets(auth, spreadsheetId, ranges, rowDataArra
   }
 }
 
-async function deleteToGoogleSheets(auth, spreadsheetId, range, value) {
+async function deleteToGoogleSheets(auth, spreadsheetId, range, data) {
   const sheets = google.sheets({ version: 'v4', auth });
 
   try {
-    const response = sheets.spreadsheets.values.batchClear({
-      spreadsheetId,
-      range,
-      majorDimension: 'ROWS',
-      values: [value],
-    });
-    console.log('Cells containing value deleted:', response.value);
+      const response = await sheets.spreadsheets.values.get({
+          spreadsheetId: spreadsheetId,
+          range: range,
+      });
+
+      const rows = response.data.values;
+      if (rows.length === 0) {
+          console.log('No data found.');
+          return;
+      } else {
+          const newData = rows.map(row => row.map(cell => cell.includes(data) ? "" : cell));
+          
+          // 데이터를 지정된 범위에 업데이트
+          const updateResponse = await sheets.spreadsheets.values.update({
+              spreadsheetId: spreadsheetId,
+              range: range,
+              valueInputOption: 'RAW',
+              resource: { values: newData },
+          });
+
+          console.log(`${updateResponse.data.updatedCells} cells updated.`);
+      }
   } catch (err) {
-    console.error('Error deleting cell value:', err);
-    throw err;
+      console.error('The API returned an error: ' + err);
+      throw err;
   }
 }
 
