@@ -767,25 +767,25 @@ async function initialize() {
   try {
     console.log('서버 초기화 중');
     auth_global = await authorize();
-    //await main_met();
-    //await main_met_dorm();
+    await main_met();
+    await main_met_dorm();
     await main_lecturelist();
     await main_lectureinfo();
-    fs.readFile('./crawl_met.json', 'utf8', (err, data) => {
+    fs.readFile('./crawl_met.json', 'utf8', async (err, data) => {
       if (err) throw err;
-      mealMetropole = JSON.parse(data);
+      mealMetropole = await JSON.parse(data);
     });
-    fs.readFile('./crawl_met_dorm.json', 'utf8', (err, data) => {
+    fs.readFile('./crawl_met_dorm.json', 'utf8', async (err, data) => {
       if (err) throw err;
-      mealMetropoleDormitory = JSON.parse(data);
+      mealMetropoleDormitory = await JSON.parse(data);
     });
-    fs.readFile('./lecturelist.json', 'utf8', (err, data) => {
+    fs.readFile('./lecturelist.json', 'utf8', async (err, data) => {
       if (err) throw err;
-      lectureList = JSON.parse(data);
+      lectureList = await JSON.parse(data);
     });
-    fs.readFile('./lectureinfo.json', 'utf8', (err, data) => {
+    fs.readFile('./lectureinfo.json', 'utf8', async (err, data) => {
       if (err) throw err;
-      lectureInfo = JSON.parse(data);
+      lectureInfo = await JSON.parse(data);
     });
     console.log('서버 초기화 완료');
     serverInitialized = true;
