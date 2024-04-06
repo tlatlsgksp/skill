@@ -43,7 +43,7 @@
                 table.appendChild(headerRow);
 
                 // 시간표 데이터를 테이블로 구성하여 표시
-                for (let i = 1; i <= 15; i++) {
+                for (let i = 1; i <= 14; i++) {
                     const row = document.createElement('tr');
                     const cell1 = document.createElement('td');
                     cell1.innerHTML = `${i}교시<br>${(i + 8) % 24}:30 - ${(i + 9) % 24}:20`;
@@ -54,8 +54,7 @@
                         const key = day + '(' + i + ')';
                         cell.innerHTML = userScheduleData.find(item => Object.keys(item)[0] === key) ? (() => {
                             const data = userScheduleData.find(item => Object.keys(item)[0] === key)[key].split('\n');
-                            return `${data[0]}[${data[1]}]<br>${data[2]} ${data[3]}`;
-                            })(): '';
+                            return `${data[0]}[${data[1]}]<br>${data[2]} ${data[3]}`;})(): '';
                         row.appendChild(cell);
                     }
                     table.appendChild(row);
