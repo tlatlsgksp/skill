@@ -3932,7 +3932,7 @@ app.post('/lecture_schedule_edit', async (req, res) => {
                 'label': `번호 입력`,
                 'blockId': `660ab9587ad61051639e131d`,
                 'extra':{
-
+                  'selectedLectureInfo' : selectedLectureInfo
                 }
               },
               {
@@ -3998,8 +3998,40 @@ app.post('/lecture_schedule_edit', async (req, res) => {
 
 app.post('/lecture_schedule_delete', async (req, res) => {
   try{
-  let response;
-  
+    const userId = req.body.userRequest.user.id;
+    const extra = req.body.action.clientExtra;
+    let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID)
+    let schedule_no = req.body.action.params.schedule_no;
+    let selectedLectureInfo = extra.selectedLectureInfo;
+    let selectedLectureInfo2 = selectedLectureInfo[schedule_no];
+    let combine = selectedLectureInfo2.과목명+'\n'+selectedLectureInfo2.교수명+'\n'+selectedLectureInfo2.분반+'\n'+selectedLectureInfo2.강의실
+    console.log(combine);
+    let response;
+
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": '해당 강의를 삭제했습니다.'
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'block',
+            'label': '뒤로가기',
+            'blockId': "66097a32a5c8987d3ca8e8bd",
+          },
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+      }
+    };
   res.json(response);
 } catch (error) {
   console.log(error)
@@ -4023,6 +4055,7 @@ app.post('/lecture_schedule_delete', async (req, res) => {
     }
   }
   res.json(response);
+}
 }
 });
 
