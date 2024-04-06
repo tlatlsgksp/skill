@@ -51,7 +51,7 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const userId = urlParams.get('userId');
-        const colors = ['#FFFFFF', '#FA5858', '#FA8258', '#F3F781', '#BEF781', '#81F781', '#81F7BE', '#81F7F3', '#81BEF7', '#8181F7', '#BE81F7', '#F781F3', '#F781BE', '#FA8258', '#F7D358', '#D0FA58', '#82FA58', '#58FA82', '#58FAD0', '#58D3F7', '#5882FA', '#8258FA', '#D358F7', '#FA58D0', '#FA5882']; // 20가지의 연한 색상 목록
+        const colors = ['#FFFFFF', '#FE2E2E', '#FE9A2E', '#F3F781', '#BEF781', '#81F781', '#81F7BE', '#81F7F3', '#81BEF7', '#8181F7', '#BE81F7', '#F781F3', '#F781BE', '#FA8258', '#F7D358', '#D0FA58', '#82FA58', '#58FA82', '#58FAD0', '#58D3F7', '#5882FA', '#8258FA', '#D358F7', '#FA58D0', '#FA5882']; // 20가지의 연한 색상 목록
 
         fetch(`/schedule_load`)
         .then(response => response.json())
