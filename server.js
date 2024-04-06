@@ -4166,8 +4166,6 @@ app.post('/lecture_schedule_print', async (req, res) => {
   try {
       const userId = req.body.userRequest.user.id;
       const url = `http://35.216.59.180:8080/schedule.html?userId=${userId}`;
-      //const userId = '023476d11ea11b084104c6d385f954e0e9ea04c05e8dba0c8ba3fd3c7775392c72';
-      //const url = `http://localhost:8080/schedule.html?userId=${userId}`;
       const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
       const page = await browser.newPage();
 
@@ -4187,7 +4185,6 @@ app.post('/lecture_schedule_print', async (req, res) => {
       fs.writeFileSync(imageFullPath, imageBuffer);
       browser.close();
       const imageUrl = `http://35.216.59.180:8080/images/${imageName}`;
-      //const imageUrl = `http://localhost:8080/images/${imageName}`;
       response = {
         "version": "2.0",
         "template": {
