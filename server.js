@@ -4174,7 +4174,7 @@ app.post('/lecture_schedule_print', async (req, res) => {
       page.setExtraHTTPHeaders({
         'Accept-Language': 'ko-KR'
       });
-      page.setViewport({ width: 1600, height: 900 });
+      page.setViewport({ width: 1920, height: 1080 });
       page.setDefaultNavigationTimeout(0);
       await page.goto(url, { waitUntil: 'networkidle0' });
       page.evaluate(() => {
