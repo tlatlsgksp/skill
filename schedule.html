@@ -12,7 +12,7 @@
         th, td {
             border: 1px solid #dddddd;
             text-align: center;
-            padding: 25px;
+            padding: 10px;
             width: 80px;
         }
         th {
@@ -43,29 +43,20 @@
                 table.appendChild(headerRow);
 
                 // 시간표 데이터를 테이블로 구성하여 표시
-                for (let i = 1; i <= 14; i++) {
+                for (let i = 1; i <= 15; i++) {
                     const row = document.createElement('tr');
                     const cell1 = document.createElement('td');
                     cell1.innerHTML = `${i}교시<br>${(i + 8) % 24}:30 - ${(i + 9) % 24}:20`;
                     row.appendChild(cell1);
                     for (let j = 1; j <= 5; j++) {
-                    const cell = document.createElement('td');
-                    const day = ['월', '화', '수', '목', '금'][j - 1];
-                    const key = day + '(' + i + ')';
-                    const scheduleItem = userScheduleData.find(item => Object.keys(item)[0] === key);
-                    if (scheduleItem) {
-                        const data = scheduleItem[key].split('\n');
-                        const subject = data[0] || ''; // 과목명
-                        const division = data[1] ? `[${data[1]}]` : ''; // 분반 (존재하면 표시, 아니면 공백)
-                        const professor = data[2] || ''; // 교수명
-                        const room = data[3] || ''; // 강의실
-                        cell.innerHTML = `${subject}${division}<br>${professor} ${room}`;
-                    } else {
-                        cell.innerHTML = ''; // undefined인 경우 빈 문자열로 처리
+                        const cell = document.createElement('td');
+                        const day = ['월', '화', '수', '목', '금'][j - 1];
+                        const key = day + '(' + i + ')';
+                        cell.innerHTML = userScheduleData.find(item => Object.keys(item)[0] === key) 
+                        ? userScheduleData.find(item => Object.keys(item)[0] === key)[key].replace(/\n/g, '<br>') : '';
+                        row.appendChild(cell);
                     }
-                    row.appendChild(cell);
-                }
-                table.appendChild(row);
+                    table.appendChild(row);
                 }
             })
             .catch(error => console.error('Error fetching schedule data:', error));
