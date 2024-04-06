@@ -111,35 +111,38 @@ async function batchWriteToGoogleSheets(auth, spreadsheetId, ranges, rowDataArra
 
 async function deleteToGoogleSheets(auth, spreadsheetId, range, value) {
   const sheets = google.sheets({ version: 'v4', auth });
-  
-  try {
-    let requests = [];
-    range.split(":").forEach((cell, colIndex) => {
-      if (cell.includes(value)) {
-        // 값을 포함하는 셀의 값을 수정하여 삭제합니다.
-        requests.push({
-          updateCells: {
-            rows: [{
-              values: Array(cell.length).fill({ userEnteredValue: { stringValue: '' }})
-            }],
-            fields: '*',
-            start: { sheetId: 0, rowIndex: rowIndex, columnIndex: colIndex },
-          }
-        });
-      }
-    });
 
-    // 요청을 실행하여 셀을 삭제합니다.
-    if (requests.length > 0) {
-      const batchUpdateRequest = { requests: requests };
-      const batchUpdateResponse = await sheets.spreadsheets.batchUpdate({
-        spreadsheetId: spreadsheetId,
-        resource: batchUpdateRequest
-      });
-      console.log('Cells containing value deleted:', batchUpdateResponse.data);
-    } else {
-      console.log('No cells containing value found.');
-    }
+  try {
+    const request = {
+      spreadsheetId: spreadsheetId,
+      resource: {
+        requests: [
+          {
+            setBasicFilter: {
+              filter: {
+                range: range,
+                criteria: {
+                  0: {
+                    condition: {
+                      type: 'TEXT_EQ',
+                      values: value,
+                    },
+                  },
+                },
+              },
+            },
+          },
+          {
+            clearBasicFilter: {
+              sheetId: 0,
+            },
+          },
+        ],
+      },
+    };
+
+    const response = await sheets.spreadsheets.batchUpdate(request);
+    console.log('Cells containing value deleted:', response.data);
   } catch (err) {
     console.error('Error deleting cell value:', err);
     throw err;
