@@ -122,7 +122,7 @@ async function deleteToGoogleSheets(auth, spreadsheetId, range, data) {
           console.log('No data found.');
           return;
       } else {
-          const newData = rows.map(row => row.map(cell => cell.includes(data) ? "" : cell));
+          const newData = rows.map(row => row.map(cell => cell === data ? "" : cell));
           
           // 데이터를 지정된 범위에 업데이트
           const updateResponse = await sheets.spreadsheets.values.update({
