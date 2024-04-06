@@ -130,11 +130,11 @@ async function deleteToGoogleSheets(auth, spreadsheetId, range, data) {
           const newData = rows.map(row => row.map(cell => cell === data ? "" : cell));
           
           // 데이터를 지정된 범위에 업데이트
-          const updateResponse = await sheets.spreadsheets.values.update({
-              spreadsheetId: spreadsheetId,
-              range: range,
-              valueInputOption: 'RAW',
-              resource: { values: newData },
+          const updateResponse = sheets.spreadsheets.values.update({
+            spreadsheetId: spreadsheetId,
+            range: range,
+            valueInputOption: 'RAW',
+            resource: { values: newData },
           });
 
           console.log(`${updateResponse.data.updatedCells} cells updated.`);
