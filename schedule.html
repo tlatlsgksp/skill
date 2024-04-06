@@ -54,7 +54,7 @@
                         const key = day + '(' + i + ')';
                         cell.innerHTML = '';
                         const scheduleItem = userScheduleData.find(item => Object.keys(item)[0] === key);
-                        if (scheduleItem) {
+                        if (!scheduleItem.include('undefined')) {
                             const data = scheduleItem[key].split('\n');
                             const formattedData = `${data[0]}[${data[1]}]<br>${data[2]} ${data[3]}`;
                             cell.innerHTML = formattedData;
