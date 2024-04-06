@@ -55,9 +55,13 @@
                     const scheduleItem = userScheduleData.find(item => Object.keys(item)[0] === key);
                     if (scheduleItem) {
                         const data = scheduleItem[key].split('\n');
-                        cell.innerHTML = `${data[0]}[${data[1]}]<br>${data[2]} ${data[3]}`;
+                        const subject = data[0] || ''; // 과목명
+                        const division = data[1] ? `[${data[1]}]` : ''; // 분반 (존재하면 표시, 아니면 공백)
+                        const professor = data[2] || ''; // 교수명
+                        const room = data[3] || ''; // 강의실
+                        cell.innerHTML = `${subject}${division}<br>${professor} ${room}`;
                     } else {
-                        cell.innerHTML = '';
+                        cell.innerHTML = ''; // undefined인 경우 빈 문자열로 처리
                     }
                     row.appendChild(cell);
                 }
