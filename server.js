@@ -149,7 +149,7 @@ async function getScheduleData(auth, spreadsheetId) {
   const sheets = google.sheets({ version: 'v4', auth });
   const response = await sheets.spreadsheets.values.get({
       spreadsheetId: spreadsheetId,
-      range: '시간표!A1:BX', // 시간표 시트의 전체 범위
+      range: '시간표!A1:BS', // 시간표 시트의 전체 범위
   });
   const rows = response.data.values;
 
@@ -240,7 +240,7 @@ function getColumnIndex(timeIndices) {
   const Array2 = ['Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD', 'AE'];
   const Array3 = ['AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM', 'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT'];
   const Array4 = ['AU', 'AV', 'AW', 'AX', 'AY', 'AZ', 'BA', 'BB', 'BC', 'BD', 'BE', 'BF', 'BG', 'BH', 'BI'];
-  const Array5 = ['BJ', 'BK', 'BL', 'BM', 'BN', 'BO', 'BP', 'BQ', 'BR', 'BS', 'BT', 'BU', 'BV', 'BW', 'BX'];
+  const Array5 = ['BJ', 'BK', 'BL', 'BM', 'BN', 'BO', 'BP', 'BQ', 'BR', 'BS', 'BT', 'BU', 'BV', 'BW', 'BS'];
 
   for (const index of timeIndices) {
     let letter;
@@ -3983,7 +3983,7 @@ app.post('/lecture_schedule_edit', async (req, res) => {
   try{
     const userId = req.body.userRequest.user.id;
     let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID)
-    const rowData = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!B${userRow}:BX${userRow}`);
+    const rowData = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!B${userRow}:BS${userRow}`);
     let response;
 
     if (userRow){
@@ -4101,7 +4101,7 @@ app.post('/lecture_schedule_delete', async (req, res) => {
     let selectedLectureInfos = selectedLectureInfo[schedule_no - 1];
     let combine = selectedLectureInfos.과목명+'\n'+selectedLectureInfos.분반+'\n'+selectedLectureInfos.교수명+'\n'+selectedLectureInfos.강의실
     let response;
-    await deleteToGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!B${userRow}:BX${userRow}`, combine);
+    await deleteToGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!B${userRow}:BS${userRow}`, combine);
     response = {
       "version": "2.0",
       "template": {
