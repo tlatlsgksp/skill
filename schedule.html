@@ -46,13 +46,14 @@
                 for (let i = 1; i <= 15; i++) {
                     const row = document.createElement('tr');
                     const cell1 = document.createElement('td');
-                    cell1.textContent = i + '교시<br>' + ((i + 8) % 24) + ':30 - ' + ((i + 9) % 24) + ':20';
+                    cell1.innerHTML = `${i}교시<br>${(i + 8) % 24}:30 - ${(i + 9) % 24}:20`;
                     row.appendChild(cell1);
                     for (let j = 1; j <= 5; j++) {
                         const cell = document.createElement('td');
                         const day = ['월', '화', '수', '목', '금'][j - 1];
                         const key = day + '(' + i + ')';
-                        cell.textContent = userScheduleData.find(item => Object.keys(item)[0] === key)? userScheduleData.find(item => Object.keys(item)[0] === key)[key].replace(/\n/g, '<br>'): '';
+                        cell.innerHTML = userScheduleData.find(item => Object.keys(item)[0] === key) 
+                        ? userScheduleData.find(item => Object.keys(item)[0] === key)[key].replace(/\n/g, '<br>') : '';
                         row.appendChild(cell);
                     }
                     table.appendChild(row);
