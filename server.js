@@ -1,6 +1,8 @@
 const express = require('express');
+const puppeteer = require('puppeteer');
 const { google } = require('googleapis');
 const fs = require('fs');
+const path = require('path');
 const schedule = require('node-schedule');
 const { main_met } = require('./crawl_metropole');
 const { main_met_dorm } = require('./crawl_metropole_dormitory');
@@ -19,6 +21,10 @@ const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 const CREDENTIALS_PATH = 'credentials.json';
 const SPREADSHEET_ID = '1F3kEbduNvPnsIbfdO9gDZzc1yua1LMs627KAwZsYg6o';
 let auth_global;
+const imagePath = path.join(__dirname, 'images');
+if (!fs.existsSync(imagePath)) {
+  fs.mkdirSync(imagePath);
+  }
 
 //스케줄러
 const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 0, hour: 10, minute: 0 }, async function() {
@@ -147,18 +153,22 @@ async function getScheduleData(auth, spreadsheetId) {
   });
   const rows = response.data.values;
 
+  // 헤더 행을 기준으로 userId와 시간표 데이터를 추출하여 객체에 저장
   const headerRow = rows.shift(); // 헤더 행 추출
-  const scheduleData = [];
+  const scheduleData = {};
+
   rows.forEach(row => {
       const userId = row[0]; // 첫 번째 열은 userId
-      const timetable = {};
-      // 헤더 행의 내용을 기준으로 시간표 데이터를 세분화하여 timetable 객체에 저장
+      const timetable = [];
+      // 헤더 행의 내용을 기준으로 시간표 데이터를 추출하여 timetable 배열에 저장
       headerRow.forEach((header, index) => {
           if (index > 0 && index < row.length) {
-              timetable[header] = row[index];
+              timetable.push({ [header]: row[index] });
           }
       });
-      scheduleData.push({ userId, timetable });
+
+      // userId를 키로, timetable을 값으로 하는 객체를 scheduleData에 추가
+      scheduleData[userId] = timetable;
   });
 
   return scheduleData;
@@ -3802,10 +3812,11 @@ app.post('/lecture_schedule_save', async (req, res) => {
     );
     const time = selectedLectureInfo.시간표;
     const place = selectedLectureInfo.강의실;
+    const lecture_type = selectedLectureInfo.과목구분;
     let response;
     let extraSet;
     let blockId;
-    let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID) || await addUserRow(userId, auth_global, SPREADSHEET_ID);
+    
     if (type === "lecture"){
       blockId = "66014fc63190593813f158f6"
       extraSet = {
@@ -3823,37 +3834,14 @@ app.post('/lecture_schedule_save', async (req, res) => {
         'professor_name': professor_name
       }
     }
-
-    const timeIndices = getTimeIndex(time);
-    const timeIndex = getColumnIndex(timeIndices);
-    const rowData = [lectures+' '+classes+' '+professor+' '+place];
-
-    // 각 열에 대한 읽기 작업을 병렬로 수행
-    const columnReadPromises = timeIndex.map(index => readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!${index.toString()}${userRow}`));
-    const columnDataArray = await Promise.all(columnReadPromises);
-
-    let overlappingColumnsData = columnDataArray
-      .filter(columnData => columnData && columnData.length > 0)
-      .map(async (columnData, index) => {
-        const columnHeader = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!${timeIndex[index].toString()}1`);
-        return { index: columnHeader, data: columnData  };
-      });
-
-    // 겹치는 열이 하나라도 있으면 해당 데이터 보여주기
-    if (overlappingColumnsData.length > 0) {
-      let text = "수업시간이 겹치는 강의가 있습니다.\n\n";
-      for (const overlappingColumn of overlappingColumnsData) {
-        const { index, data } = await overlappingColumn;
-        text += `${data.join('')} - ${index}\n`;
-      }
-
+    if (lecture_type === "사이버강의"){
       response = {
         "version": "2.0",
         "template": {
           "outputs": [
             {
               "simpleText": {
-                "text": text
+                "text": `사이버 강의는 시간표에 저장되지 않습니다.`
               }
             }
           ],
@@ -3868,48 +3856,98 @@ app.post('/lecture_schedule_save', async (req, res) => {
               'action': 'message',
               'label': `처음으로`,
               'messageText': `처음으로`
-              
             }
           ]
         }
       };
-    } else {
-      // 겹치는 열이 없으면 시간표에 저장
-      const ranges = timeIndex.map(index => `시간표!${index.toString()}${userRow}`);
-      const rowDataArray = Array(timeIndex.length).fill(rowData);
-      await batchWriteToGoogleSheets(auth_global, SPREADSHEET_ID, ranges, rowDataArray);
+    } else{
+      let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID) || await addUserRow(userId, auth_global, SPREADSHEET_ID);
+      const timeIndices = getTimeIndex(time);
+      const timeIndex = getColumnIndex(timeIndices);
+      const rowData = [lectures+' '+classes+' '+professor+' '+place];
 
-      response = {
-        "version": "2.0",
-        "template": {
-          "outputs": [
-            {
-              "simpleText": {
-                "text": `해당 강의를 시간표에 저장했습니다.`
-              }
-            }
-          ],
-          "quickReplies": [
-            {
-              'action': 'block',
-              'label': '뒤로가기',
-              'blockId': blockId,
-              'extra':{
-                'type': 'back_search',
-                'userInput': userInput,
-                'lecture_no': lecture_no
-              }
-            },
-            {
-              'action': 'message',
-              'label': `처음으로`,
-              'messageText': `처음으로`
-            }
-          ]
+      // 각 열에 대한 읽기 작업을 병렬로 수행
+      const columnReadPromises = timeIndex.map(index => readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!${index.toString()}${userRow}`));
+      const columnDataArray = await Promise.all(columnReadPromises);
+
+      let overlappingColumnsData = columnDataArray
+        .filter(columnData => columnData && columnData.length > 0)
+        .map(async (columnData, index) => {
+          const columnHeader = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!${timeIndex[index].toString()}1`);
+          return { index: columnHeader, data: columnData  };
+        });
+
+      // 겹치는 열이 하나라도 있으면 해당 데이터 보여주기
+      if (overlappingColumnsData.length > 0) {
+        let text = "수업시간이 겹치는 강의가 있습니다.\n\n";
+        for (const overlappingColumn of overlappingColumnsData) {
+          const { index, data } = await overlappingColumn;
+          text += `${data.join('')} - ${index}\n`;
         }
-      };
+
+        response = {
+          "version": "2.0",
+          "template": {
+            "outputs": [
+              {
+                "simpleText": {
+                  "text": text
+                }
+              }
+            ],
+            "quickReplies": [
+              {
+                'action': 'block',
+                'label': '뒤로가기',
+                'blockId': blockId,
+                'extra': extraSet
+              },
+              {
+                'action': 'message',
+                'label': `처음으로`,
+                'messageText': `처음으로`
+                
+              }
+            ]
+          }
+        };
+      } else {
+        // 겹치는 열이 없으면 시간표에 저장
+        const ranges = timeIndex.map(index => `시간표!${index.toString()}${userRow}`);
+        const rowDataArray = Array(timeIndex.length).fill(rowData);
+        await batchWriteToGoogleSheets(auth_global, SPREADSHEET_ID, ranges, rowDataArray);
+
+        response = {
+          "version": "2.0",
+          "template": {
+            "outputs": [
+              {
+                "simpleText": {
+                  "text": `해당 강의를 시간표에 저장했습니다.`
+                }
+              }
+            ],
+            "quickReplies": [
+              {
+                'action': 'block',
+                'label': '뒤로가기',
+                'blockId': blockId,
+                'extra':{
+                  'type': 'back_search',
+                  'userInput': userInput,
+                  'lecture_no': lecture_no
+                }
+              },
+              {
+                'action': 'message',
+                'label': `처음으로`,
+                'messageText': `처음으로`
+              }
+            ]
+          }
+        };
+      }
     }
-
     res.json(response);
   } catch (error) {
     console.log(error);
@@ -4112,15 +4150,70 @@ app.post('/lecture_schedule_delete', async (req, res) => {
   }
 });
 
-app.post('/schedule_load', async (req, res) => {
+app.get('/schedule_load', async (req, res) => {
   try {
-      const scheduleData = await getScheduleData(auth_global, SPREADSHEET_ID);
-
-      console.log(scheduleData);
-      res.json({ scheduleData });
+    const scheduleData = await getScheduleData(auth_global, SPREADSHEET_ID);
+    res.json({ scheduleData });
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.post('/lecture_schedule_print', async (req, res) => {
+  try {
+      const userId = req.body.userRequest.user.id;
+      const url = `http://35.216.59.180:8080/schedule.html?userId=${userId}`;
+      //const userId = '023476d11ea11b084104c6d385f954e0e9ea04c05e8dba0c8ba3fd3c7775392c72';
+      //const url = `http://localhost:8080/schedule.html?userId=${userId}`;
+      const browser = await puppeteer.launch({ headless: true });
+      const page = await browser.newPage();
+
+      await page.goto(url, { waitUntil: 'networkidle0' });
+
+      const imageBuffer = await page.screenshot({ fullPage: true });
+      const imageName = `${userId}_schedule_image.png`;
+      const imageFullPath = path.join(imagePath, imageName);
+      fs.writeFileSync(imageFullPath, imageBuffer);
+      browser.close();
+      const imageUrl = `https://35.216.59.180:8080/images/${imageName}`;
+      //const imageUrl = `https://localhost:8080/images/${imageName}`;
+      response = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleImage": {
+                        "imageUrl": imageUrl,
+                        "altText": "시간표 이미지"
+                    }
+                }
+            ]
+        }
+      }
+    res.json(response);
+  } catch (error) {
+      console.log(error)
+      response = {
+        "version": "2.0",
+        "template": {
+          "outputs": [
+            {
+              "simpleText": {
+                "text": `예기치 않은 응답입니다.`
+              }
+            }
+          ],
+          "quickReplies": [
+            {
+              'action': 'message',
+              'label': `처음으로`,
+              'messageText': `처음으로`
+            }
+          ]
+        }
+      }
+      res.json(response);
   }
 });
 
