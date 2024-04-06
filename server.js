@@ -4035,7 +4035,7 @@ app.post('/lecture_schedule_delete', async (req, res) => {
     let schedule_no = req.body.action.params.schedule_no;
     let selectedLectureInfo = extra.selectedLectureInfo;
     let selectedLectureInfos = selectedLectureInfo[schedule_no - 1];
-    let combine = selectedLectureInfos.과목명+' '+selectedLectureInfos.교수명+' '+selectedLectureInfos.분반+' '+selectedLectureInfos.강의실
+    let combine = selectedLectureInfos.과목명+' '+selectedLectureInfos.분반+' '+selectedLectureInfos.교수명+' '+selectedLectureInfos.강의실
     let response;
     await deleteToGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!B${userRow}:BX${userRow}`, combine);
     response = {
@@ -4044,7 +4044,7 @@ app.post('/lecture_schedule_delete', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": '해당 강의를 삭제했습니다\n\n.'+combine
+              "text": '해당 강의를 삭제했습니다.\n\n'+combine
             }
           }
         ],
