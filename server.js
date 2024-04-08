@@ -137,7 +137,6 @@ async function deleteToGoogleSheets(auth, spreadsheetId, range, data) {
             resource: { values: newData },
           });
 
-          console.log(`${updateResponse.data.updatedCells} cells updated.`);
       }
   } catch (err) {
       console.error('The API returned an error: ' + err);
