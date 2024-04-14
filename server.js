@@ -4435,8 +4435,8 @@ app.post('/bus_city', async (req, res) => {
           uniqueLabels.add(label);
           acc.push({
             'action': 'message',
-            'label': label,
-            'messageText': label
+            'label': label+번,
+            'messageText': label+번
           });
         }
 
