@@ -4530,6 +4530,7 @@ app.post('/bus_city_print', async (req, res) => {
     const items = busUrls.map(bus_url => ({
       "thumbnail": {
         "imageUrl": bus_url,
+        "fixedRatio": 'true',
         "link": {
           "web": bus_url
         }
