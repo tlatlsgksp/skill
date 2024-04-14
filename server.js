@@ -4450,9 +4450,13 @@ app.post('/bus_city', async (req, res) => {
         if (!uniqueLabels.has(label)) {
           uniqueLabels.add(label);
           quickReplies.push({
-            'action': 'message',
+            'action': 'block',
             'label': label + `번`,
-            'messageText': label + `번`
+            'blockId': "661bccc54df3202baf9e8bd6",
+            'extra':{
+              'values': values,
+              'label': label
+            }
           });
         }
       });
@@ -4475,6 +4479,74 @@ app.post('/bus_city', async (req, res) => {
     } else {
       res.status(400).json({ message: 'No data available' });
     }
+  } catch (error) {
+    console.log(error);
+
+    const response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": `예기치 않은 응답입니다.`
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+      }
+    };
+
+    res.json(response);
+  }
+});
+
+app.post('/bus_city_print', async (req, res) => {
+  try {
+    const extra = req.body.action.clientExtra;
+    const label = extra.label;
+    const values = extra.values;
+    const busUrls = values.filter(row => {
+      const busNo = row[0];
+      return busNo.includes(label);
+    }).map(row => row[1]);
+
+    const items = busUrls.map(bus_url => ({
+      "thumbnail": {
+        "imageUrl": bus_url
+      },
+    }));
+    const response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "carousel": {
+              "type": "basicCard",
+              "items": items
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'block',
+            'label': '뒤로가기',
+            'blockId': "6611a013530fb1712c7bc233",
+          },
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+      }
+    }
+    res.json(response);
   } catch (error) {
     console.log(error);
 
