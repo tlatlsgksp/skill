@@ -4523,7 +4523,7 @@ app.post('/bus_city_print', async (req, res) => {
       // label에 '-'가 포함되지 않은 경우
       busUrls = values.filter(row => {
         const busNo = row[0];
-        return busNo.startsWith(label + '_');
+        return busNo.startsWith(label) && !busNo.includes('-');
       }).map(row => row[1]);
     }
 
