@@ -4528,7 +4528,6 @@ app.post('/bus_city_print', async (req, res) => {
     }
 
     const items = busUrls.map(bus_url => ({
-      "title": label + `번 버스`,
       "thumbnail": {
         "imageUrl": bus_url,
         "link": {
@@ -4546,6 +4545,18 @@ app.post('/bus_city_print', async (req, res) => {
               "type": "basicCard",
               "items": items
             }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'block',
+            'label': `뒤로가기`,
+            'blockId': `661bb3131322de4469f99a09`
+          },
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
           }
         ]
       }
