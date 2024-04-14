@@ -4425,16 +4425,23 @@ app.post('/bus_city', async (req, res) => {
         return busNoA.localeCompare(busNoB, 'en', { numeric: true });
       });
 
-      const quickReplies = values.map(row => {
+      const uniqueLabels = new Set();
+
+      const quickReplies = values.reduce((acc, row) => {
         const busNo = row[0];
         const label = busNo.includes('_') ? busNo.split('_')[0] : busNo;
 
-        return {
-          'action': 'message',
-          'label': label,
-          'messageText': label
-        };
-      });
+        if (!uniqueLabels.has(label)) {
+          uniqueLabels.add(label);
+          acc.push({
+            'action': 'message',
+            'label': label,
+            'messageText': label
+          });
+        }
+
+        return acc;
+      }, []);
 
       const response = {
         "version": "2.0",
