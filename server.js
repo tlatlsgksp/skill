@@ -4427,21 +4427,35 @@ app.post('/bus_city', async (req, res) => {
 
       const uniqueLabels = new Set();
 
-      const quickReplies = values.reduce((acc, row) => {
+      let quickReplies = [];
+
+      // 뒤로가기와 처음으로를 먼저 추가
+      quickReplies.push({
+        'action': 'block',
+        'label': '뒤로가기',
+        'blockId': "6611a013530fb1712c7bc233",
+      });
+
+      quickReplies.push({
+        'action': 'message',
+        'label': `처음으로`,
+        'messageText': `처음으로`
+      });
+
+      // 나머지 버스 번호 추가
+      values.forEach(row => {
         const busNo = row[0];
         const label = busNo.includes('_') ? busNo.split('_')[0] : busNo;
 
         if (!uniqueLabels.has(label)) {
           uniqueLabels.add(label);
-          acc.push({
+          quickReplies.push({
             'action': 'message',
-            'label': label+`번`,
-            'messageText': label+`번`
+            'label': label + `번`,
+            'messageText': label + `번`
           });
         }
-
-        return acc;
-      }, []);
+      });
 
       const response = {
         "version": "2.0",
