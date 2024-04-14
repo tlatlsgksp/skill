@@ -4518,7 +4518,8 @@ app.post('/bus_city_print', async (req, res) => {
 
     const items = busUrls.map(bus_url => ({
       "thumbnail": {
-        "imageUrl": bus_url
+        "imageUrl": bus_url,
+        "link" : bus_url
       },
     }));
     const response = {
