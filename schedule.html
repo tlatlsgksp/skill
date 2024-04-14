@@ -87,7 +87,7 @@
                         if (scheduleItem) {
                             const data = scheduleItem[key].split('\n');
                             const subject = data[0] || '';
-                            const division = data[1] || '';
+                            const division = parseInt(data[1]) || '';
                             const professor = data[2] || '';
                             const room = data[3] || '';
 
@@ -98,7 +98,7 @@
                             }
 
                             // 각 셀에 배경색 지정
-                            cell.innerHTML = `${subject}<br>${division} ${room}<br>${professor}`;
+                            cell.innerHTML = `${subject}<br>${division}분반 ${room}<br>${professor}`;
                             if (subject.trim() !== '') {
                                 cell.style.backgroundColor = colorMap[subject];
                             }

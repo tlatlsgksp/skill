@@ -1,5 +1,6 @@
 const express = require('express');
 const puppeteer = require('puppeteer');
+const multer = require('multer');
 const { google } = require('googleapis');
 const fs = require('fs');
 const path = require('path');
@@ -22,9 +23,47 @@ const CREDENTIALS_PATH = 'credentials.json';
 const SPREADSHEET_ID = '1F3kEbduNvPnsIbfdO9gDZzc1yua1LMs627KAwZsYg6o';
 let auth_global;
 const imagePath = path.join(__dirname, 'images');
-if (!fs.existsSync(imagePath)) {
-  fs.mkdirSync(imagePath);
+  if (!fs.existsSync(imagePath)) {
+    fs.mkdirSync(imagePath);
+}
+const imagePath2 = path.join(__dirname, 'images_bus');
+  if (!fs.existsSync(imagePath2)) {
+    fs.mkdirSync(imagePath2);
+}
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+      cb(null, imagePath2);
+  },
+  filename: function (req, file, cb) {
+      cb(null, `${file.originalname}`);
   }
+});
+
+const upload = multer({ storage: storage }).single('image');
+
+app.post('/upload_image', (req, res) => {
+  upload(req, res, function (err) {
+      if (err instanceof multer.MulterError) {
+          return res.status(400).json({ message: 'Upload failed', error: err });
+      } else if (err) {
+          return res.status(500).json({ message: 'Internal server error', error: err });
+      }
+
+      if (!req.file) {
+          return res.status(400).send('No file uploaded.');
+      }
+
+      const busNo = req.body.busNo || 'default';
+      const newFileName = `${busNo}.png`;
+
+      // 파일 이름 변경
+      fs.renameSync(`images_bus/${req.file.originalname}`, `images_bus/${newFileName}`);
+
+      const imageUrl = `http://35.216.59.180:8080/images_bus/${newFileName}`;
+      res.status(200).json({ imageUrl });
+  });
+});
 
 //스케줄러
 const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 0, hour: 10, minute: 0 }, async function() {
@@ -81,10 +120,19 @@ async function readFromGoogleSheets(auth, spreadsheetId, range) {
 // Google Sheets에 데이터 쓰기
 async function writeToGoogleSheets(auth, spreadsheetId, range, data) {
   const sheets = google.sheets({ version: 'v4', auth });
+
+  // 기존 데이터를 지우기 위한 clearValues 요청
+  await sheets.spreadsheets.values.clear({
+    spreadsheetId,
+    range,
+  });
+
   const resource = {
-    values: [data],
+    values: data.slice(1),
   };
-  const response = sheets.spreadsheets.values.update({
+
+  // 새로운 데이터를 업데이트하기 위한 update 요청
+  const response = await sheets.spreadsheets.values.update({
     spreadsheetId,
     range,
     valueInputOption: 'RAW',
@@ -137,6 +185,7 @@ async function deleteToGoogleSheets(auth, spreadsheetId, range, data) {
             resource: { values: newData },
           });
 
+          console.log(`${updateResponse.data.updatedCells} cells updated.`);
       }
   } catch (err) {
       console.error('The API returned an error: ' + err);
@@ -171,6 +220,24 @@ async function getScheduleData(auth, spreadsheetId) {
   });
 
   return scheduleData;
+}
+
+async function getBusData(auth, spreadsheetId) {
+  const sheets = google.sheets({ version: 'v4', auth });
+  const response = await sheets.spreadsheets.values.get({
+    spreadsheetId: spreadsheetId,
+    range: '버스!A2:B',
+  });
+  const rows = response.data.values;
+  const buslistData = [];
+  if (rows && rows.length) {
+    rows.forEach(row => {
+      const bus_no = row[0];
+      const bus_url = row[1];
+      buslistData.push({ bus_no, bus_url });
+    });
+  }
+  return buslistData;
 }
 
 // 사용자 ID로 시트에서 해당 행을 찾는 함수
@@ -4233,6 +4300,146 @@ app.post('/lecture_schedule_print', async (req, res) => {
       }
       res.json(response);
   }
+});
+
+app.post('/bus_select', async (req, res) => {
+  try{
+    let response;
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": ''
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'block',
+            'label': '뒤로가기',
+            'blockId': "660a9db3a5c8987d3ca92514",
+          },
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+      }
+    };
+  res.json(response);
+  } catch (error) {
+    console.log(error)
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": `예기치 않은 응답입니다.`
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+      }
+    }
+    res.json(response);
+  }
+});
+
+app.get('/buslist_load', async (req, res) => {
+  try {
+    const busList = await getBusData(auth_global, SPREADSHEET_ID);
+    res.json({ busList });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.post('/buslist_save', async (req, res) => {
+  const { busList } = req.body;
+
+  const values = busList.reduce((acc, bus) => {
+    acc.push([String(bus.bus_no), String(bus.bus_url)]);
+    return acc;
+  }, [['bus_no', 'bus_url']]);
+
+  try {
+    await writeToGoogleSheets(auth_global, SPREADSHEET_ID, '버스!A2:B', values);
+    res.status(200).json({ message: 'Bus list saved successfully' });
+  } catch (error) {
+    console.error('Error writing to Google Sheets:', error);
+    res.status(500).json({ message: 'Error saving bus list' });
+  }
+});
+
+app.post('/bus_school', async (req, res) => {
+  try{
+  let response;
+  
+  res.json(response);
+} catch (error) {
+  console.log(error)
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
+});
+
+app.post('/bus_city', async (req, res) => {
+  try{
+  let response;
+  
+  res.json(response);
+} catch (error) {
+  console.log(error)
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+      "quickReplies": [
+        {
+          'action': 'message',
+          'label': `처음으로`,
+          'messageText': `처음으로`
+        }
+      ]
+    }
+  }
+  res.json(response);
+}
 });
 
 app.listen(port, () => {
