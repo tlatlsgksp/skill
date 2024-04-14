@@ -4517,6 +4517,7 @@ app.post('/bus_city_print', async (req, res) => {
     }).map(row => row[1]);
 
     const items = busUrls.map(bus_url => ({
+      "title": label+`번 버스`,
       "thumbnail": {
         "imageUrl": bus_url,
         "link": {
@@ -4539,7 +4540,7 @@ app.post('/bus_city_print', async (req, res) => {
           {
             'action': 'block',
             'label': '뒤로가기',
-            'blockId': "6611a013530fb1712c7bc233",
+            'blockId': "661bb3131322de4469f99a09",
           },
           {
             'action': 'message',
