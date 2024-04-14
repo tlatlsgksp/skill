@@ -4413,33 +4413,72 @@ app.post('/bus_school', async (req, res) => {
 });
 
 app.post('/bus_city', async (req, res) => {
-  try{
-  let response;
-  
-  res.json(response);
-} catch (error) {
-  console.log(error)
-  response = {
-    "version": "2.0",
-    "template": {
-      "outputs": [
-        {
-          "simpleText": {
-            "text": `예기치 않은 응답입니다.`
-          }
-        }
-      ],
-      "quickReplies": [
-        {
+  try {
+    const values = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, '버스!A2:B');
+    
+    if (values && values.length > 0) {
+      // 오름차순으로 정렬
+      values.sort((a, b) => {
+        const busNoA = a[0]; // 첫 번째 열의 데이터를 bus_no로 사용
+        const busNoB = b[0]; // 첫 번째 열의 데이터를 bus_no로 사용
+
+        return busNoA.localeCompare(busNoB, 'en', { numeric: true });
+      });
+
+      const quickReplies = values.map(row => {
+        const busNo = row[0];
+        const label = busNo.includes('_') ? busNo.split('_')[0] : busNo;
+
+        return {
           'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
+          'label': label,
+          'messageText': label
+        };
+      });
+
+      const response = {
+        "version": "2.0",
+        "template": {
+          "outputs": [
+            {
+              "simpleText": {
+                "text": `버스를 선택해주세요.`
+              }
+            }
+          ],
+          "quickReplies": quickReplies
         }
-      ]
+      };
+
+      res.json(response);
+    } else {
+      res.status(400).json({ message: 'No data available' });
     }
+  } catch (error) {
+    console.log(error);
+
+    const response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": `예기치 않은 응답입니다.`
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+      }
+    };
+
+    res.json(response);
   }
-  res.json(response);
-}
 });
 
 app.listen(port, () => {
