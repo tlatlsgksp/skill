@@ -4511,13 +4511,24 @@ app.post('/bus_city_print', async (req, res) => {
     const extra = req.body.action.clientExtra;
     const label = extra.label;
     const values = extra.values;
-    const busUrls = values.filter(row => {
-      const busNo = row[0];
-      return busNo.includes(label);
-    }).map(row => row[1]);
+    let busUrls = [];
+
+    if (label.includes('-')) {
+      // label에 '-'가 포함된 경우
+      busUrls = values.filter(row => {
+        const busNo = row[0];
+        return busNo.includes(label);
+      }).map(row => row[1]);
+    } else {
+      // label에 '-'가 포함되지 않은 경우
+      busUrls = values.filter(row => {
+        const busNo = row[0];
+        return busNo === label;
+      }).map(row => row[1]);
+    }
 
     const items = busUrls.map(bus_url => ({
-      "title": label+`번 버스`,
+      "title": label + `번 버스`,
       "thumbnail": {
         "imageUrl": bus_url,
         "link": {
@@ -4525,6 +4536,7 @@ app.post('/bus_city_print', async (req, res) => {
         }
       },
     }));
+
     const response = {
       "version": "2.0",
       "template": {
@@ -4535,21 +4547,10 @@ app.post('/bus_city_print', async (req, res) => {
               "items": items
             }
           }
-        ],
-        "quickReplies": [
-          {
-            'action': 'block',
-            'label': '뒤로가기',
-            'blockId': "661bb3131322de4469f99a09",
-          },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
         ]
       }
-    }
+    };
+
     res.json(response);
   } catch (error) {
     console.log(error);
