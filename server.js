@@ -4112,6 +4112,7 @@ app.post('/lecture_schedule_edit', async (req, res) => {
       if (rowData && rowData.length > 0) {
         const uniqueRowData = removeDuplicatesAndEmpty(rowData[0]);
         const separatedData = uniqueRowData.map(row => row.split("\n"));
+        console.log(separatedData);
         const lectures = separatedData.map(data => data[0].replace(/\s+/g, '').toUpperCase());
         const classes = separatedData.map(data => data[1]);
         const professors = separatedData.map(data => data[2].replace(/\s+/g, '').toUpperCase());
