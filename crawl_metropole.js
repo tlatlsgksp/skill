@@ -70,7 +70,7 @@ async function scrapeWebsite() {
 }
 
 // 메인 함수
-async function main() {
+async function main_met() {
   const auth = await authorize();
   const spreadsheetId = '1F3kEbduNvPnsIbfdO9gDZzc1yua1LMs627KAwZsYg6o';
   const range = '학식_메트로폴!A2:N';
@@ -79,10 +79,10 @@ async function main() {
 }
 
 // 메인 함수 실행
-main().catch(error => {
+main_met().catch(error => {
   console.error('에러 발생:', error);
 });
 
 module.exports = {
-  main
+  main_met
 };

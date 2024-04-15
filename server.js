@@ -5,12 +5,12 @@ const { google } = require('googleapis');
 const fs = require('fs');
 const path = require('path');
 const schedule = require('node-schedule');
-const { main_met } = require('./crawl_metropole');
-const { main_met_load } = require('./load_crawl_met');
-const { main_met_dorm } = require('./crawl_metropole_dormitory');
-const { main_met_dorm_load } = require('./load_crawl_met_dorm');
+//const { main_met } = require('./crawl_metropole');
+//const { main_met_dorm } = require('./crawl_metropole_dormitory');
 const { main_met_bus } = require('./crawl_metropole_bus');
 const { main_plan } = require('./crawl_plan');
+const { main_met_load } = require('./load_crawl_met');
+const { main_met_dorm_load } = require('./load_crawl_met_dorm');
 const { main_lecturelist } = require('./load_lecturelist');
 const { main_lectureinfo } = require('./load_lectureinfo');
 const { type } = require('os');
@@ -80,6 +80,12 @@ const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 0, hour: 10, minute: 0 
     console.log('크롤링 스케줄 실행 중');
     //await main_met();
     //await main_met_dorm();
+    //await main_met_bus();
+    //await main_plan();
+    //await main_met_load();
+    //await main_met_dorm_load();
+    //await main_lecturelist();
+    //await main_lectureinfo();
     fs.readFile('./crawl_met.json', 'utf8', async (err, data) => {
       if (err) throw err;
       mealMetropole = await JSON.parse(data);
@@ -87,6 +93,14 @@ const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 0, hour: 10, minute: 0 
     fs.readFile('./crawl_met_dorm.json', 'utf8', async (err, data) => {
       if (err) throw err;
       mealMetropoleDormitory = await JSON.parse(data);
+    });
+    fs.readFile('./lecturelist.json', 'utf8', async (err, data) => {
+      if (err) throw err;
+      lectureList = await JSON.parse(data);
+    });
+    fs.readFile('./lectureinfo.json', 'utf8', async (err, data) => {
+      if (err) throw err;
+      lectureInfo = await JSON.parse(data);
     });
     console.log('크롤링 스케줄 완료');
   } catch (error) {
@@ -842,10 +856,6 @@ async function initialize() {
   try {
     console.log('서버 초기화 중');
     auth_global = await authorize();
-    //await main_met();
-    //await main_met_dorm();
-    //await main_lecturelist();
-    //await main_lectureinfo();
     fs.readFile('./crawl_met.json', 'utf8', async (err, data) => {
       if (err) throw err;
       mealMetropole = await JSON.parse(data);
@@ -928,15 +938,27 @@ app.post('/shutdown', (req, res) => {
 //서버 업데이트
 app.post('/update', async (req, res) => {
   try {
+    await main_met_bus();
+    await main_plan();
+    await main_met_load();
+    await main_met_dorm_load();
     await main_lecturelist();
     await main_lectureinfo();
-    fs.readFile('./lecturelist.json', 'utf8', (err, data) => {
+    fs.readFile('./crawl_met.json', 'utf8', async (err, data) => {
       if (err) throw err;
-      lectureList = JSON.parse(data);
+      mealMetropole = await JSON.parse(data);
     });
-    fs.readFile('./lectureinfo.json', 'utf8', (err, data) => {
+    fs.readFile('./crawl_met_dorm.json', 'utf8', async (err, data) => {
       if (err) throw err;
-      lectureInfo = JSON.parse(data);
+      mealMetropoleDormitory = await JSON.parse(data);
+    });
+    fs.readFile('./lecturelist.json', 'utf8', async (err, data) => {
+      if (err) throw err;
+      lectureList = await JSON.parse(data);
+    });
+    fs.readFile('./lectureinfo.json', 'utf8', async (err, data) => {
+      if (err) throw err;
+      lectureInfo = await JSON.parse(data);
     });
     res.json({ message: '데이터가 업데이트되었습니다.' });
   } catch (error) {

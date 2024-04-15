@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 
-async function scrapeWebsite() {
+async function main_plan() {
   const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
   const page = await browser.newPage();
   const dir = './images_plan';
@@ -57,6 +57,10 @@ async function scrapeWebsite() {
   console.log('스크린샷이 성공적으로 저장되었습니다.');
 }
 
-scrapeWebsite().catch(error => {
+main_plan().catch(error => {
   console.error('에러 발생:', error);
 });
+
+module.exports = {
+  main_plan
+};

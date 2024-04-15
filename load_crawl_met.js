@@ -49,11 +49,11 @@ async function saveToJson(data) {
   };
 
   await fs.writeFile('crawl_met.json', JSON.stringify(transformedData, null, 2));
-  console.log('Crawling data saved to JSON file: crawl_met.json');
+  console.log('Data saved to JSON file: crawl_met.json');
 }
 
 // 메인 함수
-async function main() {
+async function main_met_load() {
   const auth = await authorize();
   const spreadsheetId = '1F3kEbduNvPnsIbfdO9gDZzc1yua1LMs627KAwZsYg6o';
   const range = '학식_메트로폴!A2:N';
@@ -66,10 +66,10 @@ async function main() {
 }
 
 // 메인 함수 실행
-main().catch(error => {
+main_met_load().catch(error => {
   console.error('에러 발생:', error);
 });
 
 module.exports = {
-  main
+  main_met_load
 };
