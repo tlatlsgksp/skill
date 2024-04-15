@@ -8,8 +8,10 @@ const schedule = require('node-schedule');
 const { main_met } = require('./crawl_metropole');
 const { main_met_dorm } = require('./crawl_metropole_dormitory');
 const { main_met_bus } = require('./crawl_metropole_bus');
+const { main_plan } = require('./crawl_plan');
 const { main_lecturelist } = require('./load_lecturelist');
 const { main_lectureinfo } = require('./load_lectureinfo');
+const { type } = require('os');
 const app = express();
 const port = 8080;
 let mealMetropole;
@@ -4621,6 +4623,147 @@ app.post('/bus_city_print', async (req, res) => {
   }
 });
 
+app.post('/plan_select', async (req, res) => {
+  try{
+    const extra = req.body.action.clientExtra;
+    let type;
+    let response;
+    let quickReplies = [];
+    if (extra.type === "this"){
+      type = "올해"
+    } else{
+      type = "내년"
+    }
+    quickReplies.push({
+      'action': 'block',
+      'label': '뒤로가기',
+      'blockId': "661d2de74fe5e11ebc044f95",
+    });
+
+    quickReplies.push({
+      'action': 'message',
+      'label': `처음으로`,
+      'messageText': `처음으로`
+    });
+    
+    for (let i = 1; i <= 12; i++) {
+      quickReplies.push({
+        'action': 'block',
+        'label': `${i}월`,
+        'blockId': "661d306c7b7d1331386105d5",
+        'extra':{
+          'type': extra.type,
+          'no': i
+        }
+      });
+    }
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "textCard": {
+              "title": `${type} 학사일정`,
+              "description": `조회할 월간 학사일정을 선택하세요.`
+            }
+          }
+        ],
+        "quickReplies": quickReplies
+      }
+    }
+    res.json(response);
+  } catch (error) {
+    console.log(error)
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": `예기치 않은 응답입니다.`
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+      }
+    }
+    res.json(response);
+  }
+});
+
+app.post('/plan_print', async (req, res) => {
+  try{
+    const extra = req.body.action.clientExtra;
+    const offset = 1000 * 60 * 60 * 9
+    const KST = new Date((new Date()).getTime() + offset)
+    let response;
+    let year;
+    if (extra.type === "this"){
+      year = KST.getFullYear();
+    } else{
+      year = KST.getFullYear() + 1;
+    }
+    const imageUrl = `http://35.216.59.180:8080/images_plan/plan_${year}_${extra.no}`;
+    response = {
+      "version": "2.0",
+      "template": {
+          "outputs": [
+              {
+                  "simpleImage": {
+                      "imageUrl": imageUrl,
+                      "altText": "학사일정 이미지"
+                  }
+              }
+          ],
+          "quickReplies": [
+            {
+              'action': 'block',
+              'label': '뒤로가기',
+              'blockId': "661d2fc47b7d1331386105c9",
+              'extra': {
+                'type': extra.type
+              }
+            },
+            {
+              'action': 'message',
+              'label': `처음으로`,
+              'messageText': `처음으로`
+            }
+          ]
+      }
+    }
+    res.json(response);
+  } catch (error) {
+    console.log(error)
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": `예기치 않은 응답입니다.`
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+      }
+    }
+    res.json(response);
+  }
+});
+
 app.listen(port, () => {
   console.log(`서버가 http://localhost:${port} 에서 실행 중입니다.`);
 });
@@ -4628,7 +4771,7 @@ app.listen(port, () => {
 app.post('/example', async (req, res) => {
   try{
     let response;
-    
+
     res.json(response);
   } catch (error) {
     console.log(error)
