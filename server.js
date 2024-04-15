@@ -3956,14 +3956,14 @@ app.post('/lecture_schedule_save', async (req, res) => {
           ]
         }
       };
-    } else if (time.some(index => index.split('(')[0] === '토' || index.split('(')[0] === '일')) {
+    } else if (time.includes('토') || time.includes('일')) {
       response = {
         "version": "2.0",
         "template": {
           "outputs": [
             {
               "simpleText": {
-                "text": `토요일과 일요일의 시간표는 저장할 수 없습니다.`
+                "text": `토요일 및 일요일의 시간표는 저장할 수 없습니다.`
               }
             }
           ],
