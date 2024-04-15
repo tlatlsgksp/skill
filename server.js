@@ -3032,6 +3032,7 @@ app.post('/lecture_info_search', async (req, res) => {
         "outputs": [
           {
             "textCard": {
+              "title": "교과개요",
               "description": `교과목개요▼\n ${selectedLectureInfo.교과목개요}\n\n교과목표▼\n ${selectedLectureInfo.교과목표}`
             }
           }
