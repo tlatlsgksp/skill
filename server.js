@@ -4390,7 +4390,7 @@ app.post('/buslist_save', async (req, res) => {
 app.post('/bus_school_print', async (req, res) => {
   try{
     const extra = req.body.action.clientExtra;
-    const imageUrl = `http://35.216.59.180:8080/images_bus_school/schoolbus_${extra.type}`;
+    const imageUrl = `http://35.216.59.180:8080/images_bus_school/schoolbus_${extra.type}.png`;
     let response;
     response = {
       "version": "2.0",
