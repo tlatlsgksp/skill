@@ -45,19 +45,6 @@ async function writeToGoogleSheets(auth, spreadsheetId, range, dates, breakfasts
     });
 
     console.log('Appended data to Google Sheets');
-
-    // 크롤링 데이터를 JSON 파일로 저장
-    const jsonData = {
-      timestamp,
-      data: values.map(data => ({
-        date: data[1],
-        breakfast: data[2],
-        dinner: data[3],
-        origin: data[4],
-      })),
-    };
-    await fs.writeFile('crawl_met_dorm.json', JSON.stringify(jsonData, null, 2));
-    console.log('Crawling data saved to JSON file: crawl_met_dorm.json');
   } catch (error) {
     console.error('Error appending data to Google Sheets:', error.message);
   }
@@ -84,7 +71,7 @@ async function scrapeWebsite() {
 }
 
 // 메인 함수
-async function main_met_dorm() {
+async function main() {
   const auth = await authorize();
   const spreadsheetId = '1F3kEbduNvPnsIbfdO9gDZzc1yua1LMs627KAwZsYg6o';
   const range = '학식_메트로폴_기숙사!A2:N';
@@ -92,7 +79,11 @@ async function main_met_dorm() {
   await writeToGoogleSheets(auth, spreadsheetId, range, dates, breakfasts, dinners, origins);
 }
 
-main_met_dorm();
-  module.exports = {
-    main_met_dorm
-  };
+// 메인 함수 실행
+main().catch(error => {
+  console.error('에러 발생:', error);
+});
+
+module.exports = {
+  main
+};

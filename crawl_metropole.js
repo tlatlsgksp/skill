@@ -45,18 +45,6 @@ async function writeToGoogleSheets(auth, spreadsheetId, range, dates, menus, ori
     });
 
     console.log('Appended data to Google Sheets');
-
-    // 크롤링 데이터를 JSON 파일로 저장
-    const jsonData = {
-      timestamp,
-      data: values.map(data => ({
-        date: data[1],
-        meal: data[2],
-        origin: data[3],
-      })),
-    };
-    await fs.writeFile('crawl_met.json', JSON.stringify(jsonData, null, 2));
-    console.log('Crawling data saved to JSON file: crawl_met.json');
   } catch (error) {
     console.error('Error appending data to Google Sheets:', error.message);
   }
@@ -67,7 +55,7 @@ async function scrapeWebsite() {
   const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'], });
   const page = await browser.newPage();
 
-  await page.goto('https://www.kduniv.ac.kr/kor/CMS/DietMenuMgr/list.do?mCode=MN183&searchDietCategory=6');
+  await page.goto('https://www.kduniv.ac.kr/kor/CMS/DietMenuMgr/list.do?mCode=MN183&searchDietCategory=6', { timeout: 60000 });
   await page.waitForSelector('#cafeteria-menu');
 
   const dates = await page.$$eval('#cafeteria-menu tbody tr th', (dates) => dates.map(date => {
@@ -82,7 +70,7 @@ async function scrapeWebsite() {
 }
 
 // 메인 함수
-async function main_met() {
+async function main() {
   const auth = await authorize();
   const spreadsheetId = '1F3kEbduNvPnsIbfdO9gDZzc1yua1LMs627KAwZsYg6o';
   const range = '학식_메트로폴!A2:N';
@@ -90,7 +78,11 @@ async function main_met() {
   await writeToGoogleSheets(auth, spreadsheetId, range, dates, menus, origins);
 }
 
-main_met();
-  module.exports = {
-    main_met
-  };
+// 메인 함수 실행
+main().catch(error => {
+  console.error('에러 발생:', error);
+});
+
+module.exports = {
+  main
+};

@@ -5,8 +5,10 @@ const { google } = require('googleapis');
 const fs = require('fs');
 const path = require('path');
 const schedule = require('node-schedule');
-//const { main_met } = require('./crawl_metropole');
-//const { main_met_dorm } = require('./crawl_metropole_dormitory');
+const { main_met } = require('./crawl_metropole');
+const { main_met_load } = require('./load_crawl_met');
+const { main_met_dorm } = require('./crawl_metropole_dormitory');
+const { main_met_dorm_load } = require('./load_crawl_met_dorm');
 const { main_met_bus } = require('./crawl_metropole_bus');
 const { main_plan } = require('./crawl_plan');
 const { main_lecturelist } = require('./load_lecturelist');
@@ -4709,7 +4711,7 @@ app.post('/plan_print', async (req, res) => {
     } else{
       year = KST.getFullYear() + 1;
     }
-    const imageUrl = `http://35.216.59.180:8080/images_plan/plan_${year}_${extra.no}`;
+    const imageUrl = `http://35.216.59.180:8080/images_plan/plan_${year}_${extra.no}.png`;
     response = {
       "version": "2.0",
       "template": {
