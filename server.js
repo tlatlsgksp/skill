@@ -3032,7 +3032,6 @@ app.post('/lecture_info_search', async (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "교과개요",
               "description": `교과목개요▼\n ${selectedLectureInfo.교과목개요}\n\n교과목표▼\n ${selectedLectureInfo.교과목표}`
             }
           }
@@ -4112,7 +4111,6 @@ app.post('/lecture_schedule_edit', async (req, res) => {
       if (rowData && rowData.length > 0) {
         const uniqueRowData = removeDuplicatesAndEmpty(rowData[0]);
         const separatedData = uniqueRowData.map(row => row.split("\n"));
-        console.log(separatedData);
         const lectures = separatedData.map(data => data[0].replace(/\s+/g, '').toUpperCase());
         const classes = separatedData.map(data => data[1]);
         const professors = separatedData.map(data => data[2].replace(/\s+/g, '').toUpperCase());
