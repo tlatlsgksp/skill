@@ -5,8 +5,8 @@ const { google } = require('googleapis');
 const fs = require('fs');
 const path = require('path');
 const schedule = require('node-schedule');
-const { main_met } = require('./crawl_metropole');
-const { main_met_dorm } = require('./crawl_metropole_dormitory');
+//const { main_met } = require('./crawl_metropole');
+//const { main_met_dorm } = require('./crawl_metropole_dormitory');
 const { main_met_bus } = require('./crawl_metropole_bus');
 const { main_plan } = require('./crawl_plan');
 const { main_lecturelist } = require('./load_lecturelist');
@@ -76,8 +76,8 @@ app.post('/upload_image', (req, res) => {
 const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 0, hour: 10, minute: 0 }, async function() {
   try {
     console.log('크롤링 스케줄 실행 중');
-    await main_met();
-    await main_met_dorm();
+    //await main_met();
+    //await main_met_dorm();
     fs.readFile('./crawl_met.json', 'utf8', async (err, data) => {
       if (err) throw err;
       mealMetropole = await JSON.parse(data);
