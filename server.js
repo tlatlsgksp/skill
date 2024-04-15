@@ -4120,13 +4120,13 @@ app.post('/lecture_schedule_edit', async (req, res) => {
 
         for (let i = 0; i < lectures.length; i++) {
             const lectureName = lectures[i];
-            const professorName = professors[i];
             const classNumber = classes[i];
+            const professorName = professors[i];
             const place = places[i];
             const lecture = lectureList.find(lecture => 
               lecture.과목명 === lectureName &&
-              lecture.교수명 === professorName &&
-              lecture.분반 === classNumber
+              lecture.분반 === classNumber &&
+              lecture.교수명 === professorName
             );
             if (lecture) {
                 selectedLectureInfo.push(lecture);
@@ -4223,6 +4223,7 @@ app.post('/lecture_schedule_delete', async (req, res) => {
     let selectedLectureInfo = extra.selectedLectureInfo;
     let selectedLectureInfos = selectedLectureInfo[schedule_no - 1];
     let combine = selectedLectureInfos.과목명+'\n'+selectedLectureInfos.분반+'\n'+selectedLectureInfos.교수명+'\n'+selectedLectureInfos.강의실
+    let combine2 = selectedLectureInfos.과목명+'['+selectedLectureInfos.분반+'] '+selectedLectureInfos.교수명+' '+selectedLectureInfos.강의실
     let response;
     await deleteToGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!B${userRow}:BS${userRow}`, combine);
     response = {
@@ -4231,7 +4232,7 @@ app.post('/lecture_schedule_delete', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": '해당 강의를 삭제했습니다.\n\n'+combine
+              "text": '해당 강의를 삭제했습니다.\n\n'+combine2
             }
           }
         ],
