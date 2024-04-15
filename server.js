@@ -7,6 +7,7 @@ const path = require('path');
 const schedule = require('node-schedule');
 const { main_met } = require('./crawl_metropole');
 const { main_met_dorm } = require('./crawl_metropole_dormitory');
+const { main_met_bus } = require('./crawl_metropole_bus');
 const { main_lecturelist } = require('./load_lecturelist');
 const { main_lectureinfo } = require('./load_lectureinfo');
 const app = express();
@@ -29,6 +30,10 @@ const imagePath = path.join(__dirname, 'images');
 const imagePath2 = path.join(__dirname, 'images_bus');
   if (!fs.existsSync(imagePath2)) {
     fs.mkdirSync(imagePath2);
+}
+const imagePath3 = path.join(__dirname, 'images_bus_school');
+  if (!fs.existsSync(imagePath3)) {
+    fs.mkdirSync(imagePath3);
 }
 
 const storage = multer.diskStorage({
@@ -4382,34 +4387,60 @@ app.post('/buslist_save', async (req, res) => {
   }
 });
 
-app.post('/bus_school', async (req, res) => {
+app.post('/bus_school_print', async (req, res) => {
   try{
-  let response;
-  
-  res.json(response);
-} catch (error) {
-  console.log(error)
-  response = {
-    "version": "2.0",
-    "template": {
-      "outputs": [
-        {
-          "simpleText": {
-            "text": `예기치 않은 응답입니다.`
-          }
-        }
-      ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
+    const extra = req.body.action.clientExtra;
+    const imageUrl = `http://35.216.59.180:8080/images_bus_school/schoolbus_${extra.type}`;
+    let response;
+    response = {
+      "version": "2.0",
+      "template": {
+          "outputs": [
+              {
+                  "simpleImage": {
+                      "imageUrl": imageUrl,
+                      "altText": "버스정보 이미지"
+                  }
+              }
+          ],
+          "quickReplies": [
+            {
+              'action': 'block',
+              'label': '뒤로가기',
+              'blockId': "661bb30c560bdd10253c2aa5",
+            },
+            {
+              'action': 'message',
+              'label': `처음으로`,
+              'messageText': `처음으로`
+            }
+          ]
+      }
     }
+    res.json(response);
+  } catch (error) {
+    console.log(error)
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": `예기치 않은 응답입니다.`
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+      }
+    }
+    res.json(response);
   }
-  res.json(response);
-}
 });
 
 app.post('/bus_city', async (req, res) => {
@@ -4596,30 +4627,30 @@ app.listen(port, () => {
 
 app.post('/example', async (req, res) => {
   try{
-  let response;
-  
-  res.json(response);
-} catch (error) {
-  console.log(error)
-  response = {
-    "version": "2.0",
-    "template": {
-      "outputs": [
-        {
-          "simpleText": {
-            "text": `예기치 않은 응답입니다.`
+    let response;
+    
+    res.json(response);
+  } catch (error) {
+    console.log(error)
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": `예기치 않은 응답입니다.`
+            }
           }
-        }
-      ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
+        ],
+        "quickReplies": [
+          {
+            'action': 'message',
+            'label': `처음으로`,
+            'messageText': `처음으로`
+          }
+        ]
+      }
     }
+    res.json(response);
   }
-  res.json(response);
-}
 });
