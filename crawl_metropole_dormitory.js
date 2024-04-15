@@ -68,7 +68,7 @@ async function scrapeWebsite() {
   const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
   const page = await browser.newPage();
 
-  await page.goto('https://www.kduniv.ac.kr/kor/CMS/DietMenuMgr/list.do?mCode=MN183&searchDietCategory=5');
+  await page.goto('https://www.kduniv.ac.kr/kor/CMS/DietMenuMgr/list.do?mCode=MN183&searchDietCategory=5', { timeout: 60000 });
   await page.waitForSelector('#cafeteria-menu');
 
   const dates = await page.$$eval('#cafeteria-menu tbody tr th', (dates) => dates.map(date => {
