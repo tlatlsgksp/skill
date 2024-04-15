@@ -79,7 +79,6 @@ async function main_lecturelist() {
   }
 }
 
-main_lecturelist();
 module.exports = {
   main_lecturelist
 };

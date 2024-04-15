@@ -79,11 +79,6 @@ async function main_met_dorm() {
   await writeToGoogleSheets(auth, spreadsheetId, range, dates, breakfasts, dinners, origins);
 }
 
-// 메인 함수 실행
-main_met_dorm().catch(error => {
-  console.error('에러 발생:', error);
-});
-
 module.exports = {
   main_met_dorm
 };

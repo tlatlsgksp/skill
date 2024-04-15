@@ -65,11 +65,6 @@ async function main_met_load() {
   await saveToJson(sheetData);
 }
 
-// 메인 함수 실행
-main_met_load().catch(error => {
-  console.error('에러 발생:', error);
-});
-
 module.exports = {
   main_met_load
 };

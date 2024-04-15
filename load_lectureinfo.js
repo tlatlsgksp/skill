@@ -109,7 +109,6 @@ async function main_lectureinfo() {
   }
 }
 
-main_lectureinfo();
 module.exports = {
   main_lectureinfo
 };

@@ -57,10 +57,6 @@ async function main_plan() {
   console.log('스크린샷이 성공적으로 저장되었습니다.');
 }
 
-main_plan().catch(error => {
-  console.error('에러 발생:', error);
-});
-
 module.exports = {
   main_plan
 };

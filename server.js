@@ -5,8 +5,8 @@ const { google } = require('googleapis');
 const fs = require('fs');
 const path = require('path');
 const schedule = require('node-schedule');
-//const { main_met } = require('./crawl_metropole');
-//const { main_met_dorm } = require('./crawl_metropole_dormitory');
+const { main_met } = require('./crawl_metropole');
+const { main_met_dorm } = require('./crawl_metropole_dormitory');
 const { main_met_bus } = require('./crawl_metropole_bus');
 const { main_plan } = require('./crawl_plan');
 const { main_met_load } = require('./load_crawl_met');
@@ -78,14 +78,14 @@ app.post('/upload_image', (req, res) => {
 const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 0, hour: 10, minute: 0 }, async function() {
   try {
     console.log('크롤링 스케줄 실행 중');
-    //await main_met();
-    //await main_met_dorm();
-    //await main_met_bus();
-    //await main_plan();
-    //await main_met_load();
-    //await main_met_dorm_load();
-    //await main_lecturelist();
-    //await main_lectureinfo();
+    await main_met();
+    await main_met_dorm();
+    await main_met_bus();
+    await main_plan();
+    await main_met_load();
+    await main_met_dorm_load();
+    await main_lecturelist();
+    await main_lectureinfo();
     fs.readFile('./crawl_met.json', 'utf8', async (err, data) => {
       if (err) throw err;
       mealMetropole = await JSON.parse(data);
@@ -854,6 +854,14 @@ function findSimilarProfessorsNofilter(userInput, lectureInfo) {
 async function initialize() {
   try {
     console.log('서버 초기화 중');
+    await main_met();
+    await main_met_dorm();
+    await main_met_bus();
+    await main_plan();
+    await main_met_load();
+    await main_met_dorm_load();
+    await main_lecturelist();
+    await main_lectureinfo();
     auth_global = await authorize();
     fs.readFile('./crawl_met.json', 'utf8', async (err, data) => {
       if (err) throw err;

@@ -62,10 +62,6 @@ async function main_met_bus() {
   console.log('스크린샷이 성공적으로 저장되었습니다.');
 }
 
-main_met_bus().catch(error => {
-  console.error('에러 발생:', error);
-});
-
 module.exports = {
   main_met_bus
 };

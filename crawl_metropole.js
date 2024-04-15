@@ -78,11 +78,6 @@ async function main_met() {
   await writeToGoogleSheets(auth, spreadsheetId, range, dates, menus, origins);
 }
 
-// 메인 함수 실행
-main_met().catch(error => {
-  console.error('에러 발생:', error);
-});
-
 module.exports = {
   main_met
 };
