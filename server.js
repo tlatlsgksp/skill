@@ -3963,7 +3963,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
           "outputs": [
             {
               "simpleText": {
-                "text": `토요일 및 일요일의 시간표는 저장할 수 없습니다.`
+                "text": `수업시간이 주말인 강의는 시간표에 저장되지 않습니다.`
               }
             }
           ],
