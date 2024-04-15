@@ -208,7 +208,6 @@ async function deleteToGoogleSheets(auth, spreadsheetId, range, data) {
             resource: { values: newData },
           });
 
-          console.log(`${updateResponse.data.updatedCells} cells updated.`);
       }
   } catch (err) {
       console.error('The API returned an error: ' + err);
@@ -440,7 +439,7 @@ function findAvailableClassrooms(lectureList) {
       }
     }
     else {
-      console.log("Lecture does not have '시간표' or '캠퍼스' property:", lecture);
+      console.log("Lecture does not have '시간표' or '캠퍼스' property:");
     }
   }
 
@@ -467,7 +466,7 @@ function findAvailableClassroomsNext(lectureList) {
       }
     }
     else {
-      console.log("Lecture does not have '시간표' property:", lecture);
+      console.log("Lecture does not have '시간표' property:");
     }
   }
 
@@ -3939,6 +3938,32 @@ app.post('/lecture_schedule_save', async (req, res) => {
             {
               "simpleText": {
                 "text": `사이버 강의는 시간표에 저장되지 않습니다.`
+              }
+            }
+          ],
+          "quickReplies": [
+            {
+              'action': 'block',
+              'label': '뒤로가기',
+              'blockId': blockId,
+              'extra': extraSet
+            },
+            {
+              'action': 'message',
+              'label': `처음으로`,
+              'messageText': `처음으로`
+            }
+          ]
+        }
+      };
+    } else if (time.some(index => index.split('(')[0] === '토' || index.split('(')[0] === '일')) {
+      response = {
+        "version": "2.0",
+        "template": {
+          "outputs": [
+            {
+              "simpleText": {
+                "text": `토요일과 일요일의 시간표는 저장할 수 없습니다.`
               }
             }
           ],
