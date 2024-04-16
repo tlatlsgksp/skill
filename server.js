@@ -4067,11 +4067,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
                 'action': 'block',
                 'label': '뒤로가기',
                 'blockId': blockId,
-                'extra':{
-                  'type': 'back_search',
-                  'userInput': userInput,
-                  'lecture_no': lecture_no
-                }
+                'extra': extraSet
               },
               {
                 'action': 'message',
