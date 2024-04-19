@@ -4616,6 +4616,7 @@ app.post('/bus_city_print', async (req, res) => {
     }
 
     const items = busUrls.map(bus_url => ({
+      "description": "썸네일과 실제 이미지가 다를 수도 있습니다. 링크를 통해 확인해주세요.",
       "thumbnail": {
         "imageUrl": bus_url,
         "fixedRatio": 'true',
@@ -4631,7 +4632,7 @@ app.post('/bus_city_print', async (req, res) => {
         "outputs": [
           {
             "carousel": {
-              "type": "textCard",
+              "type": "basicCard",
               "items": items
             }
           }
