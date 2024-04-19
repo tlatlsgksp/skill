@@ -4631,7 +4631,7 @@ app.post('/bus_city_print', async (req, res) => {
         "outputs": [
           {
             "carousel": {
-              "type": "basicCard",
+              "type": "textCard",
               "items": items
             }
           }
