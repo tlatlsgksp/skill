@@ -3456,13 +3456,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
         let text = "수업시간이 겹치는 강의가 있습니다.\n\n";
         for (const overlappingColumn of overlappingColumnsData) {
           const { index, data } = await overlappingColumn;
-          const combine = data.map(item => {
-            if (typeof item === 'string') {
-              return item.replace(/\n/g, '');
-            }
-            return item;
-          }).join(' ');
-    
+          const combine = data.filter(item => typeof item === 'string').join(' ');
           text += `${combine} - ${index}\n`;
         }
 
