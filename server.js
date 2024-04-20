@@ -540,11 +540,6 @@ function createBuildingResponse_1(buildingName, buildingCode, floors, hasCarouse
           'label': `뒤로가기`,
           'blockId': `65f16b9d21bdeb24853d9669`
         },
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
       ]
     },
   };
@@ -587,11 +582,6 @@ function createBuildingResponse_2(buildingName, buildingCode, floors, hasCarouse
           'label': `뒤로가기`,
           'blockId': `65f16bac82abcd51947bf6d4`
         },
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
       ]
     },
   };
@@ -634,11 +624,6 @@ function createBuildingResponse_3(buildingName, buildingCode, floors, hasCarouse
           'label': `뒤로가기`,
           'blockId': `65f18d02303da839d8dfc680`
         },
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
       ]
     },
   };
@@ -681,11 +666,6 @@ function createBuildingResponseNext_1(buildingName, buildingCode, floors, hasCar
           'label': `뒤로가기`,
           'blockId': `65f16b9d21bdeb24853d9669`
         },
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
       ]
     },
   };
@@ -728,11 +708,6 @@ function createBuildingResponseNext_2(buildingName, buildingCode, floors, hasCar
           'label': `뒤로가기`,
           'blockId': `65f16bac82abcd51947bf6d4`
         },
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
       ]
     },
   };
@@ -775,11 +750,6 @@ function createBuildingResponseNext_3(buildingName, buildingCode, floors, hasCar
           'label': `뒤로가기`,
           'blockId': `65f18d02303da839d8dfc680`
         },
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
       ]
     },
   };
@@ -908,13 +878,6 @@ app.use((req, res, next) => {
             "textCard": {
               "title": "서버 초기화 중입니다.",
               "description": "잠시 후 다시 시도해주세요.",
-              "buttons": [
-                {
-                  'action': 'message',
-                  'label': `처음으로`,
-                  'messageText': `처음으로`
-                },
-              ]
             }
           }
         ]
@@ -986,13 +949,6 @@ app.post('/cancle', (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -1022,14 +978,6 @@ app.post('/today', (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
-        ]
-
       }
     }
   }
@@ -1068,13 +1016,6 @@ app.post('/today', (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
-        ]
 
       }
     };
@@ -1093,13 +1034,6 @@ app.post('/today', (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -1131,14 +1065,6 @@ app.post('/tomorrow', (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
-        ]
-
       }
     }
   }
@@ -1177,14 +1103,6 @@ app.post('/tomorrow', (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
-        ]
-
       }
     };
   }
@@ -1202,13 +1120,6 @@ app.post('/tomorrow', (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -1239,14 +1150,6 @@ app.post('/today_origin', (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
-        ]
-
       }
     }
   }else{
@@ -1267,11 +1170,6 @@ app.post('/today_origin', (req, res) => {
             'label': `뒤로가기`,
             'blockId': `65ca1b7109dcef4315f12fd3`
           },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
         ]
 
       }
@@ -1290,13 +1188,6 @@ app.post('/today_origin', (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -1327,14 +1218,6 @@ app.post('/today_origin_dorm', (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
-        ]
-
       }
     }
   } else{
@@ -1355,11 +1238,6 @@ app.post('/today_origin_dorm', (req, res) => {
             'label': `뒤로가기`,
             'blockId': `65ca1b7109dcef4315f12fd3`
           },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
         ]
 
       }
@@ -1378,13 +1256,6 @@ app.post('/today_origin_dorm', (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -1416,14 +1287,6 @@ app.post('/tomorrow_origin', (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
-        ]
-
       }
     }
   } else {
@@ -1444,11 +1307,6 @@ app.post('/tomorrow_origin', (req, res) => {
             'label': `뒤로가기`,
             'blockId': `65ee8168c8612a194feaff1d`
           },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
         ]
       }
     };
@@ -1466,13 +1324,6 @@ app.post('/tomorrow_origin', (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -1504,14 +1355,6 @@ app.post('/tomorrow_origin_dorm', (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
-        ]
-
       }
     }
   } else {
@@ -1532,11 +1375,6 @@ app.post('/tomorrow_origin_dorm', (req, res) => {
             'label': `뒤로가기`,
             'blockId': `65ee8168c8612a194feaff1d`
           },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
         ]
       }
     };
@@ -1554,13 +1392,6 @@ app.post('/tomorrow_origin_dorm', (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -1592,13 +1423,6 @@ try{
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
-        ]
       }
     };
   res.json(response);
@@ -1614,13 +1438,6 @@ try{
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -1676,11 +1493,6 @@ app.post('/week_met', async (req, res) => {
           'label': `뒤로가기`,
           'blockId': `65ca1c5709dcef4315f12fe8`
         },
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
       ]
     }
   };
@@ -1698,13 +1510,6 @@ app.post('/week_met', async (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -1759,11 +1564,6 @@ app.post('/week_met_dorm', async (req, res) => {
           'label': `뒤로가기`,
           'blockId': `65ca1c5709dcef4315f12fe8`
         },
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
       ]
     }
   };
@@ -1781,13 +1581,6 @@ app.post('/week_met_dorm', async (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -1823,11 +1616,6 @@ app.post('/week_met_origin', async (req, res) => {
             'label': `뒤로가기`,
             'blockId': `65ee8c4499eaa8487e2a54df`
           },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
         ]
       }
     };
@@ -1845,13 +1633,6 @@ app.post('/week_met_origin', async (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -1887,11 +1668,6 @@ app.post('/week_met_dorm_origin', async (req, res) => {
             'label': `뒤로가기`,
             'blockId': `65ee8c9b5f95a271a0afa67d`
           },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
         ]
       }
     };
@@ -1909,13 +1685,6 @@ app.post('/week_met_dorm_origin', async (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -1946,13 +1715,6 @@ app.post('/lecture_find', async (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          },
-        ]
       }
     }
   } else if (!isClassTime){
@@ -1967,13 +1729,6 @@ app.post('/lecture_find', async (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          },
-        ]
       }
     }
   } else {
@@ -2011,13 +1766,6 @@ app.post('/lecture_find', async (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          },
-        ]
       }
     };
   }
@@ -2034,13 +1782,6 @@ app.post('/lecture_find', async (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -2055,7 +1796,7 @@ app.post('/empty_lecture_now_1', async (req, res) => {
   const today = KST.getDay();
   const currentHour = KST.getHours();
   const currentMinute = KST.getMinutes();
-  const isClassTime = currentHour > 8 || (currentHour === 8 && currentMinute >= 30) && (currentHour < 23 || (currentHour === 23 && currentMinute <= 30));
+  const isClassTime = currentHour > 9 || (currentHour === 9 && currentMinute >= 30) && (currentHour < 23 || (currentHour === 23 && currentMinute <= 30));
   let response;
 
   if (today === 6 || today === 0) {
@@ -2070,13 +1811,6 @@ app.post('/empty_lecture_now_1', async (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          },
-        ]
       }
     }
   } else if (!isClassTime){
@@ -2091,13 +1825,6 @@ app.post('/empty_lecture_now_1', async (req, res) => {
               }
             }
           ],
-          "quickReplies": [
-            {
-              'action': 'message',
-              'label': `처음으로`,
-              'messageText': `처음으로`
-            },
-          ]
         }
       }
     } else {
@@ -2139,13 +1866,6 @@ app.post('/empty_lecture_now_1', async (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -2160,7 +1880,7 @@ app.post('/empty_lecture_now_2', async (req, res) => {
   const today = KST.getDay();
   const currentHour = KST.getHours();
   const currentMinute = KST.getMinutes();
-  const isClassTime = currentHour > 8 || (currentHour === 8 && currentMinute >= 30) && (currentHour < 23 || (currentHour === 23 && currentMinute <= 30));
+  const isClassTime = currentHour > 9 || (currentHour === 9 && currentMinute >= 30) && (currentHour < 23 || (currentHour === 23 && currentMinute <= 30));
   let response;
 
   if (today === 6 || today === 0) {
@@ -2175,13 +1895,6 @@ app.post('/empty_lecture_now_2', async (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          },
-        ]
       }
     }
   } else if (!isClassTime){
@@ -2196,13 +1909,6 @@ app.post('/empty_lecture_now_2', async (req, res) => {
               }
             }
           ],
-          "quickReplies": [
-            {
-              'action': 'message',
-              'label': `처음으로`,
-              'messageText': `처음으로`
-            },
-          ]
         }
       }
     } else {
@@ -2244,13 +1950,6 @@ app.post('/empty_lecture_now_2', async (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -2265,7 +1964,7 @@ app.post('/empty_lecture_now_3', async (req, res) => {
   const today = KST.getDay();
   const currentHour = KST.getHours();
   const currentMinute = KST.getMinutes();
-  const isClassTime = currentHour > 8 || (currentHour === 8 && currentMinute >= 30) && (currentHour < 23 || (currentHour === 23 && currentMinute <= 30));
+  const isClassTime = currentHour > 9 || (currentHour === 9 && currentMinute >= 30) && (currentHour < 23 || (currentHour === 23 && currentMinute <= 30));
   let response;
 
   if (today === 6 || today === 0) {
@@ -2280,13 +1979,6 @@ app.post('/empty_lecture_now_3', async (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          },
-        ]
       }
     }
   } else if (!isClassTime){
@@ -2301,13 +1993,6 @@ app.post('/empty_lecture_now_3', async (req, res) => {
                 }
               }
             ],
-            "quickReplies": [
-              {
-                'action': 'message',
-                'label': `처음으로`,
-                'messageText': `처음으로`
-              },
-            ]
           }
         }
       } else {
@@ -2349,13 +2034,6 @@ app.post('/empty_lecture_now_3', async (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -2385,13 +2063,6 @@ app.post('/empty_lecture_next_1', async (req, res) => {
               }
             }
           ],
-          "quickReplies": [
-            {
-              'action': 'message',
-              'label': `처음으로`,
-              'messageText': `처음으로`
-            },
-          ]
         }
       }
     } else if (!isClassTime){
@@ -2406,13 +2077,6 @@ app.post('/empty_lecture_next_1', async (req, res) => {
                 }
               }
             ],
-            "quickReplies": [
-              {
-                'action': 'message',
-                'label': `처음으로`,
-                'messageText': `처음으로`
-              },
-            ]
           }
         }
       } else {
@@ -2454,13 +2118,6 @@ app.post('/empty_lecture_next_1', async (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -2490,13 +2147,6 @@ app.post('/empty_lecture_next_2', async (req, res) => {
               }
             }
           ],
-          "quickReplies": [
-            {
-              'action': 'message',
-              'label': `처음으로`,
-              'messageText': `처음으로`
-            },
-          ]
         }
       }
     } else if (!isClassTime){
@@ -2511,13 +2161,6 @@ app.post('/empty_lecture_next_2', async (req, res) => {
                 }
               }
             ],
-            "quickReplies": [
-              {
-                'action': 'message',
-                'label': `처음으로`,
-                'messageText': `처음으로`
-              },
-            ]
           }
         }
       } else {
@@ -2559,13 +2202,6 @@ app.post('/empty_lecture_next_2', async (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -2595,13 +2231,6 @@ app.post('/empty_lecture_next_3', async (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          },
-        ]
       }
     }
   } else if (!isClassTime){
@@ -2616,13 +2245,6 @@ app.post('/empty_lecture_next_3', async (req, res) => {
               }
             }
           ],
-          "quickReplies": [
-            {
-              'action': 'message',
-              'label': `처음으로`,
-              'messageText': `처음으로`
-            },
-          ]
         }
       }
     } else {
@@ -2664,13 +2286,6 @@ app.post('/empty_lecture_next_3', async (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -2717,11 +2332,6 @@ app.post('/lecture_info_find', async (req, res) => {
             'label': `다시 입력`,
             'blockId': `65ffd578dad261262541fc58`//find
           },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
         ]
       }
     }
@@ -2742,11 +2352,6 @@ app.post('/lecture_info_find', async (req, res) => {
             'label': `다시 입력`,
             'blockId': `65ffd578dad261262541fc58`//find
           },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
         ]
       }
     }
@@ -2764,13 +2369,6 @@ app.post('/lecture_info_find', async (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -2824,11 +2422,6 @@ app.post('/lecture_info_select', async (req, res) => {
                 'userInput': userInput,
               }
             },
-            {
-              'action': 'message',
-              'label': `처음으로`,
-              'messageText': `처음으로`
-            }
           ]
         }
       }
@@ -2917,11 +2510,6 @@ app.post('/lecture_info_select', async (req, res) => {
                 'lecture_no': lecture_no
               }
             },
-            {
-              'action': 'message',
-              'label': `처음으로`,
-              'messageText': `처음으로`
-            }
           ]
         }
       };
@@ -2947,11 +2535,6 @@ app.post('/lecture_info_select', async (req, res) => {
                 'userInput': userInput,
             }
           },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
         ]
       }
     }
@@ -2969,13 +2552,6 @@ app.post('/lecture_info_select', async (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -3024,11 +2600,6 @@ app.post('/lecture_info_search', async (req, res) => {
                 'lecture_no': lecture_no
               }
           },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
         ]
       }
     }
@@ -3056,11 +2627,6 @@ app.post('/lecture_info_search', async (req, res) => {
               'lecture_no': lecture_no
             }
           },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
         ]
       }
     }
@@ -3088,11 +2654,6 @@ app.post('/lecture_info_search', async (req, res) => {
               'lecture_no': lecture_no
             }
           },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
         ]
       }
     }
@@ -3110,13 +2671,6 @@ res.json(response);
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -3163,11 +2717,6 @@ app.post('/lecture_professor_find', async (req, res) => {
             'label': `다시 입력`,
             'blockId': `65ffd650a64303558478508f`//pro_find
           },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
         ]
       }
     }
@@ -3188,11 +2737,6 @@ app.post('/lecture_professor_find', async (req, res) => {
             'label': `다시 입력`,
             'blockId': `65ffd650a64303558478508f`//pro_find
           },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
         ]
       }
     }
@@ -3210,13 +2754,6 @@ app.post('/lecture_professor_find', async (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -3278,11 +2815,6 @@ app.post('/lecture_professor_select', async (req, res) => {
                 'userInput': userInput,
               }
             },
-            {
-              'action': 'message',
-              'label': `처음으로`,
-              'messageText': `처음으로`
-            }
           ]
         }
       }
@@ -3321,11 +2853,6 @@ app.post('/lecture_professor_select', async (req, res) => {
                 'userInput': userInput,
               }
             },
-            {
-              'action': 'message',
-              'label': `처음으로`,
-              'messageText': `처음으로`
-            }
           ]
         }
       };
@@ -3351,11 +2878,6 @@ app.post('/lecture_professor_select', async (req, res) => {
                 'userInput': userInput,
             }
           },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
         ]
       }
     }
@@ -3373,13 +2895,6 @@ app.post('/lecture_professor_select', async (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -3443,11 +2958,6 @@ app.post('/lecture_professor_info_find', async (req, res) => {
               'professor_name': professor_name
             }
           },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
         ]
       }
     }
@@ -3475,11 +2985,6 @@ app.post('/lecture_professor_info_find', async (req, res) => {
               'professor_name': professor_name
             }
           },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
         ]
       }
     }
@@ -3497,13 +3002,6 @@ app.post('/lecture_professor_info_find', async (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -3566,11 +3064,6 @@ app.post('/lecture_professor_info_select', async (req, res) => {
                 'professor_name': professor_name
               }
             },
-            {
-              'action': 'message',
-              'label': `처음으로`,
-              'messageText': `처음으로`
-            }
           ]
         }
       }
@@ -3669,11 +3162,6 @@ app.post('/lecture_professor_info_select', async (req, res) => {
                 'professor_name': professor_name
               }
             },
-            {
-              'action': 'message',
-              'label': `처음으로`,
-              'messageText': `처음으로`
-            }
           ]
         }
       };
@@ -3702,11 +3190,6 @@ app.post('/lecture_professor_info_select', async (req, res) => {
               'professor_name': professor_name
             }
           },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
         ]
       }
     }
@@ -3724,13 +3207,6 @@ app.post('/lecture_professor_info_select', async (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -3794,11 +3270,6 @@ app.post('/lecture_professor_info_search', async (req, res) => {
                 'professor_name': professor_name
               }
           },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
         ]
       }
     }
@@ -3828,11 +3299,6 @@ app.post('/lecture_professor_info_search', async (req, res) => {
               'professor_name': professor_name
             }
           },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
         ]
       }
     }
@@ -3862,11 +3328,6 @@ app.post('/lecture_professor_info_search', async (req, res) => {
               'professor_name': professor_name
             }
           },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
         ]
       }
     }
@@ -3884,13 +3345,6 @@ res.json(response);
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -3956,11 +3410,6 @@ app.post('/lecture_schedule_save', async (req, res) => {
               'blockId': blockId,
               'extra': extraSet
             },
-            {
-              'action': 'message',
-              'label': `처음으로`,
-              'messageText': `처음으로`
-            }
           ]
         }
       };
@@ -3982,11 +3431,6 @@ app.post('/lecture_schedule_save', async (req, res) => {
               'blockId': blockId,
               'extra': extraSet
             },
-            {
-              'action': 'message',
-              'label': `처음으로`,
-              'messageText': `처음으로`
-            }
           ]
         }
       };
@@ -4032,12 +3476,6 @@ app.post('/lecture_schedule_save', async (req, res) => {
                 'blockId': blockId,
                 'extra': extraSet
               },
-              {
-                'action': 'message',
-                'label': `처음으로`,
-                'messageText': `처음으로`
-                
-              }
             ]
           }
         };
@@ -4069,11 +3507,6 @@ app.post('/lecture_schedule_save', async (req, res) => {
                 'blockId': blockId,
                 'extra': extraSet
               },
-              {
-                'action': 'message',
-                'label': `처음으로`,
-                'messageText': `처음으로`
-              }
             ]
           }
         };
@@ -4092,13 +3525,6 @@ app.post('/lecture_schedule_save', async (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
-        ]
       }
     };
     res.json(response);
@@ -4162,11 +3588,6 @@ app.post('/lecture_schedule_edit', async (req, res) => {
                 'label': '뒤로가기',
                 'blockId': "66097a32a5c8987d3ca8e8bd",
               },
-              {
-                'action': 'message',
-                'label': `처음으로`,
-                'messageText': `처음으로`
-              }
             ]
           }
         };
@@ -4181,13 +3602,7 @@ app.post('/lecture_schedule_edit', async (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
-        ]
+        
       }
     }
   }
@@ -4205,13 +3620,6 @@ app.post('/lecture_schedule_edit', async (req, res) => {
           }
         }
       ],
-      "quickReplies": [
-        {
-          'action': 'message',
-          'label': `처음으로`,
-          'messageText': `처음으로`
-        }
-      ]
     }
   }
   res.json(response);
@@ -4246,11 +3654,7 @@ app.post('/lecture_schedule_delete', async (req, res) => {
             'label': '뒤로가기',
             'blockId': "660a9db3a5c8987d3ca92514",
           },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
+          
         ]
       }
     };
@@ -4267,13 +3671,7 @@ app.post('/lecture_schedule_delete', async (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
-        ]
+        
       }
     }
     res.json(response);
@@ -4330,11 +3728,6 @@ app.post('/lecture_schedule_print', async (req, res) => {
                 'label': '뒤로가기',
                 'blockId': "66097a32a5c8987d3ca8e8bd",
               },
-              {
-                'action': 'message',
-                'label': `처음으로`,
-                'messageText': `처음으로`
-              }
             ]
         }
       }
@@ -4351,13 +3744,6 @@ app.post('/lecture_schedule_print', async (req, res) => {
               }
             }
           ],
-          "quickReplies": [
-            {
-              'action': 'message',
-              'label': `처음으로`,
-              'messageText': `처음으로`
-            }
-          ]
         }
       }
       res.json(response);
@@ -4383,11 +3769,7 @@ app.post('/bus_select', async (req, res) => {
             'label': '뒤로가기',
             'blockId': "660a9db3a5c8987d3ca92514",
           },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
+          
         ]
       }
     };
@@ -4404,13 +3786,7 @@ app.post('/bus_select', async (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
-        ]
+        
       }
     }
     res.json(response);
@@ -4466,11 +3842,6 @@ app.post('/bus_school_print', async (req, res) => {
               'label': '뒤로가기',
               'blockId': "661bb30c560bdd10253c2aa5",
             },
-            {
-              'action': 'message',
-              'label': `처음으로`,
-              'messageText': `처음으로`
-            }
           ]
       }
     }
@@ -4487,13 +3858,7 @@ app.post('/bus_school_print', async (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
-        ]
+        
       }
     }
     res.json(response);
@@ -4517,17 +3882,10 @@ app.post('/bus_city', async (req, res) => {
 
       let quickReplies = [];
 
-      // 뒤로가기와 처음으로를 먼저 추가
       quickReplies.push({
         'action': 'block',
         'label': '뒤로가기',
         'blockId': "6611a013530fb1712c7bc233",
-      });
-
-      quickReplies.push({
-        'action': 'message',
-        'label': `처음으로`,
-        'messageText': `처음으로`
       });
 
       // 나머지 버스 번호 추가
@@ -4580,13 +3938,6 @@ app.post('/bus_city', async (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
-        ]
       }
     };
 
@@ -4643,11 +3994,7 @@ app.post('/bus_city_print', async (req, res) => {
             'label': `뒤로가기`,
             'blockId': `661bb3131322de4469f99a09`
           },
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
+          
         ]
       }
     };
@@ -4665,13 +4012,6 @@ app.post('/bus_city_print', async (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
-        ]
       }
     };
 
@@ -4694,12 +4034,6 @@ app.post('/plan_select', async (req, res) => {
       'action': 'block',
       'label': '뒤로가기',
       'blockId': "661d2de74fe5e11ebc044f95",
-    });
-
-    quickReplies.push({
-      'action': 'message',
-      'label': `처음으로`,
-      'messageText': `처음으로`
     });
     
     for (let i = 1; i <= 12; i++) {
@@ -4740,13 +4074,7 @@ app.post('/plan_select', async (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
-        ]
+        
       }
     }
     res.json(response);
@@ -4786,11 +4114,6 @@ app.post('/plan_print', async (req, res) => {
                 'type': extra.type
               }
             },
-            {
-              'action': 'message',
-              'label': `처음으로`,
-              'messageText': `처음으로`
-            }
           ]
       }
     }
@@ -4807,13 +4130,6 @@ app.post('/plan_print', async (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
-        ]
       }
     }
     res.json(response);
@@ -4841,13 +4157,7 @@ app.post('/example', async (req, res) => {
             }
           }
         ],
-        "quickReplies": [
-          {
-            'action': 'message',
-            'label': `처음으로`,
-            'messageText': `처음으로`
-          }
-        ]
+        
       }
     }
     res.json(response);
