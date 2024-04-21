@@ -297,13 +297,13 @@ async function findUserRow(userId, auth, spreadsheetId) {
 
 async function addUserRow(userId, auth, spreadsheetId) {
   const sheets = google.sheets({ version: 'v4', auth });
-  const response = await sheets.spreadsheets.values.append({
+  const response = sheets.spreadsheets.values.append({
     spreadsheetId,
     range: '시간표!A:A', // userId가 있는 열 범위
     valueInputOption: 'RAW',
     resource: { values: [[userId]] },
   });
-  return response.data.updates.updatedRange.split(':')[0].replace('시간표!', ''); // 사용자의 행 번호 반환
+  return await response.data.updates.updatedRange.split(':')[0].replace('시간표!', ''); // 사용자의 행 번호 반환
 }
 
 // 시간표의 시간 문자열을 이용하여 열 인덱스를 계산하는 함수
