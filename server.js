@@ -27,9 +27,6 @@ const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 const CREDENTIALS_PATH = 'credentials.json';
 const SPREADSHEET_ID = '1F3kEbduNvPnsIbfdO9gDZzc1yua1LMs627KAwZsYg6o';
 let auth_global;
-app.get('/', (req, res) => {
-  res.redirect('/login.html');
-});
 const imagePath = path.join(__dirname, 'images');
   if (!fs.existsSync(imagePath)) {
     fs.mkdirSync(imagePath);
@@ -43,40 +40,6 @@ const imagePath3 = path.join(__dirname, 'images_bus_school');
     fs.mkdirSync(imagePath3);
 }
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-      cb(null, imagePath2);
-  },
-  filename: function (req, file, cb) {
-      cb(null, `${file.originalname}`);
-  }
-});
-
-const upload = multer({ storage: storage }).single('image');
-
-app.post('/upload_image', (req, res) => {
-  upload(req, res, function (err) {
-      if (err instanceof multer.MulterError) {
-          return res.status(400).json({ message: 'Upload failed', error: err });
-      } else if (err) {
-          return res.status(500).json({ message: 'Internal server error', error: err });
-      }
-
-      if (!req.file) {
-          return res.status(400).send('No file uploaded.');
-      }
-
-      const busNo = req.body.busNo || 'default';
-      const newFileName = `${busNo}.png`;
-
-      // 파일 이름 변경
-      fs.renameSync(`images_bus/${req.file.originalname}`, `images_bus/${newFileName}`);
-
-      const imageUrl = `http://35.216.59.180:8080/images_bus/${newFileName}`;
-      res.status(200).json({ imageUrl });
-  });
-});
-
 app.post('/login', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
@@ -86,6 +49,114 @@ app.post('/login', (req, res) => {
   } else {
       console.log("로그인 실패");
       res.status(401).json({ message: '로그인 실패' });
+  }
+});
+
+//서버 초기화
+async function initialize() {
+  try {
+    console.log('서버 초기화 중');
+    await main_met();
+    await main_met_dorm();
+    await main_met_bus();
+    await main_plan();
+    await main_met_load();
+    await main_met_dorm_load();
+    await main_lecturelist();
+    await main_lectureinfo();
+    auth_global = await authorize();
+    fs.readFile('./crawl_met.json', 'utf8', async (err, data) => {
+      if (err) throw err;
+      mealMetropole = await JSON.parse(data);
+    });
+    fs.readFile('./crawl_met_dorm.json', 'utf8', async (err, data) => {
+      if (err) throw err;
+      mealMetropoleDormitory = await JSON.parse(data);
+    });
+    fs.readFile('./lecturelist.json', 'utf8', async (err, data) => {
+      if (err) throw err;
+      lectureList = await JSON.parse(data);
+    });
+    fs.readFile('./lectureinfo.json', 'utf8', async (err, data) => {
+      if (err) throw err;
+      lectureInfo = await JSON.parse(data);
+    });
+    console.log('서버 초기화 완료');
+    serverInitialized = true;
+  } catch (error) {
+    console.error('Error during initialization:', error.message);
+  }
+}
+initialize();
+
+//서버 대기
+app.use((req, res, next) => {
+  if (!serverInitialized) {
+    const response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "textCard": {
+              "title": "서버 초기화 중입니다.",
+              "description": "잠시 후 다시 시도해주세요.",
+            }
+          }
+        ]
+      }
+    }
+    res.json(response);
+    return;
+  }
+  next();
+});
+
+//서버 재시작
+app.post('/restart', (req, res) => {
+  serverInitialized = false;
+  initialize();
+  console.log('서버 재시작');
+});
+
+//서버 종료
+app.post('/shutdown', (req, res) => {
+  console.log('서버를 종료합니다.');
+
+  // 프로세스 종료
+  process.exit();
+});
+
+//서버 업데이트
+app.post('/update', async (req, res) => {
+  try {
+    serverInitialized = false;
+    await main_met_bus();
+    await main_plan();
+    await main_met_load();
+    await main_met_dorm_load();
+    await main_lecturelist();
+    await main_lectureinfo();
+    fs.readFile('./crawl_met.json', 'utf8', async (err, data) => {
+      if (err) throw err;
+      mealMetropole = await JSON.parse(data);
+    });
+    fs.readFile('./crawl_met_dorm.json', 'utf8', async (err, data) => {
+      if (err) throw err;
+      mealMetropoleDormitory = await JSON.parse(data);
+    });
+    fs.readFile('./lecturelist.json', 'utf8', async (err, data) => {
+      if (err) throw err;
+      lectureList = await JSON.parse(data);
+    });
+    fs.readFile('./lectureinfo.json', 'utf8', async (err, data) => {
+      if (err) throw err;
+      lectureInfo = await JSON.parse(data);
+    });
+    console.log('서버 업데이트 완료');
+    serverInitialized = true;
+  } catch (error) {
+    console.error('Error during update:', error.message);
+    res.status(500).json({ error: '업데이트 중 오류가 발생했습니다.' });
   }
 });
 
@@ -121,6 +192,44 @@ const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 0, hour: 10, minute: 0 
   } catch (error) {
     console.error('Error in schedule:', error.message);
   }
+});
+
+app.get('/', (req, res) => {
+  res.redirect('/login.html');
+});
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+      cb(null, imagePath2);
+  },
+  filename: function (req, file, cb) {
+      cb(null, `${file.originalname}`);
+  }
+});
+
+const upload = multer({ storage: storage }).single('image');
+
+app.post('/upload_image', (req, res) => {
+  upload(req, res, function (err) {
+      if (err instanceof multer.MulterError) {
+          return res.status(400).json({ message: 'Upload failed', error: err });
+      } else if (err) {
+          return res.status(500).json({ message: 'Internal server error', error: err });
+      }
+
+      if (!req.file) {
+          return res.status(400).send('No file uploaded.');
+      }
+
+      const busNo = req.body.busNo || 'default';
+      const newFileName = `${busNo}.png`;
+
+      // 파일 이름 변경
+      fs.renameSync(`images_bus/${req.file.originalname}`, `images_bus/${newFileName}`);
+
+      const imageUrl = `http://35.216.59.180:8080/images_bus/${newFileName}`;
+      res.status(200).json({ imageUrl });
+  });
 });
 
 // Google Sheets API 인증 정보 가져오기
@@ -834,132 +943,6 @@ function findSimilarProfessorsNofilter(userInput, lectureInfo) {
     return similarProfessors;
   }
 }
-
-//서버 초기화
-async function initialize() {
-  try {
-    console.log('서버 초기화 중');
-    //await main_met();
-    //await main_met_dorm();
-    await main_met_bus();
-    //await main_plan();
-    //await main_met_load();
-    //await main_met_dorm_load();
-    //await main_lecturelist();
-    //await main_lectureinfo();
-    auth_global = await authorize();
-    fs.readFile('./crawl_met.json', 'utf8', async (err, data) => {
-      if (err) throw err;
-      mealMetropole = await JSON.parse(data);
-    });
-    fs.readFile('./crawl_met_dorm.json', 'utf8', async (err, data) => {
-      if (err) throw err;
-      mealMetropoleDormitory = await JSON.parse(data);
-    });
-    fs.readFile('./lecturelist.json', 'utf8', async (err, data) => {
-      if (err) throw err;
-      lectureList = await JSON.parse(data);
-    });
-    fs.readFile('./lectureinfo.json', 'utf8', async (err, data) => {
-      if (err) throw err;
-      lectureInfo = await JSON.parse(data);
-    });
-    console.log('서버 초기화 완료');
-    serverInitialized = true;
-  } catch (error) {
-    console.error('Error during initialization:', error.message);
-  }
-}
-initialize();
-
-//엔드포인트
-//서버 대기
-app.use((req, res, next) => {
-  if (!serverInitialized) {
-    const response = {
-      "version": "2.0",
-      "template": {
-        "outputs": [
-          {
-            "textCard": {
-              "title": "서버 초기화 중입니다.",
-              "description": "잠시 후 다시 시도해주세요.",
-            }
-          }
-        ]
-      }
-    }
-    res.json(response);
-    return;
-  }
-  next();
-});
-
-//서버 재시작
-app.post('/restart', (req, res) => {
-  serverInitialized = false;
-  initialize();
-  console.log('서버 재시작');
-});
-
-//서버 종료
-app.post('/shutdown', (req, res) => {
-  console.log('서버를 종료합니다.');
-
-  // 프로세스 종료
-  process.exit();
-});
-
-//서버 업데이트
-app.post('/update', async (req, res) => {
-  try {
-    serverInitialized = false;
-    await main_met_bus();
-    await main_plan();
-    await main_met_load();
-    await main_met_dorm_load();
-    await main_lecturelist();
-    await main_lectureinfo();
-    fs.readFile('./crawl_met.json', 'utf8', async (err, data) => {
-      if (err) throw err;
-      mealMetropole = await JSON.parse(data);
-    });
-    fs.readFile('./crawl_met_dorm.json', 'utf8', async (err, data) => {
-      if (err) throw err;
-      mealMetropoleDormitory = await JSON.parse(data);
-    });
-    fs.readFile('./lecturelist.json', 'utf8', async (err, data) => {
-      if (err) throw err;
-      lectureList = await JSON.parse(data);
-    });
-    fs.readFile('./lectureinfo.json', 'utf8', async (err, data) => {
-      if (err) throw err;
-      lectureInfo = await JSON.parse(data);
-    });
-    console.log('서버 업데이트 완료');
-    serverInitialized = true;
-  } catch (error) {
-    console.error('Error during update:', error.message);
-    res.status(500).json({ error: '업데이트 중 오류가 발생했습니다.' });
-  }
-});
-
-//탈출블록
-app.post('/cancle', (req, res) => {
-  response = {
-    "version": "2.0",
-    "template": {
-      "outputs": [
-        {
-          "simpleText": {
-            "text": `입력이 취소 되었습니다.`
-          }
-        }
-      ],
-    }
-  }
-  res.json(response);
-});
 
 //오늘의 학식 - 학생식당, 기숙사
 app.post('/today', (req, res) => {
