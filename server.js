@@ -873,15 +873,6 @@ async function initialize() {
 initialize();
 
 //엔드포인트
-app.get('/', (req, res) => {
-  res.send('서버가 실행 중입니다.');
-});
-
-app.get('/keyboard', (req, res) => {
-  const data = { 'type': 'text' }
-  res.json(data);
-});
-
 //서버 대기
 app.use((req, res, next) => {
   if (!serverInitialized) {
