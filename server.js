@@ -303,8 +303,7 @@ async function addUserRow(userId, auth, spreadsheetId) {
     valueInputOption: 'RAW',
     resource: { values: [[userId]] },
   });
-  console.log(response.data.updates.updatedRange)
-  return response.data.updates.updatedRange.split(':')[0].replace('시간표!', ''); // 사용자의 행 번호 반환
+  return response.data.updates.updatedRange.split('A')[1]; // 사용자의 행 번호 반환
 }
 
 // 시간표의 시간 문자열을 이용하여 열 인덱스를 계산하는 함수
