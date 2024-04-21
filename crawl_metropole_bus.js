@@ -63,7 +63,7 @@ async function main_met_bus() {
           x: lastTitBoundingBox.x,
           y: lastTitBoundingBox.y,
           width: lastTitBoundingBox.width,
-          height: lastBoundingBox.y - lastTitBoundingBox.y
+          height: lastBoundingBox.y - lastTitBoundingBox.y + 60
         };
 
         await page.screenshot({ path: path.join(dir, `schoolbus_2_3.png`), clip: lasttitClip });
