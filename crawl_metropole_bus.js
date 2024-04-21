@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 async function main_met_bus() {
+  try{
   const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
   const page = await browser.newPage();
   const dir = './images_bus_school';
@@ -14,6 +15,7 @@ async function main_met_bus() {
 
   // gap을 기준으로 페이지를 분할
   const gaps = await page.$$('.gap');
+  const tits = await page.$$('h5.c-tit03');
 
   let previousGapBoundingBox = null;
 
@@ -31,8 +33,43 @@ async function main_met_bus() {
         height: currentBoundingBox.y - previousGapBoundingBox.y
       };
 
-      // 클립 영역에 따른 스크린샷 찍기
-      await page.screenshot({ path: path.join(dir, `schoolbus_${i}.png`), clip });
+      if (i === 2) {
+        let previousTitBoundingBox = null;
+
+        for (let j = 0; j < 3; j++) {
+          const currentTit = tits[j];
+
+          if (previousTitBoundingBox) {
+            const currentTitBoundingBox = await currentTit.boundingBox();
+
+            const titclip = {
+              x: previousTitBoundingBox.x,
+              y: previousTitBoundingBox.y,
+              width: previousTitBoundingBox.width,
+              height: currentTitBoundingBox.y - previousTitBoundingBox.y
+            };
+
+            await page.screenshot({ path: path.join(dir, `schoolbus_${i}_${j}.png`), clip: titclip }); // 수정된 부분
+          }
+
+          previousTitBoundingBox = await currentTit.boundingBox();
+        }
+
+        // 마지막 tit 이후의 영역 스크린샷
+        const lastTitBoundingBox = await previousTitBoundingBox;
+        const lastBoundingBox = await gaps[2].boundingBox();
+
+        const lasttitClip = {
+          x: lastTitBoundingBox.x,
+          y: lastTitBoundingBox.y,
+          width: lastTitBoundingBox.width,
+          height: lastBoundingBox.y - lastTitBoundingBox.y
+        };
+
+        await page.screenshot({ path: path.join(dir, `schoolbus_2_3.png`), clip: lasttitClip });
+      } else {
+        await page.screenshot({ path: path.join(dir, `schoolbus_${i}.png`), clip });
+      }
     }
 
     // 이전 gap의 bounding box 업데이트
@@ -43,10 +80,6 @@ async function main_met_bus() {
   const lastGapBoundingBox = await previousGapBoundingBox;
   const footerWrap = await page.$('#footer-wrap');
   const footerBoundingBox = await footerWrap.boundingBox();
-  const { width, height } = await page.evaluate(() => ({
-    width: document.documentElement.scrollWidth,
-    height: document.documentElement.scrollHeight,
-  }));
 
   const lastClip = {
     x: lastGapBoundingBox.x,
@@ -60,6 +93,9 @@ async function main_met_bus() {
   await browser.close();
 
   console.log('스크린샷이 성공적으로 저장되었습니다.');
+  }catch (error) {
+    console.error(error);
+  }
 }
 
 module.exports = {

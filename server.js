@@ -839,14 +839,14 @@ function findSimilarProfessorsNofilter(userInput, lectureInfo) {
 async function initialize() {
   try {
     console.log('서버 초기화 중');
-    await main_met();
-    await main_met_dorm();
+    //await main_met();
+    //await main_met_dorm();
     await main_met_bus();
-    await main_plan();
-    await main_met_load();
-    await main_met_dorm_load();
-    await main_lecturelist();
-    await main_lectureinfo();
+    //await main_plan();
+    //await main_met_load();
+    //await main_met_dorm_load();
+    //await main_lecturelist();
+    //await main_lectureinfo();
     auth_global = await authorize();
     fs.readFile('./crawl_met.json', 'utf8', async (err, data) => {
       if (err) throw err;
@@ -3787,49 +3787,6 @@ app.post('/lecture_schedule_print', async (req, res) => {
         }
       }
       res.json(response);
-  }
-});
-
-app.post('/bus_select', async (req, res) => {
-  try{
-    let response;
-    response = {
-      "version": "2.0",
-      "template": {
-        "outputs": [
-          {
-            "simpleText": {
-              "text": ''
-            }
-          }
-        ],
-        "quickReplies": [
-          {
-            'action': 'block',
-            'label': '뒤로가기',
-            'blockId': "660a9db3a5c8987d3ca92514",
-          },
-          
-        ]
-      }
-    };
-  res.json(response);
-  } catch (error) {
-    console.log(error)
-    response = {
-      "version": "2.0",
-      "template": {
-        "outputs": [
-          {
-            "simpleText": {
-              "text": `예기치 않은 응답입니다.`
-            }
-          }
-        ],
-        
-      }
-    }
-    res.json(response);
   }
 });
 
