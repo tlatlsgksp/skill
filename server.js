@@ -27,6 +27,9 @@ const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 const CREDENTIALS_PATH = 'credentials.json';
 const SPREADSHEET_ID = '1F3kEbduNvPnsIbfdO9gDZzc1yua1LMs627KAwZsYg6o';
 let auth_global;
+app.get('/', (req, res) => {
+  res.redirect('/login.html');
+});
 const imagePath = path.join(__dirname, 'images');
   if (!fs.existsSync(imagePath)) {
     fs.mkdirSync(imagePath);
@@ -72,10 +75,6 @@ app.post('/upload_image', (req, res) => {
       const imageUrl = `http://35.216.59.180:8080/images_bus/${newFileName}`;
       res.status(200).json({ imageUrl });
   });
-});
-
-app.get('/', (req, res) => {
-  res.redirect('/login.html');
 });
 
 app.post('/login', (req, res) => {
