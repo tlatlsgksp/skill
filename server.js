@@ -297,13 +297,13 @@ async function findUserRow(userId, auth, spreadsheetId) {
 
 async function addUserRow(userId, auth, spreadsheetId) {
   const sheets = google.sheets({ version: 'v4', auth });
-  const response = sheets.spreadsheets.values.append({
+  const response = await sheets.spreadsheets.values.append({
     spreadsheetId,
     range: '시간표!A:A', // userId가 있는 열 범위
     valueInputOption: 'RAW',
     resource: { values: [[userId]] },
   });
-  return await response.data.updates.updatedRange.split(':')[0].replace('시간표!', ''); // 사용자의 행 번호 반환
+  return response.data.updates.updatedRange.split(':')[0].replace('시간표!', ''); // 사용자의 행 번호 반환
 }
 
 // 시간표의 시간 문자열을 이용하여 열 인덱스를 계산하는 함수
@@ -3361,6 +3361,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
   try {
     const extra = req.body.action.clientExtra;
     const userId = req.body.userRequest.user.id;
+    let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID) || await addUserRow(userId, auth_global, SPREADSHEET_ID);
     const type = extra.save.type;
     const userInput = extra.save.userInput;
     const lecture_no = extra.save.lecture_no;
@@ -3441,7 +3442,6 @@ app.post('/lecture_schedule_save', async (req, res) => {
         }
       };
     } else{
-      let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID) || await addUserRow(userId, auth_global, SPREADSHEET_ID);
       const timeIndices = getTimeIndex(time);
       const timeIndex = getColumnIndex(timeIndices);
       const rowData = [lectures+'\n'+classes+'\n'+professor+'\n'+place];
