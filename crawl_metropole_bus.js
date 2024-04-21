@@ -92,7 +92,7 @@ async function main_met_bus() {
 
   await browser.close();
 
-  console.log('스크린샷이 성공적으로 저장되었습니다.');
+  console.log('Saved schoolbus Images');
   }catch (error) {
     console.error(error);
   }

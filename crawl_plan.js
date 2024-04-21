@@ -54,7 +54,7 @@ async function main_plan() {
 
   await browser.close();
 
-  console.log('스크린샷이 성공적으로 저장되었습니다.');
+  console.log('Save plan Images');
 }
 
 module.exports = {

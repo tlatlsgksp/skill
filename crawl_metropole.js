@@ -44,7 +44,7 @@ async function writeToGoogleSheets(auth, spreadsheetId, range, dates, menus, ori
       },
     });
 
-    console.log('Appended data to Google Sheets');
+    console.log('Appended metropole meal data to Google Sheets');
   } catch (error) {
     console.error('Error appending data to Google Sheets:', error.message);
   }
