@@ -303,6 +303,7 @@ async function addUserRow(userId, auth, spreadsheetId) {
     valueInputOption: 'RAW',
     resource: { values: [[userId]] },
   });
+  console.log(response.data.updates.updatedRange)
   return response.data.updates.updatedRange.split(':')[0].replace('시간표!', ''); // 사용자의 행 번호 반환
 }
 
@@ -3442,7 +3443,6 @@ app.post('/lecture_schedule_save', async (req, res) => {
       };
     } else{
       let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID) || await addUserRow(userId, auth_global, SPREADSHEET_ID);
-      console.log(userRow);
       const timeIndices = getTimeIndex(time);
       const timeIndex = getColumnIndex(timeIndices);
       const rowData = [lectures+'\n'+classes+'\n'+professor+'\n'+place];
