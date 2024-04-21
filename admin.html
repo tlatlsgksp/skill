@@ -7,5 +7,23 @@
   <title>Test Message Post</title>
 </head>
 <body>
+<form action="http://35.216.59.180:8080/update" method="POST">
+    <button type="submit" name="test" value="update">서버 업데이트</button>
+  </form>
+  <form action="http://35.216.59.180:8080/restart" method="POST">
+    <button type="submit" name="test" value="restart">서버 재시작</button>
+  </form>
+  <form action="http://35.216.59.180:8080/shutdown" method="POST">
+    <button type="submit" name="test" value="shutdown">서버 종료</button>
+  </form>
+  <form action="http://localhost:8080/webchatbot.html" method="GET">
+    <button>TEST</button>
+  </form>
+  <form action="schedule_links.html" method="GET">
+    <button type="submit">시간표</button>
+  </form>
+  <form action="bus.html" method="GET">
+    <button type="submit">버스시간표</button>
+  </form>
 </body>
 </html>
