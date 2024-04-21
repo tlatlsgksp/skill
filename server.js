@@ -74,6 +74,22 @@ app.post('/upload_image', (req, res) => {
   });
 });
 
+app.get('/', (req, res) => {
+  res.redirect('/login.html');
+});
+
+app.post('/login', (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  if (username === 'tlatlsgksp' && password === 'dlxorb127@') {
+      res.redirect('/admin.html');
+  } else {
+      console.log("로그인 실패");
+      res.status(401).json({ message: '로그인 실패' });
+  }
+});
+
 //스케줄러
 const mondaySchedule = schedule.scheduleJob({ dayOfWeek: 0, hour: 10, minute: 0 }, async function() {
   try {
@@ -4138,7 +4154,6 @@ app.post('/plan_print', async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`서버가 http://localhost:${port} 에서 실행 중입니다.`);
 });
 
 app.post('/example', async (req, res) => {
