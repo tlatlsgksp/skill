@@ -899,13 +899,12 @@ app.use((req, res, next) => {
 app.post('/restart', (req, res) => {
   serverInitialized = false;
   initialize();
-  res.json({ message: '서버 재시작' });
+  console.log('서버 재시작');
 });
 
 //서버 종료
 app.post('/shutdown', (req, res) => {
   console.log('서버를 종료합니다.');
-  res.json({ message: '서버가 종료됩니다.' });
 
   // 프로세스 종료
   process.exit();
@@ -914,6 +913,7 @@ app.post('/shutdown', (req, res) => {
 //서버 업데이트
 app.post('/update', async (req, res) => {
   try {
+    serverInitialized = false;
     await main_met_bus();
     await main_plan();
     await main_met_load();
@@ -936,7 +936,8 @@ app.post('/update', async (req, res) => {
       if (err) throw err;
       lectureInfo = await JSON.parse(data);
     });
-    res.json({ message: '데이터가 업데이트되었습니다.' });
+    console.log('서버 업데이트 완료');
+    serverInitialized = true;
   } catch (error) {
     console.error('Error during update:', error.message);
     res.status(500).json({ error: '업데이트 중 오류가 발생했습니다.' });
