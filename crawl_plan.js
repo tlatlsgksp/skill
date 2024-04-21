@@ -54,7 +54,7 @@ async function main_plan() {
 
   await browser.close();
 
-  console.log('Save plan Images');
+  console.log('Saved plan Images');
 }
 
 module.exports = {
