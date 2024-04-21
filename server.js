@@ -3542,10 +3542,10 @@ app.post('/lecture_schedule_edit', async (req, res) => {
   try{
     const userId = req.body.userRequest.user.id;
     let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID)
-    const rowData = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!B${userRow}:BS${userRow}`);
     let response;
 
     if (userRow){
+      const rowData = await readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!B${userRow}:BS${userRow}`);
       if (rowData && rowData.length > 0) {
         const uniqueRowData = removeDuplicatesAndEmpty(rowData[0]);
         const separatedData = uniqueRowData.map(row => row.split("\n"));
@@ -3613,6 +3613,20 @@ app.post('/lecture_schedule_edit', async (req, res) => {
       }
     }
   }
+  } else{
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "simpleText": {
+              "text": `시간표에 저장된 강의가 없습니다.`
+            }
+          }
+        ],
+        
+      }
+    }
   }
   res.json(response);
 } catch (error) {
@@ -3699,43 +3713,61 @@ app.post('/lecture_schedule_print', async (req, res) => {
   try {
       const userId = req.body.userRequest.user.id;
       const url = `http://35.216.59.180:8080/schedule.html?userId=${userId}`;
-      const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
-      const page = await browser.newPage();
+      let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID)
+      let response;
 
-      page.setExtraHTTPHeaders({
-        'Accept-Language': 'ko-KR'
-      });
-      page.setViewport({ width: 1080, height: 800 });
-      page.setDefaultNavigationTimeout(0);
-      await page.goto(url, { waitUntil: 'networkidle0' });
-      page.evaluate(() => {
-        document.body.style.fontFamily = 'Nanum Gothic, sans-serif';
-      });
+      if (userRow){
+        const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+        const page = await browser.newPage();
+        page.setExtraHTTPHeaders({
+          'Accept-Language': 'ko-KR'
+        });
+        page.setViewport({ width: 1080, height: 800 });
+        page.setDefaultNavigationTimeout(0);
+        await page.goto(url, { waitUntil: 'networkidle0' });
+        page.evaluate(() => {
+          document.body.style.fontFamily = 'Nanum Gothic, sans-serif';
+        });
 
-      const imageBuffer = await page.screenshot({ fullPage: true });
-      const imageName = `${userId}_schedule_image.png`;
-      const imageFullPath = path.join(imagePath, imageName);
-      fs.writeFileSync(imageFullPath, imageBuffer);
-      browser.close();
-      const imageUrl = `http://35.216.59.180:8080/images/${imageName}`;
-      response = {
-        "version": "2.0",
-        "template": {
-            "outputs": [
+        const imageBuffer = await page.screenshot({ fullPage: true });
+        const imageName = `${userId}_schedule_image.png`;
+        const imageFullPath = path.join(imagePath, imageName);
+        fs.writeFileSync(imageFullPath, imageBuffer);
+        browser.close();
+        const imageUrl = `http://35.216.59.180:8080/images/${imageName}`;
+        response = {
+          "version": "2.0",
+          "template": {
+              "outputs": [
+                  {
+                      "simpleImage": {
+                          "imageUrl": imageUrl,
+                          "altText": "시간표 이미지"
+                      }
+                  }
+              ],
+              "quickReplies": [
                 {
-                    "simpleImage": {
-                        "imageUrl": imageUrl,
-                        "altText": "시간표 이미지"
-                    }
-                }
-            ],
-            "quickReplies": [
+                  'action': 'block',
+                  'label': '뒤로가기',
+                  'blockId': "66097a32a5c8987d3ca8e8bd",
+                },
+              ]
+          }
+        }
+      } else{
+        response = {
+          "version": "2.0",
+          "template": {
+            "outputs": [
               {
-                'action': 'block',
-                'label': '뒤로가기',
-                'blockId': "66097a32a5c8987d3ca8e8bd",
-              },
-            ]
+                "simpleText": {
+                  "text": `시간표에 저장된 강의가 없습니다.`
+                }
+              }
+            ],
+            
+          }
         }
       }
       res.json(response);
