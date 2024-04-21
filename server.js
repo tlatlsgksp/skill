@@ -3361,7 +3361,6 @@ app.post('/lecture_schedule_save', async (req, res) => {
   try {
     const extra = req.body.action.clientExtra;
     const userId = req.body.userRequest.user.id;
-    let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID) || await addUserRow(userId, auth_global, SPREADSHEET_ID);
     const type = extra.save.type;
     const userInput = extra.save.userInput;
     const lecture_no = extra.save.lecture_no;
@@ -3442,12 +3441,14 @@ app.post('/lecture_schedule_save', async (req, res) => {
         }
       };
     } else{
+      let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID) || await addUserRow(userId, auth_global, SPREADSHEET_ID);
+      console.log(userRow);
       const timeIndices = getTimeIndex(time);
       const timeIndex = getColumnIndex(timeIndices);
       const rowData = [lectures+'\n'+classes+'\n'+professor+'\n'+place];
 
       // 각 열에 대한 읽기 작업을 병렬로 수행
-      const columnReadPromises = timeIndex.map(index => readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!${index.toString()}${userRow}:시간표!${index.toString()}${userRow}`));
+      const columnReadPromises = timeIndex.map(index => readFromGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!${index.toString()}${userRow}`));
       const columnDataArray = await Promise.all(columnReadPromises);
 
       let overlappingColumnsData = columnDataArray
