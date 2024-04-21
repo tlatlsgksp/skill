@@ -297,7 +297,7 @@ async function findUserRow(userId, auth, spreadsheetId) {
 
 async function addUserRow(userId, auth, spreadsheetId) {
   const sheets = google.sheets({ version: 'v4', auth });
-  const response = sheets.spreadsheets.values.append({
+  const response = await sheets.spreadsheets.values.append({
     spreadsheetId,
     range: '시간표!A:A', // userId가 있는 열 범위
     valueInputOption: 'RAW',
@@ -3569,7 +3569,7 @@ app.post('/lecture_schedule_edit', async (req, res) => {
                 selectedLectureInfo.push(lecture);
             }
         }
-        const lectureListText = selectedLectureInfo.map((info, index) => `${index + 1}.${info.과목명}[${info.분반}] ${info.교수명} ${info.강의실} ${info.시간표}`).join("\n");
+        const lectureListText = selectedLectureInfo.map((info, index) => `${index + 1}.${info.과목명} ${info.분반} ${info.교수명} ${info.강의실} ${info.시간표}`).join("\n");
         const text = `※번호 확인 후 번호 입력 클릭※\n\n시간표에 저장된 강의 목록\n\n${lectureListText}`;
         response = {
           "version": "2.0",
@@ -3599,35 +3599,35 @@ app.post('/lecture_schedule_edit', async (req, res) => {
           }
         };
       } else{
-    response = {
-      "version": "2.0",
-      "template": {
-        "outputs": [
-          {
-            "simpleText": {
-              "text": `시간표에 저장된 강의가 없습니다.`
+          response = {
+            "version": "2.0",
+            "template": {
+              "outputs": [
+                {
+                  "simpleText": {
+                    "text": `시간표에 저장된 강의가 없습니다.`
+                  }
+                }
+              ],
+              
             }
           }
-        ],
-        
-      }
-    }
-  }
-  } else{
-    response = {
-      "version": "2.0",
-      "template": {
-        "outputs": [
-          {
-            "simpleText": {
-              "text": `시간표에 저장된 강의가 없습니다.`
-            }
+        }
+    } else{
+        response = {
+          "version": "2.0",
+          "template": {
+            "outputs": [
+              {
+                "simpleText": {
+                  "text": `시간표에 저장된 강의가 없습니다.`
+                }
+              }
+            ],
+            
           }
-        ],
-        
+        }
       }
-    }
-  }
   res.json(response);
 } catch (error) {
   console.log(error)
@@ -3656,7 +3656,7 @@ app.post('/lecture_schedule_delete', async (req, res) => {
     let selectedLectureInfo = extra.selectedLectureInfo;
     let selectedLectureInfos = selectedLectureInfo[schedule_no - 1];
     let combine = selectedLectureInfos.과목명+'\n'+selectedLectureInfos.분반+'\n'+selectedLectureInfos.교수명+'\n'+selectedLectureInfos.강의실
-    let combine2 = selectedLectureInfos.과목명+'['+selectedLectureInfos.분반+'] '+selectedLectureInfos.교수명+' '+selectedLectureInfos.강의실
+    let combine2 = selectedLectureInfos.과목명+' '+selectedLectureInfos.분반+' '+selectedLectureInfos.교수명+' '+selectedLectureInfos.강의실
     let response;
     await deleteToGoogleSheets(auth_global, SPREADSHEET_ID, `시간표!B${userRow}:BS${userRow}`, combine);
     response = {
