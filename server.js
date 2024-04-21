@@ -3820,7 +3820,7 @@ app.post('/bus_school_print', async (req, res) => {
             {
               'action': 'block',
               'label': '뒤로가기',
-              'blockId': "661bb30c560bdd10253c2aa5",
+              'blockId': "6624f6cd7e38b92310023a7d",
             },
           ]
       }
