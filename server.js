@@ -963,7 +963,7 @@ app.post('/today', (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "오늘은 주말입니다.",
+              "title": "❗오늘은 주말입니다.❗",
               "description": "학식이 제공되지않습니다.",
             }
           }
@@ -1050,7 +1050,7 @@ app.post('/tomorrow', (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "내일은 주말입니다.",
+              "title": "❗내일은 주말입니다.❗",
               "description": "학식이 제공되지 않습니다.",
             }
           }
@@ -1135,7 +1135,7 @@ app.post('/today_origin', (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "오늘은 주말입니다.",
+              "title": "❗오늘은 주말입니다.❗",
               "description": "학식이 제공되지않습니다.",
             }
           }
@@ -1203,7 +1203,7 @@ app.post('/today_origin_dorm', (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "오늘은 주말입니다.",
+              "title": "❗오늘은 주말입니다.❗",
               "description": "학식이 제공되지않습니다.",
             }
           }
@@ -1272,7 +1272,7 @@ app.post('/tomorrow_origin', (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "내일은 주말입니다.",
+              "title": "❗내일은 주말입니다.❗",
               "description": "학식이 제공되지 않습니다.",
             }
           }
@@ -1340,7 +1340,7 @@ app.post('/tomorrow_origin_dorm', (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "내일은 주말입니다.",
+              "title": "❗내일은 주말입니다.❗",
               "description": "학식이 제공되지 않습니다.",
             }
           }
@@ -1700,7 +1700,7 @@ app.post('/lecture_find', async (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "오늘은 주말입니다.",
+              "title": "❗오늘은 주말입니다.❗",
               "description": "해당 기능이 제공되지 않습니다.",
             }
           }
@@ -1714,7 +1714,7 @@ app.post('/lecture_find', async (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "수업시간이 아닙니다.",
+              "title": "❗수업시간이 아닙니다.❗",
               "description": "해당 기능이 제공되지 않습니다.",
             }
           }
@@ -1731,7 +1731,7 @@ app.post('/lecture_find', async (req, res) => {
               "type": "textCard",
               "items": [
                 {
-                    "title": "강의실 찾기",
+                    "title": "🏫강의실 찾기🏫",
                     "description": `- 빈 강의실이 있는 층만 표기됩니다.`,
                     "buttons": [
                       {
@@ -1796,7 +1796,7 @@ app.post('/empty_lecture_now_1', async (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "오늘은 주말입니다.",
+              "title": "❗오늘은 주말입니다.❗",
               "description": "해당 기능이 제공되지 않습니다.",
             }
           }
@@ -1810,7 +1810,7 @@ app.post('/empty_lecture_now_1', async (req, res) => {
           "outputs": [
             {
               "textCard": {
-                "title": "수업시간이 아닙니다.",
+                "title": "❗수업시간이 아닙니다.❗",
                 "description": "해당 기능이 제공되지 않습니다.",
               }
             }
@@ -1880,7 +1880,7 @@ app.post('/empty_lecture_now_2', async (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "오늘은 주말입니다.",
+              "title": "❗오늘은 주말입니다.❗",
               "description": "해당 기능이 제공되지 않습니다.",
             }
           }
@@ -1894,7 +1894,7 @@ app.post('/empty_lecture_now_2', async (req, res) => {
           "outputs": [
             {
               "textCard": {
-                "title": "수업시간이 아닙니다.",
+                "title": "❗수업시간이 아닙니다.❗",
                 "description": "해당 기능이 제공되지 않습니다.",
               }
             }
@@ -1964,7 +1964,7 @@ app.post('/empty_lecture_now_3', async (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "오늘은 주말입니다.",
+              "title": "❗오늘은 주말입니다.❗",
               "description": "해당 기능이 제공되지 않습니다.",
             }
           }
@@ -1978,7 +1978,7 @@ app.post('/empty_lecture_now_3', async (req, res) => {
             "outputs": [
               {
                 "textCard": {
-                  "title": "수업시간이 아닙니다.",
+                  "title": "❗수업시간이 아닙니다.❗",
                   "description": "해당 기능이 제공되지 않습니다.",
                 }
               }
@@ -2048,7 +2048,7 @@ app.post('/empty_lecture_next_1', async (req, res) => {
           "outputs": [
             {
               "textCard": {
-                "title": "오늘은 주말입니다.",
+                "title": "❗오늘은 주말입니다.❗",
                 "description": "해당 기능이 제공되지 않습니다.",
               }
             }
@@ -2062,7 +2062,7 @@ app.post('/empty_lecture_next_1', async (req, res) => {
             "outputs": [
               {
                 "textCard": {
-                  "title": "수업시간이 아닙니다.",
+                  "title": "❗수업시간이 아닙니다.❗",
                   "description": "해당 기능이 제공되지 않습니다.",
                 }
               }
@@ -2132,7 +2132,7 @@ app.post('/empty_lecture_next_2', async (req, res) => {
           "outputs": [
             {
               "textCard": {
-                "title": "오늘은 주말입니다.",
+                "title": "❗오늘은 주말입니다.❗",
                 "description": "해당 기능이 제공되지 않습니다.",
               }
             }
@@ -2146,7 +2146,7 @@ app.post('/empty_lecture_next_2', async (req, res) => {
             "outputs": [
               {
                 "textCard": {
-                  "title": "수업시간이 아닙니다.",
+                  "title": "❗수업시간이 아닙니다.❗",
                   "description": "해당 기능이 제공되지 않습니다.",
                 }
               }
@@ -2216,7 +2216,7 @@ app.post('/empty_lecture_next_3', async (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "오늘은 주말입니다.",
+              "title": "❗오늘은 주말입니다.❗",
               "description": "해당 기능이 제공되지 않습니다.",
             }
           }
@@ -2230,7 +2230,7 @@ app.post('/empty_lecture_next_3', async (req, res) => {
           "outputs": [
             {
               "textCard": {
-                "title": "수업시간이 아닙니다.",
+                "title": "❗수업시간이 아닙니다.❗",
                 "description": "해당 기능이 제공되지 않습니다.",
               }
             }
@@ -2304,7 +2304,7 @@ app.post('/lecture_info_find', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": `※번호 확인 후 번호 입력 클릭※\n\n번호 - 과목 - 교수 - 분반 순\n\n${similarLectures.map((lecture, index) => `${index + 1}.${lecture.과목명} ${lecture.교수명} ${lecture.분반}`).join('\n')}\n`
+              "text": `📖번호 확인 후 번호 입력 클릭📖\n\n번호 - 과목 - 교수 - 분반 순\n\n${similarLectures.map((lecture, index) => `${index + 1}.${lecture.과목명} ${lecture.교수명} ${lecture.분반}`).join('\n')}\n`
             }
           }
         ],
@@ -2332,7 +2332,7 @@ app.post('/lecture_info_find', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": `일치하거나 유사한 강의가 없습니다.`
+              "text": `❗일치하거나 유사한 강의가 없습니다.❗`
             }
           }
         ],
@@ -2398,7 +2398,7 @@ app.post('/lecture_info_select', async (req, res) => {
           "outputs": [
             {
               "simpleText": {
-                "text": `강의 정보를 찾을 수 없습니다.`
+                "text": `❗강의 정보를 찾을 수 없습니다.❗`
               }
             }
           ],
@@ -2422,7 +2422,7 @@ app.post('/lecture_info_select', async (req, res) => {
           "outputs": [
             {
               "textCard": {
-                "title": "선택한 강의정보",
+                "title": "📖선택한 강의정보📖",
                 "description": `강의명: ${selectedLectureInfo.과목명}\n교수명: ${selectedLectureInfo.교수명}\n분반: ${selectedLectureInfo.분반}`,
                 "buttons": [
                   {
@@ -2511,7 +2511,7 @@ app.post('/lecture_info_select', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": `올바른 번호를 입력해주세요.`
+              "text": `❗올바른 번호를 입력해주세요.❗`
             }
           }
         ],
@@ -2574,7 +2574,7 @@ app.post('/lecture_info_search', async (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "강좌 기본정보",
+              "title": "🧾강좌 기본정보🧾",
               "description": `과목코드: ${selectedLectureInfo2.과목코드}\n과목명: ${selectedLectureInfo2.과목명}\n시간표: ${selectedLectureInfo2.시간표}\n강의실: ${selectedLectureInfo2.강의실}\n교수명: ${selectedLectureInfo.교수명}\n핸드폰: ${selectedLectureInfo.핸드폰}\n이메일: ${selectedLectureInfo.이메일}\n분반: ${selectedLectureInfo.분반}\n성적평가구분: ${selectedLectureInfo.성적평가구분}\n과정구분: ${selectedLectureInfo.과정구분}\n이수구분: ${selectedLectureInfo.이수구분}\n개설학과: ${selectedLectureInfo.개설학과}\n개설학년: ${selectedLectureInfo.개설학년}\n교재 및 참고 문헌: ${selectedLectureInfo['교재 및 참고 문헌']}`
             }
           }
@@ -2601,7 +2601,7 @@ app.post('/lecture_info_search', async (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "교과개요",
+              "title": "🧾교과개요🧾",
               "description": `교과목개요▼\n ${selectedLectureInfo.교과목개요}\n\n교과목표▼\n ${selectedLectureInfo.교과목표}`
             }
           }
@@ -2628,7 +2628,7 @@ app.post('/lecture_info_search', async (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "평가항목 및 방법",
+              "title": "🧾평가항목 및 방법🧾",
               "description": `출석▼\n 반영비율: ${selectedLectureInfo['평가항목 및 방법'].출석.반영비율}\n 평가방법 및 주요내용: ${selectedLectureInfo['평가항목 및 방법'].출석.평가방법_및_주요내용}\n\n중간▼\n 반영비율: ${selectedLectureInfo['평가항목 및 방법'].중간.반영비율}\n 평가방법 및 주요내용: ${selectedLectureInfo['평가항목 및 방법'].중간.평가방법_및_주요내용}\n\n기말▼\n 반영비율: ${selectedLectureInfo['평가항목 및 방법'].기말.반영비율}\n 평가방법 및 주요내용: ${selectedLectureInfo['평가항목 및 방법'].기말.평가방법_및_주요내용}\n\n과제▼\n 반영비율: ${selectedLectureInfo['평가항목 및 방법'].과제.반영비율}\n 평가방법 및 주요내용: ${selectedLectureInfo['평가항목 및 방법'].과제.평가방법_및_주요내용}\n\n기타▼\n 반영비율: ${selectedLectureInfo['평가항목 및 방법'].기타.반영비율}\n 평가방법 및 주요내용: ${selectedLectureInfo['평가항목 및 방법'].기타.평가방법_및_주요내용}\n\n과제개요▼\n 과제주제: ${selectedLectureInfo['평가항목 및 방법'].과제개요.과제주제}\n 분량 : ${selectedLectureInfo['평가항목 및 방법'].과제개요.분량}\n 제출일자: ${selectedLectureInfo['평가항목 및 방법'].과제개요.제출일자}`
             }
           }
@@ -2689,7 +2689,7 @@ app.post('/lecture_professor_find', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": `※번호 확인 후 번호 입력 클릭※\n\n번호 - 교수 - 소속 순\n\n${similarProfessors.map((lecture, index) => `${index + 1}.${lecture.교수명} ${lecture.소속}`).join('\n')}\n`
+              "text": `📖번호 확인 후 번호 입력 클릭📖\n\n번호 - 교수 - 소속 순\n\n${similarProfessors.map((lecture, index) => `${index + 1}.${lecture.교수명} ${lecture.소속}`).join('\n')}\n`
             }
           }
         ],
@@ -2717,7 +2717,7 @@ app.post('/lecture_professor_find', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": `일치하거나 유사한 교수가 없습니다.`
+              "text": `❗일치하거나 유사한 교수가 없습니다.❗`
             }
           }
         ],
@@ -2791,7 +2791,7 @@ app.post('/lecture_professor_select', async (req, res) => {
           "outputs": [
             {
               "simpleText": {
-                "text": `교수 정보를 찾을 수 없습니다.`
+                "text": `❗교수 정보를 찾을 수 없습니다.❗`
               }
             }
           ],
@@ -2815,7 +2815,7 @@ app.post('/lecture_professor_select', async (req, res) => {
           "outputs": [
             {
               "textCard": {
-                "title": `선택한 교수정보`,
+                "title": `📖선택한 교수정보📖`,
                 "description": `교수명: ${selectedProfessorInfo.교수명}\n소속: ${selectedProfessorInfo2.소속}\n핸드폰: ${selectedProfessorInfo.핸드폰}\n이메일: ${selectedProfessorInfo.이메일}`,
                 "buttons": [
                   {
@@ -2854,7 +2854,7 @@ app.post('/lecture_professor_select', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": `올바른 번호를 입력해주세요.`
+              "text": `❗올바른 번호를 입력해주세요.❗`
             }
           }
         ],
@@ -2920,7 +2920,7 @@ app.post('/lecture_professor_info_find', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": `※번호 확인 후 번호 입력 클릭※\n\n번호 - 과목 - 교수 - 분반 순\n\n${similarLectures.map((lecture, index) => `${index + 1}.${lecture.과목명} ${lecture.교수명} ${lecture.분반}`).join('\n')}\n`
+              "text": `📖번호 확인 후 번호 입력 클릭📖\n\n번호 - 과목 - 교수 - 분반 순\n\n${similarLectures.map((lecture, index) => `${index + 1}.${lecture.과목명} ${lecture.교수명} ${lecture.분반}`).join('\n')}\n`
             }
           }
         ],
@@ -2958,7 +2958,7 @@ app.post('/lecture_professor_info_find', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": `개설된 강의가 없습니다.`
+              "text": `❗개설된 강의가 없습니다.❗`
             }
           }
         ],
@@ -3037,7 +3037,7 @@ app.post('/lecture_professor_info_select', async (req, res) => {
           "outputs": [
             {
               "simpleText": {
-                "text": `강의 정보를 찾을 수 없습니다.`
+                "text": `❗강의 정보를 찾을 수 없습니다.❗`
               }
             }
           ],
@@ -3064,7 +3064,7 @@ app.post('/lecture_professor_info_select', async (req, res) => {
           "outputs": [
             {
               "textCard": {
-                "title": "선택한 강의정보",
+                "title": "📖선택한 강의정보📖",
                 "description": `강의명: ${selectedLectureInfo.과목명}\n교수명: ${selectedLectureInfo.교수명}\n분반: ${selectedLectureInfo.분반}`,
                 "buttons": [
                   {
@@ -3163,7 +3163,7 @@ app.post('/lecture_professor_info_select', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": `올바른 번호를 입력해주세요.`
+              "text": `❗올바른 번호를 입력해주세요.❗`
             }
           }
         ],
@@ -3242,7 +3242,7 @@ app.post('/lecture_professor_info_search', async (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "강좌 기본정보",
+              "title": "🧾강좌 기본정보🧾",
               "description": `과목코드: ${selectedLectureInfo2.과목코드}\n과목명: ${selectedLectureInfo2.과목명}\n시간표: ${selectedLectureInfo2.시간표}\n강의실: ${selectedLectureInfo2.강의실}\n교수명: ${selectedLectureInfo.교수명}\n핸드폰: ${selectedLectureInfo.핸드폰}\n이메일: ${selectedLectureInfo.이메일}\n분반: ${selectedLectureInfo.분반}\n성적평가구분: ${selectedLectureInfo.성적평가구분}\n과정구분: ${selectedLectureInfo.과정구분}\n이수구분: ${selectedLectureInfo.이수구분}\n개설학과: ${selectedLectureInfo.개설학과}\n개설학년: ${selectedLectureInfo.개설학년}\n교재 및 참고 문헌: ${selectedLectureInfo['교재 및 참고 문헌']}`
             }
           }
@@ -3271,7 +3271,7 @@ app.post('/lecture_professor_info_search', async (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "교과개요",
+              "title": "🧾교과개요🧾",
               "description": `교과목개요▼\n ${selectedLectureInfo.교과목개요}\n\n교과목표▼\n ${selectedLectureInfo.교과목표}`
             }
           }
@@ -3300,7 +3300,7 @@ app.post('/lecture_professor_info_search', async (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": "평가항목 및 방법",
+              "title": "🧾평가항목 및 방법🧾",
               "description": `출석▼\n 반영비율: ${selectedLectureInfo['평가항목 및 방법'].출석.반영비율}\n 평가방법 및 주요내용: ${selectedLectureInfo['평가항목 및 방법'].출석.평가방법_및_주요내용}\n\n중간▼\n 반영비율: ${selectedLectureInfo['평가항목 및 방법'].중간.반영비율}\n 평가방법 및 주요내용: ${selectedLectureInfo['평가항목 및 방법'].중간.평가방법_및_주요내용}\n\n기말▼\n 반영비율: ${selectedLectureInfo['평가항목 및 방법'].기말.반영비율}\n 평가방법 및 주요내용: ${selectedLectureInfo['평가항목 및 방법'].기말.평가방법_및_주요내용}\n\n과제▼\n 반영비율: ${selectedLectureInfo['평가항목 및 방법'].과제.반영비율}\n 평가방법 및 주요내용: ${selectedLectureInfo['평가항목 및 방법'].과제.평가방법_및_주요내용}\n\n기타▼\n 반영비율: ${selectedLectureInfo['평가항목 및 방법'].기타.반영비율}\n 평가방법 및 주요내용: ${selectedLectureInfo['평가항목 및 방법'].기타.평가방법_및_주요내용}\n\n과제개요▼\n 과제주제: ${selectedLectureInfo['평가항목 및 방법'].과제개요.과제주제}\n 분량 : ${selectedLectureInfo['평가항목 및 방법'].과제개요.분량}\n 제출일자: ${selectedLectureInfo['평가항목 및 방법'].과제개요.제출일자}`
             }
           }
@@ -3389,7 +3389,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
           "outputs": [
             {
               "simpleText": {
-                "text": `사이버 강의는 시간표에 저장되지 않습니다.`
+                "text": `❗사이버 강의는 시간표에 저장되지 않습니다.❗`
               }
             }
           ],
@@ -3410,7 +3410,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
           "outputs": [
             {
               "simpleText": {
-                "text": `수업시간이 주말인 강의는 시간표에 저장되지 않습니다.`
+                "text": `❗수업시간이 주말인 강의는 시간표에 저장되지 않습니다.❗`
               }
             }
           ],
@@ -3443,7 +3443,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
 
       // 겹치는 열이 하나라도 있으면 해당 데이터 보여주기
       if (overlappingColumnsData.length > 0) {
-        let text = "수업시간이 겹치는 강의가 있습니다.\n\n";
+        let text = "❗수업시간이 겹치는 강의가 있습니다.❗\n\n";
         for (const overlappingColumn of overlappingColumnsData) {
           const { index, data } = await overlappingColumn;
           const combine = data[0][0].replace(/\n/g, ' ');
@@ -3482,7 +3482,7 @@ app.post('/lecture_schedule_save', async (req, res) => {
             "outputs": [
               {
                 "simpleText": {
-                  "text": `해당 강의를 시간표에 저장했습니다.`
+                  "text": `⭕해당 강의를 시간표에 저장했습니다.⭕`
                 }
               }
             ],
@@ -3554,7 +3554,7 @@ app.post('/lecture_schedule_edit', async (req, res) => {
             }
         }
         const lectureListText = selectedLectureInfo.map((info, index) => `${index + 1}.${info.과목명} ${info.분반} ${info.교수명} ${info.강의실} ${info.시간표}`).join("\n");
-        const text = `※번호 확인 후 번호 입력 클릭※\n\n시간표에 저장된 강의 목록\n\n${lectureListText}`;
+        const text = `📒번호 확인 후 번호 입력 클릭📒\n\n시간표에 저장된 강의 목록\n\n${lectureListText}`;
         response = {
           "version": "2.0",
           "template": {
@@ -3589,7 +3589,7 @@ app.post('/lecture_schedule_edit', async (req, res) => {
               "outputs": [
                 {
                   "simpleText": {
-                    "text": `시간표에 저장된 강의가 없습니다.`
+                    "text": `❗시간표에 저장된 강의가 없습니다.❗`
                   }
                 }
               ],
@@ -3604,7 +3604,7 @@ app.post('/lecture_schedule_edit', async (req, res) => {
             "outputs": [
               {
                 "simpleText": {
-                  "text": `시간표에 저장된 강의가 없습니다.`
+                  "text": `❗시간표에 저장된 강의가 없습니다.❗`
                 }
               }
             ],
@@ -3649,7 +3649,7 @@ app.post('/lecture_schedule_delete', async (req, res) => {
         "outputs": [
           {
             "simpleText": {
-              "text": '해당 강의를 삭제했습니다.\n\n'+combine2
+              "text": '❌해당 강의를 삭제했습니다.❌\n\n'+combine2
             }
           }
         ],
@@ -3746,7 +3746,7 @@ app.post('/lecture_schedule_print', async (req, res) => {
             "outputs": [
               {
                 "simpleText": {
-                  "text": `시간표에 저장된 강의가 없습니다.`
+                  "text": `❗시간표에 저장된 강의가 없습니다.❗`
                 }
               }
             ],
@@ -3802,7 +3802,13 @@ app.post('/buslist_save', async (req, res) => {
 
 app.post('/bus_school_print', async (req, res) => {
   try{
+    let blockId;
     const extra = req.body.action.clientExtra;
+    if (extra.back === "select"){
+      blockId = "6624f6cd7e38b92310023a7d"
+    } else{
+      blockId = "661bb30c560bdd10253c2aa5"
+    }
     const imageUrl = `http://35.216.59.180:8080/images_bus_school/schoolbus_${extra.type}.png`;
     let response;
     response = {
@@ -3820,7 +3826,7 @@ app.post('/bus_school_print', async (req, res) => {
             {
               'action': 'block',
               'label': '뒤로가기',
-              'blockId': "6624f6cd7e38b92310023a7d",
+              'blockId': blockId,
             },
           ]
       }
@@ -3893,7 +3899,7 @@ app.post('/bus_city', async (req, res) => {
           "outputs": [
             {
               "simpleText": {
-                "text": `버스를 선택해주세요.`
+                "text": `🚍버스를 선택해주세요.🚍`
               }
             }
           ],
@@ -4033,7 +4039,7 @@ app.post('/plan_select', async (req, res) => {
         "outputs": [
           {
             "textCard": {
-              "title": `${type} 학사일정`,
+              "title": `📆${type} 학사일정📆`,
               "description": `조회할 월간 학사일정을 선택하세요.`
             }
           }
