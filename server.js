@@ -1737,17 +1737,29 @@ app.post('/lecture_find', async (req, res) => {
                       {
                         'action': 'block',
                         'label': `우당관`,
-                        'blockId': `65f16b9d21bdeb24853d9669`
+                        'blockId': `65f16b9d21bdeb24853d9669`,
+                        'extra' : {
+                          'no' : '1',
+                          'name' : '우당관',
+                        }
                       },
                       {
                         'action': 'block',
                         'label': `선덕관`,
-                        'blockId': `65f16bac82abcd51947bf6d4`
+                        'blockId': `65f16bac82abcd51947bf6d4`,
+                        'extra' : {
+                          'no' : '2',
+                          'name' : '선덕관',
+                        }
                       },
                       {
                         'action': 'block',
                         'label': `충효관`,
-                        'blockId': `65f18d02303da839d8dfc680`
+                        'blockId': `65f18d02303da839d8dfc680`,
+                        'extra' : {
+                          'no' : '3',
+                          'name' : '충효관',
+                        }
                       },
                   ]
                 },
@@ -1778,267 +1790,246 @@ app.post('/lecture_find', async (req, res) => {
 }
 });
 
-//현재 빈 강의실 - 우당관
-app.post('/empty_lecture_now_1', async (req, res) => {
+//빈 강의실 시간 선택
+app.post('/lecture_empty', async (req, res) => {
   try{
-  const offset = 1000 * 60 * 60 * 9
-  const KST = new Date((new Date()).getTime() + offset)
-  const today = KST.getDay();
-  const currentHour = KST.getHours();
-  const currentMinute = KST.getMinutes();
-  const isClassTime = currentHour > 9 || (currentHour === 9 && currentMinute >= 30) && (currentHour < 23 || (currentHour === 23 && currentMinute <= 30));
-  let response;
-
-  if (today === 6 || today === 0) {
-    response = {
-      "version": "2.0",
-      "template": {
-        "outputs": [
-          {
-            "textCard": {
-              "title": "❗오늘은 주말입니다.❗",
-              "description": "해당 기능이 제공되지 않습니다.",
-            }
-          }
-        ],
-      }
-    }
-  } else if (!isClassTime){
-      response = {
-        "version": "2.0",
-        "template": {
-          "outputs": [
-            {
-              "textCard": {
-                "title": "❗수업시간이 아닙니다.❗",
-                "description": "해당 기능이 제공되지 않습니다.",
-              }
-            }
-          ],
-        }
-      }
-    } else {
-    const empty = findAvailableClassrooms(lectureList);
-
-    const buildingCode = '1';
-    const floors = {
-      '1': [], '2': [], '3': [], '4': [], '5': [],
-      '6': [], '7': [], '8': [], '9': [], '0': [],
-    };
-
-    empty.forEach(classroom => {
-      const currentBuildingCode = classroom.charAt(0);
-      const floorName = getCurrentFloor(classroom);
-
-      if (currentBuildingCode === buildingCode) {
-        if (!floors[floorName]) {
-          floors[floorName] = [];
-        }
-
-        floors[floorName].push(classroom);
-      }
-    });
-
-    const sortedFloors = sortFloors(floors);
-
-    response = createBuildingResponse_1('우당관', buildingCode, sortedFloors, false);
-  }
-  res.json(response);
-} catch (error) {
-  console.log(error)
-  response = {
-    "version": "2.0",
-    "template": {
-      "outputs": [
-        {
-          "simpleText": {
-            "text": `예기치 않은 응답입니다.`
-          }
-        }
-      ],
-    }
-  }
-  res.json(response);
-}
-});
-
-//현재 빈 강의실 - 선덕관
-app.post('/empty_lecture_now_2', async (req, res) => {
-  try{
-  const offset = 1000 * 60 * 60 * 9
-  const KST = new Date((new Date()).getTime() + offset)
-  const today = KST.getDay();
-  const currentHour = KST.getHours();
-  const currentMinute = KST.getMinutes();
-  const isClassTime = currentHour > 9 || (currentHour === 9 && currentMinute >= 30) && (currentHour < 23 || (currentHour === 23 && currentMinute <= 30));
-  let response;
-
-  if (today === 6 || today === 0) {
-    response = {
-      "version": "2.0",
-      "template": {
-        "outputs": [
-          {
-            "textCard": {
-              "title": "❗오늘은 주말입니다.❗",
-              "description": "해당 기능이 제공되지 않습니다.",
-            }
-          }
-        ],
-      }
-    }
-  } else if (!isClassTime){
-      response = {
-        "version": "2.0",
-        "template": {
-          "outputs": [
-            {
-              "textCard": {
-                "title": "❗수업시간이 아닙니다.❗",
-                "description": "해당 기능이 제공되지 않습니다.",
-              }
-            }
-          ],
-        }
-      }
-    } else {
-  const empty = findAvailableClassrooms(lectureList);
-
-  const buildingCode = '2';
-  const floors = {
-    '1': [], '2': [], '3': [], '4': [], '5': [],
-    '6': [], '7': [], '8': [], '9': [], '0': [],
-  };
-
-  empty.forEach(classroom => {
-    const currentBuildingCode = classroom.charAt(0);
-    const floorName = getCurrentFloor(classroom);
-
-    if (currentBuildingCode === buildingCode) {
-      if (!floors[floorName]) {
-        floors[floorName] = [];
-      }
-
-      floors[floorName].push(classroom);
-    }
-  });
-
-  const sortedFloors = sortFloors(floors);
-
-  response = createBuildingResponse_2('선덕관', buildingCode, sortedFloors, false);
-}
-  res.json(response);
-} catch (error) {
-  console.log(error)
-  response = {
-    "version": "2.0",
-    "template": {
-      "outputs": [
-        {
-          "simpleText": {
-            "text": `예기치 않은 응답입니다.`
-          }
-        }
-      ],
-    }
-  }
-  res.json(response);
-}
-});
-
-//현재 빈 강의실 - 충효관
-app.post('/empty_lecture_now_3', async (req, res) => {
-  try{
-  const offset = 1000 * 60 * 60 * 9
-  const KST = new Date((new Date()).getTime() + offset)
-  const today = KST.getDay();
-  const currentHour = KST.getHours();
-  const currentMinute = KST.getMinutes();
-  const isClassTime = currentHour > 9 || (currentHour === 9 && currentMinute >= 30) && (currentHour < 23 || (currentHour === 23 && currentMinute <= 30));
-  let response;
-
-  if (today === 6 || today === 0) {
-    response = {
-      "version": "2.0",
-      "template": {
-        "outputs": [
-          {
-            "textCard": {
-              "title": "❗오늘은 주말입니다.❗",
-              "description": "해당 기능이 제공되지 않습니다.",
-            }
-          }
-        ],
-      }
-    }
-  } else if (!isClassTime){
-        response = {
-          "version": "2.0",
-          "template": {
-            "outputs": [
-              {
-                "textCard": {
-                  "title": "❗수업시간이 아닙니다.❗",
-                  "description": "해당 기능이 제공되지 않습니다.",
-                }
-              }
-            ],
-          }
-        }
-      } else {
-    const empty = findAvailableClassrooms(lectureList);
-
-    const buildingCode = '3';
-    const floors = {
-      '1': [], '2': [], '3': [], '4': [], '5': [],
-      '6': [], '7': [], '8': [], '9': [], '0': [],
-    };
-
-    empty.forEach(classroom => {
-      const currentBuildingCode = classroom.charAt(0);
-      const floorName = getCurrentFloor(classroom);
-
-      if (currentBuildingCode === buildingCode) {
-        if (!floors[floorName]) {
-          floors[floorName] = [];
-        }
-
-        floors[floorName].push(classroom);
-      }
-    });
-
-    const sortedFloors = sortFloors(floors);
-
-    response = createBuildingResponse_3('충효관', buildingCode, sortedFloors, false);
-  }
-  res.json(response);
-} catch (error) {
-  console.log(error)
-  response = {
-    "version": "2.0",
-    "template": {
-      "outputs": [
-        {
-          "simpleText": {
-            "text": `예기치 않은 응답입니다.`
-          }
-        }
-      ],
-    }
-  }
-  res.json(response);
-}
-});
-
-//다음 교시 빈 강의실 - 우당관
-app.post('/empty_lecture_next_1', async (req, res) => {
-  try {
+  const extra = req.body.action.clientExtra;
+  const name = extra.name;
   const offset = 1000 * 60 * 60 * 9
   const KST = new Date((new Date()).getTime() + offset)
   const today = KST.getDay();
   const currentHour = KST.getHours();
   const currentMinute = KST.getMinutes();
   const isClassTime = currentHour > 8 || (currentHour === 8 && currentMinute >= 30) && (currentHour < 23 || (currentHour === 23 && currentMinute <= 30));
+  let response;
+
+  if (today === 6 || today === 0) {
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "textCard": {
+              "title": "❗오늘은 주말입니다.❗",
+              "description": "해당 기능이 제공되지 않습니다.",
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'block',
+            'label': `뒤로가기`,
+            'blockId': `65f16c470c18862f977ddf5b`,
+          },
+        ]
+      }
+    }
+  } else if (!isClassTime){
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "textCard": {
+              "title": "❗수업시간이 아닙니다.❗",
+              "description": "해당 기능이 제공되지 않습니다.",
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'block',
+            'label': `뒤로가기`,
+            'blockId': `65f16c470c18862f977ddf5b`,
+          },
+        ]
+      }
+    }
+  } else {
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "carousel": {
+              "type": "textCard",
+              "items": [
+                {
+                    "title": `🕒 ${name} 빈 강의실 선택🕒`,
+                    "buttons": [
+                      {
+                        'action': 'block',
+                        'label': `현재 빈 강의실`,
+                        'blockId': `6638fd49dc3e762a0214e5c9`,
+                        'extra' : extra
+                      },
+                      {
+                        'action': 'block',
+                        'label': `다음 교시 빈 강의실`,
+                        'blockId': `6638fd3f19526d38d6e66b5c`,
+                        'extra' : extra
+                      },
+                  ]
+                },
+                
+              ]
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'block',
+            'label': `뒤로가기`,
+            'blockId': `65f16c470c18862f977ddf5b`,
+            'extra' : extra
+          },
+        ]
+      }
+    };
+  }
+  res.json(response);
+} catch (error) {
+  console.log(error)
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+    }
+  }
+  res.json(response);
+}
+});
+
+//현재 빈 강의실
+app.post('/empty_lecture_now', async (req, res) => {
+  try{
+  const extra = req.body.action.clientExtra;
+  const offset = 1000 * 60 * 60 * 9
+  const KST = new Date((new Date()).getTime() + offset)
+  const today = KST.getDay();
+  const currentHour = KST.getHours();
+  const currentMinute = KST.getMinutes();
+  const isClassTime = currentHour > 9 || (currentHour === 9 && currentMinute >= 30) && (currentHour < 23 || (currentHour === 23 && currentMinute <= 30));
+  let buildingCode;
+  let response;
+
+  if (today === 6 || today === 0) {
+    response = {
+      "version": "2.0",
+      "template": {
+        "outputs": [
+          {
+            "textCard": {
+              "title": "❗오늘은 주말입니다.❗",
+              "description": "해당 기능이 제공되지 않습니다.",
+            }
+          }
+        ],
+        "quickReplies": [
+          {
+            'action': 'block',
+            'label': `뒤로가기`,
+            'blockId': `6638fd01dddb764373ba35be`,
+            'extra' : extra
+          },
+        ]
+      }
+    }
+  } else if (!isClassTime){
+      response = {
+        "version": "2.0",
+        "template": {
+          "outputs": [
+            {
+              "textCard": {
+                "title": "❗수업시간이 아닙니다.❗",
+                "description": "해당 기능이 제공되지 않습니다.",
+              }
+            }
+          ],
+          "quickReplies": [
+            {
+              'action': 'block',
+              'label': `뒤로가기`,
+              'blockId': `6638fd01dddb764373ba35be`,
+              'extra' : extra
+            },
+          ]
+        }
+      }
+    } else {
+    const empty = findAvailableClassrooms(lectureList);
+
+    if (extra === "1"){
+      buildingCode = '1';
+    } else if (extra === "2"){
+      buildingCode = '2';
+    } else{
+      buildingCode = '3';
+    }
+    const floors = {
+      '1': [], '2': [], '3': [], '4': [], '5': [],
+      '6': [], '7': [], '8': [], '9': [], '0': [],
+    };
+
+    empty.forEach(classroom => {
+      const currentBuildingCode = classroom.charAt(0);
+      const floorName = getCurrentFloor(classroom);
+
+      if (currentBuildingCode === buildingCode) {
+        if (!floors[floorName]) {
+          floors[floorName] = [];
+        }
+
+        floors[floorName].push(classroom);
+      }
+    });
+
+    const sortedFloors = sortFloors(floors);
+    if (extra === "1"){
+      response = createBuildingResponse_1('우당관', buildingCode, sortedFloors, false);
+    } else if (extra === "2"){
+      response = createBuildingResponse_2('선덕관', buildingCode, sortedFloors, false);
+    } else{
+      response = createBuildingResponse_3('충효관', buildingCode, sortedFloors, false);
+    }
+  }
+  res.json(response);
+} catch (error) {
+  console.log(error)
+  response = {
+    "version": "2.0",
+    "template": {
+      "outputs": [
+        {
+          "simpleText": {
+            "text": `예기치 않은 응답입니다.`
+          }
+        }
+      ],
+    }
+  }
+  res.json(response);
+}
+});
+
+//다음교시 빈 강의실
+app.post('/empty_lecture_next', async (req, res) => {
+  try {
+  const extra = req.body.action.clientExtra;
+  const offset = 1000 * 60 * 60 * 9
+  const KST = new Date((new Date()).getTime() + offset)
+  const today = KST.getDay();
+  const currentHour = KST.getHours();
+  const currentMinute = KST.getMinutes();
+  const isClassTime = currentHour > 8 || (currentHour === 8 && currentMinute >= 30) && (currentHour < 23 || (currentHour === 23 && currentMinute <= 30));
+  let buildingCode;
   let response;
 
   if (today === 6 || today === 0) {
@@ -2053,6 +2044,14 @@ app.post('/empty_lecture_next_1', async (req, res) => {
               }
             }
           ],
+          "quickReplies": [
+            {
+              'action': 'block',
+              'label': `뒤로가기`,
+              'blockId': `6638fd01dddb764373ba35be`,
+              'extra' : extra
+            },
+          ]
         }
       }
     } else if (!isClassTime){
@@ -2067,12 +2066,26 @@ app.post('/empty_lecture_next_1', async (req, res) => {
                 }
               }
             ],
+            "quickReplies": [
+              {
+                'action': 'block',
+                'label': `뒤로가기`,
+                'blockId': `6638fd01dddb764373ba35be`,
+                'extra' : extra
+              },
+            ]
           }
         }
       } else {
     const empty = findAvailableClassroomsNext(lectureList);
 
-    const buildingCode = '1';
+    if (extra === "1"){
+      buildingCode = '1';
+    } else if (extra === "2"){
+      buildingCode = '2';
+    } else{
+      buildingCode = '3';
+    }
     const floors = {
       '1': [], '2': [], '3': [], '4': [], '5': [],
       '6': [], '7': [], '8': [], '9': [], '0': [],
@@ -2092,177 +2105,15 @@ app.post('/empty_lecture_next_1', async (req, res) => {
     });
 
     const sortedFloors = sortFloors(floors);
-
-    response = createBuildingResponseNext_1('우당관', buildingCode, sortedFloors, false);
-  }
-  res.json(response);
-} catch (error) {
-  console.log(error)
-  response = {
-    "version": "2.0",
-    "template": {
-      "outputs": [
-        {
-          "simpleText": {
-            "text": `예기치 않은 응답입니다.`
-          }
-        }
-      ],
+    if (extra === "1"){
+      response = createBuildingResponseNext_1('우당관', buildingCode, sortedFloors, false);
+    } else if (extra === "2"){
+      response = createBuildingResponseNext_2('선덕관', buildingCode, sortedFloors, false);
+    } else{
+      response = createBuildingResponseNext_3('충효관', buildingCode, sortedFloors, false);
     }
+
   }
-  res.json(response);
-}
-});
-
-//다음 교시 빈 강의실 - 선덕관
-app.post('/empty_lecture_next_2', async (req, res) => {
-  try {
-  const offset = 1000 * 60 * 60 * 9
-  const KST = new Date((new Date()).getTime() + offset)
-  const today = KST.getDay();
-  const currentHour = KST.getHours();
-  const currentMinute = KST.getMinutes();
-  const isClassTime = currentHour > 8 || (currentHour === 8 && currentMinute >= 30) && (currentHour < 23 || (currentHour === 23 && currentMinute <= 30));
-  let response;
-
-  if (today === 6 || today === 0) {
-      response = {
-        "version": "2.0",
-        "template": {
-          "outputs": [
-            {
-              "textCard": {
-                "title": "❗오늘은 주말입니다.❗",
-                "description": "해당 기능이 제공되지 않습니다.",
-              }
-            }
-          ],
-        }
-      }
-    } else if (!isClassTime){
-        response = {
-          "version": "2.0",
-          "template": {
-            "outputs": [
-              {
-                "textCard": {
-                  "title": "❗수업시간이 아닙니다.❗",
-                  "description": "해당 기능이 제공되지 않습니다.",
-                }
-              }
-            ],
-          }
-        }
-      } else {
-    const empty = findAvailableClassroomsNext(lectureList);
-
-    const buildingCode = '2';
-    const floors = {
-      '1': [], '2': [], '3': [], '4': [], '5': [],
-      '6': [], '7': [], '8': [], '9': [], '0': [],
-    };
-
-    empty.forEach(classroom => {
-      const currentBuildingCode = classroom.charAt(0);
-      const floorName = getCurrentFloor(classroom);
-
-      if (currentBuildingCode === buildingCode) {
-        if (!floors[floorName]) {
-          floors[floorName] = [];
-        }
-
-        floors[floorName].push(classroom);
-      }
-    });
-
-    const sortedFloors = sortFloors(floors);
-
-    response = createBuildingResponseNext_2('선덕관', buildingCode, sortedFloors, false);
-  }
-  res.json(response);
-} catch (error) {
-  console.log(error)
-  response = {
-    "version": "2.0",
-    "template": {
-      "outputs": [
-        {
-          "simpleText": {
-            "text": `예기치 않은 응답입니다.`
-          }
-        }
-      ],
-    }
-  }
-  res.json(response);
-}
-});
-
-//다음 교시 빈 강의실 - 충효관
-app.post('/empty_lecture_next_3', async (req, res) => {
-  try {
-  const offset = 1000 * 60 * 60 * 9
-  const KST = new Date((new Date()).getTime() + offset)
-  const today = KST.getDay();
-  const currentHour = KST.getHours();
-  const currentMinute = KST.getMinutes();
-  const isClassTime = currentHour > 8 || (currentHour === 8 && currentMinute >= 30) && (currentHour < 23 || (currentHour === 23 && currentMinute <= 30));
-  let response;
-
-  if (today === 6 || today === 0) {
-    response = {
-      "version": "2.0",
-      "template": {
-        "outputs": [
-          {
-            "textCard": {
-              "title": "❗오늘은 주말입니다.❗",
-              "description": "해당 기능이 제공되지 않습니다.",
-            }
-          }
-        ],
-      }
-    }
-  } else if (!isClassTime){
-      response = {
-        "version": "2.0",
-        "template": {
-          "outputs": [
-            {
-              "textCard": {
-                "title": "❗수업시간이 아닙니다.❗",
-                "description": "해당 기능이 제공되지 않습니다.",
-              }
-            }
-          ],
-        }
-      }
-    } else {
-  const empty = findAvailableClassroomsNext(lectureList);
-
-  const buildingCode = '3';
-  const floors = {
-    '1': [], '2': [], '3': [], '4': [], '5': [],
-    '6': [], '7': [], '8': [], '9': [], '0': [],
-  };
-
-  empty.forEach(classroom => {
-    const currentBuildingCode = classroom.charAt(0);
-    const floorName = getCurrentFloor(classroom);
-
-    if (currentBuildingCode === buildingCode) {
-      if (!floors[floorName]) {
-        floors[floorName] = [];
-      }
-
-      floors[floorName].push(classroom);
-    }
-  });
-
-  const sortedFloors = sortFloors(floors);
-
-  response = createBuildingResponseNext_3('충효관', buildingCode, sortedFloors, false);
-}
   res.json(response);
 } catch (error) {
   console.log(error)
