@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,7 +53,7 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const userId = urlParams.get('userId');
-        const colors = ['#FFFFFF', '#FA5858', '#FAAC58', '#01DF3A', '#58FAD0', '#58D3F7', '#5882FA', '#8258FA', '#AC58FA', '#D358F7', '#FA58F4', '#FA58AC', '#D7DF01', '#A5DF00', '#04B431', '#01DFA5', '#01DFD7', '#0174DF', '#0000FF', '#3A01DF', '#7401DF', '#A901DB', '#DF01D7', '#B40486', '#B4045F']; // 20가지의 연한 색상 목록
+        const colors = ['#FA5858', '#FAAC58', '#01DF3A', '#58FAD0', '#58D3F7', '#5882FA', '#8258FA', '#AC58FA', '#D358F7', '#FA58F4', '#FA58AC', '#D7DF01', '#A5DF00', '#04B431', '#01DFA5', '#01DFD7', '#0174DF', '#0000FF', '#3A01DF', '#7401DF', '#A901DB', '#DF01D7', '#B40486', '#B4045F']; // 20가지의 연한 색상 목록
 
         fetch(`/schedule_load`)
         .then(response => response.json())
@@ -87,18 +87,18 @@
                         if (scheduleItem) {
                             const data = scheduleItem[key].split('\n');
                             const subject = data[0] || '';
-                            const division = parseInt(data[1]) || '';
+                            const division = data[1] || '';
                             const professor = data[2] || '';
                             const room = data[3] || '';
 
                             // 색상 매핑
-                            if (!colorMap[subject]) {
+                            if (!colorMap[subject] && subject.trim() !== '') {
                                 colorMap[subject] = colors[colorIndex];
                                 colorIndex = (colorIndex + 1) % colors.length;
                             }
 
                             // 각 셀에 배경색 지정
-                            cell.innerHTML = `${subject}<br>${division}분반 ${room}<br>${professor}`;
+                            cell.innerHTML = `${subject}<br>${division ? division + '분반 ' + room : room}<br>${professor}`;
                             if (subject.trim() !== '') {
                                 cell.style.backgroundColor = colorMap[subject];
                             }
