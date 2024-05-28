@@ -3699,17 +3699,27 @@ app.post('/lecture_schedule_print', async (req, res) => {
       const url = `http://35.216.59.180:8080/schedule.html?userId=${userId}`;
       let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID)
       let response;
-
       if (userRow){
+        const callbackUrl = req.body.userRequest.callbackUrl;
+        if (callbackUrl){
+          const callbackResponse = {
+            "version": "2.0",
+            "useCallback": true,
+            "data": {
+                "text": '답변을 입력중입니다 . . .'
+            }
+          }
+          res.json(response);
+        }
         const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
         const page = await browser.newPage();
         page.setExtraHTTPHeaders({
           'Accept-Language': 'ko-KR'
         });
-        page.setViewport({ width: 1080, height: 800 });
-        page.setDefaultNavigationTimeout(0);
+        await page.setViewport({ width: 1080, height: 800 });
+        await page.setDefaultNavigationTimeout(0);
         await page.goto(url, { waitUntil: 'networkidle0' });
-        page.evaluate(() => {
+        await page.evaluate(() => {
           document.body.style.fontFamily = 'Nanum Gothic, sans-serif';
         });
 
@@ -3721,7 +3731,6 @@ app.post('/lecture_schedule_print', async (req, res) => {
         const imageUrl = `http://35.216.59.180:8080/images/${imageName}`;
         response = {
           "version": "2.0",
-          "useCallback" : true,
           "template": {
               "outputs": [
                   {
