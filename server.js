@@ -3695,31 +3695,13 @@ app.get('/schedule_load', async (req, res) => {
 
 app.post('/lecture_schedule_print', async (req, res) => {
   try {
-      const userId = req.body.userRequest.user.id;
-    const callbackUrl = "http://35.216.59.180:8080/lecture_schedule_print_callback";
-      const url = `http://35.216.59.180:8080/schedule.html?userId=${userId}`;
-      let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID)
       let response;
-      if (userRow){
-        const response = {
-        "version": "2.0",
-        "userRequest": {
-          "callbackUrl": callbackUrl
-        }
-      };
-      } else{
-        response = {
-          "version": "2.0",
-          "template": {
-            "outputs": [
-              {
-                "simpleText": {
-                  "text": `❗시간표에 저장된 강의가 없습니다.❗`
-                }
-              }
-            ],
-            
-          }
+      response = {
+        "version" : "2.0",
+        "useCallback" : true,
+        "context": {
+        },
+        "data": {
         }
       }
       res.json(response);
@@ -3741,7 +3723,7 @@ app.post('/lecture_schedule_print', async (req, res) => {
   }
 });
 
-app.post('/lecture_schedule_print_callback', async (req, res) => {
+app.post('/lecture_schedule_print2', async (req, res) => {
   try {
       const userId = req.body.userRequest.user.id;
       const url = `http://35.216.59.180:8080/schedule.html?userId=${userId}`;
