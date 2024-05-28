@@ -3704,7 +3704,8 @@ app.post('/lecture_schedule_print', async (req, res) => {
         "data": {
           "text" : "시간표 출력 중이에요😘 \n잠시만 기다려 주실래요?!"
         }
-      }res.json(callback);
+      }
+      res.json(callback);
       const url = `http://35.216.59.180:8080/schedule.html?userId=${userId}`;
       let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID)
       let response;
