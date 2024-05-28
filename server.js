@@ -3697,6 +3697,98 @@ app.get('/schedule_load', async (req, res) => {
 app.post('/lecture_schedule_print', async (req, res) => {
   try {
       const userId = req.body.userRequest.user.id;
+      const callbackUrl = req.body.userRequest.callbackUrl;
+      const callback = {
+        "version" : "2.0",
+        "useCallback" : true,
+        "data": {
+          "text" : "시간표 출력 중이에요😘 \n잠시만 기다려 주실래요?!"
+        }
+      }
+      const url = `http://35.216.59.180:8080/schedule.html?userId=${userId}`;
+      let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID)
+      let response;
+      if (userRow){
+        const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+        const page = await browser.newPage();
+        page.setExtraHTTPHeaders({
+          'Accept-Language': 'ko-KR'
+        });
+        await page.setViewport({ width: 1080, height: 800 });
+        await page.setDefaultNavigationTimeout(0);
+        await page.goto(url, { waitUntil: 'networkidle0' });
+        await page.evaluate(() => {
+          document.body.style.fontFamily = 'Nanum Gothic, sans-serif';
+        });
+
+        const imageBuffer = await page.screenshot({ fullPage: true });
+        const imageName = `${userId}_schedule_image.png`;
+        const imageFullPath = path.join(imagePath, imageName);
+        fs.writeFileSync(imageFullPath, imageBuffer);
+        browser.close();
+        const imageUrl = `http://35.216.59.180:8080/images/${imageName}`;
+        response = {
+          "version": "2.0",
+          "useCallback" : true,
+          "template": {
+              "outputs": [
+                  {
+                      "simpleImage": {
+                          "imageUrl": imageUrl,
+                          "altText": "시간표 이미지"
+                      }
+                  }
+              ],
+              "quickReplies": [
+                {
+                  'action': 'block',
+                  'label': '뒤로가기',
+                  'blockId': "66097a32a5c8987d3ca8e8bd",
+                },
+              ]
+          }
+        }
+      } else{
+        response = {
+          "version": "2.0",
+          "useCallback" : true,
+          "template": {
+            "outputs": [
+              {
+                "simpleText": {
+                  "text": `❗시간표에 저장된 강의가 없습니다.❗`
+                }
+              }
+            ],
+            
+          }
+        }
+      }
+      res.json(callback);
+      axios.post(callbackUrl, response)
+          .then(() => console.log('callbackurl send successfully'))
+          .catch((error) => console.error('callback url send error:', error));
+  } catch (error) {
+      console.log(error)
+      response = {
+        "version": "2.0",
+        "template": {
+          "outputs": [
+            {
+              "simpleText": {
+                "text": `예기치 않은 응답입니다.`
+              }
+            }
+          ],
+        }
+      }
+      res.json(response);
+  }
+});
+
+app.post('/lecture_schedule_print2', async (req, res) => {
+  try {
+      const userId = req.body.userRequest.user.id;
       const call = req.body.userRequest.callbackUrl;
       console.log(call);
       const url = `http://35.216.59.180:8080/schedule.html?userId=${userId}`;
@@ -3774,6 +3866,7 @@ app.post('/lecture_schedule_print', async (req, res) => {
       res.json(response);
   }
 });
+
 
 app.get('/buslist_load', async (req, res) => {
   try {
