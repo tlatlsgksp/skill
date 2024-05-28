@@ -3721,6 +3721,7 @@ app.post('/lecture_schedule_print', async (req, res) => {
         const imageUrl = `http://35.216.59.180:8080/images/${imageName}`;
         response = {
           "version": "2.0",
+          "useCallback" : true,
           "template": {
               "outputs": [
                   {
