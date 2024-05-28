@@ -3705,9 +3705,6 @@ app.post('/lecture_schedule_print', async (req, res) => {
           const callbackResponse = {
             "version": "2.0",
             "useCallback": true,
-            "data": {
-                "text": '답변을 입력중입니다 . . .'
-            }
           }
           res.json(response);
         }
