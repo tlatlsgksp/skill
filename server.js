@@ -3696,18 +3696,58 @@ app.get('/schedule_load', async (req, res) => {
 app.post('/lecture_schedule_print', async (req, res) => {
   try {
       const userId = req.body.userRequest.user.id;
+    const callbackUrl = "http://35.216.59.180:8080/lecture_schedule_print_callback";
       const url = `http://35.216.59.180:8080/schedule.html?userId=${userId}`;
       let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID)
       let response;
       if (userRow){
-        const callbackUrl = req.body.userRequest.callbackUrl;
-        if (callbackUrl){
-          const callbackResponse = {
-            "version": "2.0",
-            "useCallback": true,
-          }
-          res.json(response);
+        const response = {
+        "version": "2.0",
+        "userRequest": {
+          "callbackUrl": callbackUrl
         }
+      };
+      } else{
+        response = {
+          "version": "2.0",
+          "template": {
+            "outputs": [
+              {
+                "simpleText": {
+                  "text": `❗시간표에 저장된 강의가 없습니다.❗`
+                }
+              }
+            ],
+            
+          }
+        }
+      }
+      res.json(response);
+  } catch (error) {
+      console.log(error)
+      response = {
+        "version": "2.0",
+        "template": {
+          "outputs": [
+            {
+              "simpleText": {
+                "text": `예기치 않은 응답입니다.`
+              }
+            }
+          ],
+        }
+      }
+      res.json(response);
+  }
+});
+
+app.post('/lecture_schedule_print_callback', async (req, res) => {
+  try {
+      const userId = req.body.userRequest.user.id;
+      const url = `http://35.216.59.180:8080/schedule.html?userId=${userId}`;
+      let userRow = await findUserRow(userId, auth_global, SPREADSHEET_ID)
+      let response;
+      if (userRow){
         const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
         const page = await browser.newPage();
         page.setExtraHTTPHeaders({
